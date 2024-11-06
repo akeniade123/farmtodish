@@ -115,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(15.0),
           child: SingleChildScrollView(
             child: Column(children: [
+              SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -128,9 +129,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       func: () {}, iconData: Icons.notifications),
                 ],
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
               _buildPack2(),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
               Wrap(
                 runAlignment: WrapAlignment.center,
                 // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -300,37 +301,37 @@ class _HomeScreenState extends State<HomeScreen> {
               // child: ,
               decoration: BoxDecoration(
                   color: FarmToDishTheme.deepGreen,
-                  borderRadius: BorderRadius.circular(20)),
+                  borderRadius: BorderRadius.circular(10)),
             ),
           ),
           Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
                     width: 155,
                     child: Text(
-                      "Taste the farm in every bite.",
+                      "Facilitating healthy food to dishes...",
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
                   ),
                   SizedBox(
-                    height: 25,
+                    height: 5,
                   ),
                   MaterialButton(
                     height: 35,
-                    minWidth: 120,
+                    minWidth: 155,
                     onPressed: () {
                       context.go("/ProductScreen");
                     },
                     color: FarmToDishTheme.faintGreen,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                        borderRadius: BorderRadius.circular(10)),
                     child: Text(
                       "Order Now",
                       style: TextStyle(
