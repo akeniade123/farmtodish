@@ -130,6 +130,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               SizedBox(height: 10),
+              _accountDetail(),
+              SizedBox(height: 10),
               _buildPack2(),
               SizedBox(height: 10),
               Wrap(
@@ -257,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
         margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
             color: FarmToDishTheme.accentLightColor,
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(7),
             boxShadow: List.filled(4, FarmToDishTheme.genericBoxShadow)),
 
         // height: 110,
@@ -288,9 +290,125 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  SizedBox _accountDetail() {
+    return SizedBox(
+      height: 115,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              padding: const EdgeInsets.all(15),
+              height: 113,
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Available Balance",
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        "Transaction History",
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      "₦35,762.33",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: MaterialButton(
+                      height: 20,
+                      minWidth: 100,
+                      onPressed: () {
+                        context.go("/ProductScreen");
+                      },
+                      color: FarmToDishTheme.faintGreen,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Text(
+                        "Fund Wallet",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              decoration: BoxDecoration(
+                  color: FarmToDishTheme.deepGreen,
+                  borderRadius: BorderRadius.circular(5)),
+            ),
+          ),
+          Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 5,
+                  ),
+
+/*
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Available Balance",
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        "Transaction History",
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  
+                  */
+                ],
+              ),
+            )
+          ]),
+        ],
+      ),
+    );
+  }
+
   SizedBox _buildPack2() {
     return SizedBox(
-      height: 240,
+      height: 180,
       child: Stack(
         children: [
           Align(
@@ -300,7 +418,7 @@ class _HomeScreenState extends State<HomeScreen> {
               width: double.infinity,
               // child: ,
               decoration: BoxDecoration(
-                  color: FarmToDishTheme.deepGreen,
+                  color: FarmToDishTheme.accentLightColor,
                   borderRadius: BorderRadius.circular(10)),
             ),
           ),
@@ -315,9 +433,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       "Facilitating healthy food to dishes...",
                       style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: FarmToDishTheme.deepGreen,
+                      ),
                     ),
                   ),
                   SizedBox(
