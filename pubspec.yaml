@@ -50,6 +50,7 @@ dependencies:
   numpad_layout: 
   # ^0.0.3
     path: ./numpad_package
+  firebase_core: ^3.4.0
   # path: ./packages_list/liquid_progress_indicator-master 
 
 dev_dependencies:

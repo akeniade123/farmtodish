@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "742168940418",
+    "project_id": "farmtodish-7e3e2",
+    "storage_bucket": "farmtodish-7e3e2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742168940418:android:cff39a3aeb5ffe000e899b",
+        "android_client_info": {
+          "package_name": "com.example.farm_to_dish"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpv_NRPCPHLe61IC8wUd_1AFtDcGQ8KLU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
