@@ -50,6 +50,7 @@ dependencies:
   numpad_layout: 
   # ^0.0.3
     path: ./numpad_package
+  web: ^0.5.0
   # path: ./packages_list/liquid_progress_indicator-master 
 
 dev_dependencies:
