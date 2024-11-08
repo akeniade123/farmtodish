@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _iconButtonWithBorder(
                       func: () {}, iconData: Icons.person_outline_outlined),
                   Text(
-                    "Welcome, Daniel",
+                    "Welcome, Babatunde Bamgbose",
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   _iconButtonWithBorder(

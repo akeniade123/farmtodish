@@ -94,7 +94,7 @@ OrderModel? currentOrder;
 
 // final rootNavigatorKey = GlobalKey<NavigatorState>();
 
-String baseURL = "";
+String baseURL = "https://www.farmtodish.com/base";
 
 void avoid_print(Object? o) {}
 void custom_print(Object? o, String about) {

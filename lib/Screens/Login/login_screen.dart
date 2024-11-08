@@ -278,9 +278,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-
-class LoginScreenHandler{
-  Future login(String email, String password)async{
-    requestResources("$baseURL", body, headers, requestType)
+class LoginScreenHandler {
+  Future login(String email, String password) async {
+    Map<String, String> body = {
+      "regId": "prelim",
+      "Full_Name": email,
+      "Essence": "Profile",
+      "Password": password
+    };
+    Map<String, String> headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'authentication': '937a4a8c13e317dfd28effdd479cad2f'
+    };
+    requestResources("$baseURL/user/entry", body, headers, "Post");
   }
 }
