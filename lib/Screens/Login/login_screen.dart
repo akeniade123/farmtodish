@@ -1,4 +1,5 @@
 import 'package:farm_to_dish/app_theme_file.dart';
+import 'package:farm_to_dish/requester.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -274,5 +275,12 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       )),
     );
+  }
+}
+
+
+class LoginScreenHandler{
+  Future login(String email, String password)async{
+    requestResources("$baseURL", body, headers, requestType)
   }
 }
