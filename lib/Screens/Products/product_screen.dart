@@ -210,7 +210,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          "${quantity.toString()} left",
+                          "${quantity.toString()}",
                           style: TextStyle(
                               // color:
                               // FarmToDishTheme.scaffoldBackgroundColor,

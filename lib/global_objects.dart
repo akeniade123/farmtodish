@@ -54,28 +54,28 @@ List<Map<String, dynamic>> productTypeDetails = [
 List<ProductModel> testProducts = [
   ProductModel(
       imageURL: "${assets}yams.png",
-      name: "yam",
-      price: 1200,
-      quantity: 12,
-      unit: "tuber"),
+      name: "Yam",
+      price: 3200,
+      quantity: 10,
+      unit: "tubers"),
   ProductModel(
-      imageURL: "${assets}yams.png",
-      name: "yam",
-      price: 1200,
-      quantity: 12,
-      unit: "tuber"),
+      imageURL: "${assets}chicken.png",
+      name: "Chicken",
+      price: 4500,
+      quantity: 23,
+      unit: "kilo"),
   ProductModel(
-      imageURL: "${assets}yams.png",
-      name: "yam",
-      price: 1200,
+      imageURL: "${assets}goat_meat.png",
+      name: "Goat Meat",
+      price: 4700,
       quantity: 12,
-      unit: "tuber"),
+      unit: "kilo"),
   ProductModel(
-      imageURL: "${assets}yams.png",
-      name: "yam",
-      price: 1200,
-      quantity: 12,
-      unit: "tuber"),
+      imageURL: "${assets}onions.png",
+      name: "Onions",
+      price: 3500,
+      quantity: 118,
+      unit: "small baskets"),
 ];
 
 String assets = !(UniversalPlatform.isAndroid) ? "../assets/" : "assets/";
