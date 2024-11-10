@@ -17,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as p;
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../global_objects.dart';
 import '../../global_widgets.dart';
@@ -34,9 +35,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // late SignUpHandler signUpHandler;
+
+  late QRViewController _controller;
   @override
   void initState() {
     // signUpHandler = SignUpHandler();
+    final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
 
     // temp init values for testing
 
@@ -48,6 +52,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // confirmPasswordRetriever.text = 'asdf1234';
     // gender = 'Male';
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
   }
 
   String generateRandomName({bool isPhone = false}) {
