@@ -1,22 +1,35 @@
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/global_handlers.dart';
+import 'package:farm_to_dish/notificationcontroller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'global_objects.dart';
 import 'routing_detail.dart';
 
 void main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  await NotificationController.initializeLocalNotifications();
+  await NotificationController.initializeIsolateReceivePort();
+
   // deviceId;
 
   if (!UniversalPlatform.isWeb) {
     WidgetsFlutterBinding.ensureInitialized();
   }
+
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp]); // -->[1]
+
   // identifyDeviceId();
   runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  static var navigatorKey;
+
   const MyApp({super.key});
 
   @override
