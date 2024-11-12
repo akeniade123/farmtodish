@@ -38,18 +38,24 @@ List<String> productTypes = [
   "Spices"
 ];
 
+/*
 Map<int, List<String>> sectionSlabs = {
   0: ["Fruits vegetables", "${assets}fruitVeggie.png"],
   1: ["Grains and legumes", "${assets}grains.png"],
   2: ["Tubers", "${assets}tubbers.png"],
   3: ["Spices", "${assets}pepper.png"],
 };
+
+*/
+
 List<Map<String, dynamic>> productTypeDetails = [
-  {"name": "fruits And Vegie", "imageURL": "${assets}fruitVeggie.png"},
-  {"name": "Grains and legumes", "imageURL": "${assets}grains.png"},
+  {"name": "Fruits & Veggies", "imageURL": "${assets}fruitVeggie.png"},
+  {"name": "Grains & Legumes", "imageURL": "${assets}grains.png"},
   {"name": "Tubers", "imageURL": "${assets}tubbers.png"},
   {"name": "Spices", "imageURL": "${assets}pepper.png"},
 ];
+
+late List<ProductModel> prdt;
 
 List<ProductModel> testProducts = [
   ProductModel(

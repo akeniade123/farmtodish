@@ -1,0 +1,1 @@
+const notifyer = '/notification';

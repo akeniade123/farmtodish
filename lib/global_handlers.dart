@@ -1,11 +1,16 @@
 // import 'package:Yomcoin/memory_analyst.dart';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:farm_to_dish/global_objects.dart';
+import 'package:farm_to_dish/sharedpref.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // import '../../models/global_objects.dart';x/x
 import '../../requester.dart';
+import 'Screens/Products/product_model.dart';
+import 'global_string.dart';
 import 'memory_analyst.dart';
 
 class UserHandler extends ChangeNotifier {
@@ -120,6 +125,19 @@ class UserHandler extends ChangeNotifier {
   bool matchPin(String pin) {
     return matchPin1 == matchPin2;
   }
+}
+
+class DishHandler extends ChangeNotifier {
+  void productList(List<ProductModel> _prdt) {
+    prdt = _prdt;
+    notifyListeners();
+  }
+}
+
+bool isAppActive = false;
+
+void logger(String message) {
+  log(message);
 }
 
 class TransactionHistoryHandler extends ChangeNotifier {
@@ -282,5 +300,45 @@ class TransactionHistoryHandler extends ChangeNotifier {
     Widget? result;
 
     return result;
+  }
+}
+
+class LifecycleEventHandler extends WidgetsBindingObserver {
+  final AsyncCallback resumeCallBack;
+  final AsyncCallback suspendingCallBack;
+
+  LifecycleEventHandler({
+    required this.resumeCallBack,
+    required this.suspendingCallBack,
+  });
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    print('state >>>>>>>>>>>>>>>>>>>>>> : $state');
+    SharedPref pref = SharedPref();
+    String? string = await (pref.getPrefString(notifyer));
+    logger("NtfChk:$string");
+
+    switch (state) {
+      case AppLifecycleState.resumed:
+        isAppActive = true;
+        logger("Foreground_Engagement");
+        await resumeCallBack();
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        if (suspendingCallBack != null) {
+          isAppActive = false;
+          logger("Background_Engagement");
+
+          await suspendingCallBack();
+        } else {}
+        break;
+      case AppLifecycleState.hidden:
+        logger("Hidden_Engagement");
+        break;
+      // TODO: Handle this case.
+    }
   }
 }
