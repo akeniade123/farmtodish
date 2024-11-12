@@ -1,4 +1,5 @@
 import 'package:farm_to_dish/app_theme_file.dart';
+import 'package:farm_to_dish/global_handlers.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -15,8 +16,33 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  initState() {
+    // NotificationController.startListeningNotificationEvents();
+    super.initState();
+
+    WidgetsBinding.instance
+        .addObserver(LifecycleEventHandler(resumeCallBack: () async {
+      // The app is now resumed, so let's change the value to false
+      setState(() {
+        logger("At Foreground");
+      });
+    }, suspendingCallBack: () async {
+      // The app is now inactive, so let's change the value to true
+      setState(() {
+        //  isAppInactive = true;
+        logger("In the Background");
+      });
+    }));
+  }
 
   // This widget is the root of your application.
   @override
