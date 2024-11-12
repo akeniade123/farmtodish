@@ -118,29 +118,123 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
       backgroundColor: FarmToDishTheme.scaffoldBackgroundColor,
+      key: scaffoldKey,
+      appBar: PreferredSize(
+          preferredSize:
+              const Size(double.infinity, 180), // here the desired height
+          child: AppBar(
+              toolbarHeight: 180,
+              centerTitle: true,
+              backgroundColor: FarmToDishTheme.scaffoldBackgroundColor,
+              title: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _iconButtonWithBorder(
+                              func: () {},
+                              iconData: Icons.person_outline_outlined),
+                          Text(
+                            "Welcome, Daniel",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                          _iconButtonWithBorder(
+                              func: () {}, iconData: Icons.notifications),
+                        ]),
+                    SizedBox(height: 10),
+                    _accountDetail(),
+                  ]))),
+
+      /*
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 100),
+        child: AppBar(
+          toolbarHeight: 100,
+          centerTitle: true,
+          iconTheme: const IconThemeData(size: 30, color: Colors.white),
+          title: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Tab(
+                height: 90,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: SizedBox(
+                    height: 75,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        //  (initialized == false) ? const ProfLoader() : castData()
+                        SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            /*
+                            _iconButtonWithBorder(
+                                func: () {},
+                                iconData: Icons.person_outline_outlined),
+                            Text(
+                              "Welcome, Daniel",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            /*
+                  _iconButtonWithBorder(
+                      func: () {}, iconData: Icons.notifications),
+                      */
+                            _iconButtonWithBorder(
+                                func: () {}, iconData: Icons.qr_code)
+
+                                */
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        _accountDetail(),
+                        // widget.proDetails,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          //  backgroundColor: bgmainclr,
+        ),
+      ),
+      */
+
+      /*
+      drawer: Drawer(
+          child: DrawerScreen(
+        ctx_key: scaffoldKey,
+        tagged: const {
+          "Essence": "section",
+          "State": "read_expl",
+          "Manifest": {"availability": "1"}
+        },
+        essence: sct,
+        endgoal: '',
+        title: org_,
+        view_: '',
+        destination: banky,
+        pane: pane,
+      )),
+      */
+
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: SingleChildScrollView(
             child: Column(children: [
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _iconButtonWithBorder(
-                      func: () {}, iconData: Icons.person_outline_outlined),
-                  Text(
-                    "Welcome, Babatunde Bamgbose",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                  _iconButtonWithBorder(
-                      func: () {}, iconData: Icons.notifications),
-                ],
-              ),
-              SizedBox(height: 10),
-              _accountDetail(),
               SizedBox(height: 10),
               _buildPack2(),
               SizedBox(height: 10),
