@@ -128,3 +128,12 @@ void _startBackgroundTask() async {
   //   logger("CheckMsg***$message");
   // });
 }
+
+Future<void> subscribeToTopic(String topic) async {
+  await Firebase.initializeApp();
+  await FirebaseMessaging.instance.subscribeToTopic(topic);
+}
+
+Future<void> unsubscribeFromTopic(String topic) async {
+  await FirebaseMessaging.instance.unsubscribeFromTopic(topic);
+}

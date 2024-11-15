@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               func: () {},
                               iconData: Icons.person_outline_outlined),
                           Text(
-                            "Welcome, Daniel",
+                            "Welcome, Adeyinka",
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),

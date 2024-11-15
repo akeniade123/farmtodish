@@ -1,12 +1,19 @@
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/global_handlers.dart';
 import 'package:farm_to_dish/notificationcontroller.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'env.dart';
+import 'firebaseHandler.dart';
+import 'firebase_options.dart';
 import 'global_objects.dart';
+import 'global_string.dart';
 import 'routing_detail.dart';
+import 'sharedpref.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +44,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late SharedPref pref;
   @override
   initState() {
     // NotificationController.startListeningNotificationEvents();
@@ -55,6 +63,54 @@ class _MyAppState extends State<MyApp> {
         logger("In the Background");
       });
     }));
+
+    msgg();
+  }
+
+  Future<void> msgg() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    if (await pref.getPrefBool(token) == false) {
+      try {
+        fbId = (await FirebaseMessaging.instance.getToken())!;
+        pref.setPrefString(tk_id, fbId);
+        pref.setPrefBool(token, true);
+        logger("UserToken***$fbId");
+      } catch (e) {}
+    }
+    try {
+      fbId = (await pref.getPrefString(tk_id))!;
+      logger("UserToken***$fbId");
+    } catch (e) {}
+
+    logger("Chktkn$fbId");
+
+    if (fbId != community || fbId.isNotEmpty) {
+      if (await pref.getPrefBool(prlmtpc) == false) {
+        String topic = "genElites";
+        if (lone) {
+          topic = "gen$org_";
+        }
+        subscribeToTopic(topic);
+        await pref.setPrefBool(prlmtpc, true);
+      }
+
+      if (await pref.getPrefBool(defdm) == false) {
+        subscribeToTopic(org_.replaceAll(" ", ""));
+        await pref.setPrefBool(defdm, true);
+      }
+
+      FirebaseMessaging.onMessage.listen(receivedMessage);
+      FirebaseMessaging.onMessageOpenedApp.listen((event) {
+        logger("Fore OPen");
+        // do something
+      });
+    }
+  }
+
+  Future<void> receivedMessage(RemoteMessage remoteMessage) async {
+    await handleUpdates(remoteMessage, true);
   }
 
   // This widget is the root of your application.
@@ -79,7 +135,7 @@ class _MyAppState extends State<MyApp> {
       //     }
       //     return Future.value(true);
       //   },
-      //   child: const LoginScreen(),
+      //   child: const loggerinScreen(),
       // ),
     );
   }
