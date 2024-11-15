@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Squire(
                     height: 40,
                     width: 127,
@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text(
+                          const Text(
                             'keep me',
                             style: TextStyle(fontSize: 12),
                           ),
@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             .push(DialogRoute(
                           context: context,
                           builder: (context) =>
-                              Center(child: CircularProgressIndicator()),
+                              const Center(child: CircularProgressIndicator()),
                         ));
                         // Future.delayed(
                         //   Duration(seconds: 1),
@@ -170,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Theme.of(context).primaryColor,
-                            content: Center(
+                            content: const Center(
                               child: Text("Please, enter your email "),
                             ),
                           ),
@@ -178,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           // backgroundColor: Theme.of(context).,primaryColor
                           content: Text("No Inernet connection"),
                         ),
@@ -189,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
                       'Forgot Password',
-                      style: FarmToDishTheme.iStyle!.copyWith(
+                      style: FarmToDishTheme.iStyle.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).primaryColorLight),
                     ),
@@ -240,13 +240,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                     content: Text('No internet connection')));
                           },
                     color: FarmToDishTheme.faintGreen,
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Text(
+                    height: 40,
+                    child: const Text(
                       "Log In",
                       style: TextStyle(color: Colors.white),
                     ),
-                    height: 40,
                   ),
                 ),
               ],
@@ -254,7 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("New user? "),
+                const Text("New user? "),
                 TextButton(
                     onPressed: () {
                       // prePush(context);

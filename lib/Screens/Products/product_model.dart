@@ -38,7 +38,7 @@ class ProductModel {
   }
 
   CartItemModel createCartModelFromProduct() {
-    return CartItemModel(productID! + "carted",
+    return CartItemModel("${productID!}carted",
         imageURL: imageURL,
         name: name,
         price: price,

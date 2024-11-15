@@ -146,7 +146,7 @@ class LoginHandler {
                   builder: (context) {
                     print("object");
                     return AlertDialog(
-                      title: Text(
+                      title: const Text(
                         "You cannot log in on more than one device \n do you want to logout of other device and continue with this one",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 12),
@@ -158,7 +158,7 @@ class LoginHandler {
                           onPressed: () {
                             Navigator.pop<bool>(context, true);
                           },
-                          child: Text(
+                          child: const Text(
                             "Yes",
                             style: TextStyle(color: Colors.white),
                           ),
@@ -171,7 +171,7 @@ class LoginHandler {
                           onPressed: () {
                             Navigator.pop<bool>(context, false);
                           },
-                          child: Text("No"),
+                          child: const Text("No"),
                         ),
                       ],
                     );
@@ -180,7 +180,7 @@ class LoginHandler {
                 false;
             if (toLogin) {
               Response signOutResponse =
-                  await signOut({"email": body?["email"] ?? ""}, headers);
+                  await signOut({"email": body["email"] ?? ""}, headers);
 
               response = await signIn(body, headers);
             }
@@ -403,7 +403,7 @@ class LoginHandler {
     return result;
   }
 
-  Future<Null> newMethod(BuildContext context) async {
+  Future<void> newMethod(BuildContext context) async {
     return await () async {
       print("%%^^%%^^" * 120);
       Map<String, dynamic> userDetails =

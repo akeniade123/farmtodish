@@ -2,8 +2,6 @@
 
 // import 'dart:js_interop';
 
-import 'dart:io';
-import 'dart:math';
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
 // import 'package:Yomcoin/screens/login.dart';
@@ -11,10 +9,8 @@ import 'package:farm_to_dish/Screens/Cart/cart_item_model.dart';
 import 'package:farm_to_dish/Screens/DeliveryCar/delivery_car_model.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart' as p;
 
 import '../../global_objects.dart';
 import '../../global_widgets.dart';
@@ -88,7 +84,7 @@ class _DeliveryCarDetailScreenState extends State<DeliveryCarDetailScreen> {
                               fontWeight: FontWeight.w300),
                         ),
                         Text(
-                          "${currency}${widget.model.price}",
+                          "$currency${widget.model.price}",
                           style: TextStyle(
                               // color:
                               // FarmToDishTheme.scaffoldBackgroundColor,

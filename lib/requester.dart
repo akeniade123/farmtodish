@@ -25,7 +25,7 @@ Future<http.Response> signIn(
 
   String encodedBody = json.encode(body);
   final response = await http.post(
-    Uri.parse('${baseURL}/login'),
+    Uri.parse('$baseURL/login'),
     headers: headers,
     body: encodedBody,
   );
@@ -61,7 +61,7 @@ Future<http.Response> signOut(
   headers["Content-Type"] = "application/json";
   String encodedBody = json.encode(body);
   final response = await http.post(
-    Uri.parse('${baseURL}/logout'),
+    Uri.parse('$baseURL/logout'),
     headers: headers,
     body: encodedBody,
   );

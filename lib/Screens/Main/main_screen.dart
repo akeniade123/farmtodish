@@ -2,8 +2,6 @@
 
 // import 'dart:js_interop';
 
-import 'dart:io';
-import 'dart:math';
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
 // import 'package:Yomcoin/screens/login.dart';
@@ -11,14 +9,9 @@ import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:awesome_bottom_bar/widgets/inspired/inspired.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart' as p;
 
-import '../../global_objects.dart';
-import '../../global_widgets.dart';
-import '../screens.dart';
 
 // import 'common_widget.dart';
 // import 'screen_data_handler/signup_handler.dart';
@@ -77,7 +70,7 @@ class _MainPageState extends State<MainPage> {
       //     ),
     ];
 
-    void _onTap(index) {
+    void onTap(index) {
       widget.navigationShell.goBranch(
         index,
         // A common pattern when using bottom navigation bars is to support
@@ -142,7 +135,7 @@ class _MainPageState extends State<MainPage> {
                 color: Colors.white,
                 colorSelected: FarmToDishTheme.deepGreen,
                 indexSelected: widget.navigationShell.currentIndex,
-                onTap: _onTap,
+                onTap: onTap,
                 chipStyle: const ChipStyle(
                   convexBridge: true,
                   background: Colors.white,

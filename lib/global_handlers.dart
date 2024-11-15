@@ -128,8 +128,8 @@ class UserHandler extends ChangeNotifier {
 }
 
 class DishHandler extends ChangeNotifier {
-  void productList(List<ProductModel> _prdt) {
-    prdt = _prdt;
+  void productList(List<ProductModel> prdt) {
+    prdt = prdt;
     notifyListeners();
   }
 }
@@ -328,13 +328,11 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
-        if (suspendingCallBack != null) {
-          isAppActive = false;
-          logger("Background_Engagement");
+        isAppActive = false;
+        logger("Background_Engagement");
 
-          await suspendingCallBack();
-        } else {}
-        break;
+        await suspendingCallBack();
+              break;
       case AppLifecycleState.hidden:
         logger("Hidden_Engagement");
         break;

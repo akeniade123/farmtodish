@@ -10,11 +10,9 @@ import 'package:http/http.dart';
 
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../global_handlers.dart';
 import '../../global_objects.dart';
-import '../../global_widgets.dart';
 import '../../memory_analyst.dart';
 import '../../requester.dart';
 

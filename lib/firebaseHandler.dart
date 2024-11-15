@@ -101,13 +101,13 @@ void _startBackgroundTask() async {
     }
   });
 
-  Future<void> _messageHandler(RemoteMessage message) async {
+  Future<void> messageHandler(RemoteMessage message) async {
     String msg = jsonEncode(message.data);
     logger("Background Message Received:$msg");
     logger("Msg rcpt");
   }
 
-  FirebaseMessaging.onBackgroundMessage(_messageHandler);
+  FirebaseMessaging.onBackgroundMessage(messageHandler);
 
   FirebaseMessaging.onMessage.listen((event) {
     logger("Fore");

@@ -53,9 +53,9 @@ class OrderModel {
   double totalPrice = 0.0;
   double getTotalPrice() {
     double result = 0;
-    items.forEach((element) {
+    for (var element in items) {
       result += (element.price) ?? 0;
-    });
+    }
     return result;
   }
 

@@ -20,21 +20,21 @@ final GoRouter myRouter = GoRouter(
         path: "/error",
         name: "error",
         pageBuilder: (context, state) => DialogPage(
-          builder: (context) => ErrorPage(),
+          builder: (context) => const ErrorPage(),
         ),
       ),
       GoRoute(
         path: "/success",
         name: "success",
         pageBuilder: (context, state) => DialogPage(
-          builder: (context) => SuccessPage(),
+          builder: (context) => const SuccessPage(),
         ),
       ),
       GoRoute(
         path: "/loading",
         name: "loading",
         pageBuilder: (context, state) => DialogPage(
-          builder: (context) => LoadingPage(),
+          builder: (context) => const LoadingPage(),
         ),
       ),
       GoRoute(

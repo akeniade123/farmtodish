@@ -76,7 +76,7 @@ class NumPad extends StatelessWidget {
               children: [
                 for (int number = 1; number <= 3; number++)
                   Padding(
-                    padding: paddingLet ?? EdgeInsets.all(0),
+                    padding: paddingLet ?? const EdgeInsets.all(0),
                     child: NumButton(
                       number: number.toString(),
                       highlightColor: highlightColor,
@@ -96,7 +96,7 @@ class NumPad extends StatelessWidget {
               children: [
                 for (int number = 4; number <= 6; number++)
                   Padding(
-                    padding: paddingLet ?? EdgeInsets.all(0),
+                    padding: paddingLet ?? const EdgeInsets.all(0),
                     child: NumButton(
                       number: number.toString(),
                       highlightColor: highlightColor,

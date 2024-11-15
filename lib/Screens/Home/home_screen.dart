@@ -2,25 +2,19 @@
 
 // import 'dart:js_interop';
 
-import 'dart:io';
 import 'dart:math';
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
 // import 'package:Yomcoin/screens/login.dart';
-import 'package:farm_to_dish/Dialogs/dialog_to_adding_products.dart';
 import 'package:farm_to_dish/Screens/DeliveryCar/delivery_car_model.dart';
 // import 'package:farm_to_dish/Screens/Payment/cart_model.dart';
-import 'package:farm_to_dish/Screens/Products/product_model.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart' as p;
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../global_objects.dart';
-import '../../global_widgets.dart';
 import '../screens.dart';
 
 // import 'common_widget.dart';
@@ -40,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // signUpHandler = SignUpHandler();
-    final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
+    final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
     // temp init values for testing
 
@@ -56,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 

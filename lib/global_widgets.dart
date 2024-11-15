@@ -1,14 +1,9 @@
-import 'dart:math';
 
 import 'package:card_swiper/card_swiper.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:provider/provider.dart';
 
-import 'global_handlers.dart';
 import 'global_objects.dart';
 
 class Squire extends StatefulWidget {
@@ -104,7 +99,7 @@ class TelephoneNumberWidget extends StatelessWidget {
 }
 
 class TelePhone extends InternationalPhoneNumberInput {
-  TelePhone({required super.onInputChanged});
+  TelePhone({super.key, required super.onInputChanged});
 }
 
 class TitleMoreAndBodyWidget extends StatelessWidget {
@@ -195,7 +190,7 @@ class _ImageDisplayerState extends State<ImageDisplayer> {
               borderRadius: BorderRadius.circular(15),
             ),
             clipBehavior: Clip.hardEdge,
-            child: Icon(
+            child: const Icon(
               Icons.image,
               size: 50,
             ),
@@ -222,8 +217,8 @@ class _ImageDisplayerState extends State<ImageDisplayer> {
       //     margin: EdgeInsets.all(0)),
       control: SwiperControl(
           color: FarmToDishTheme.faintGreen,
-          iconNext: IconData(0),
-          iconPrevious: IconData(0)
+          iconNext: const IconData(0),
+          iconPrevious: const IconData(0)
 
           // iconNext: Icons.arrow_circle_right,
           // iconPrevious: Icons.arrow_circle_left,
