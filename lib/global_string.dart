@@ -10,3 +10,4 @@ const String token = "token";
 
 const String prlmtpc = "tpks";
 const String defdm = "defaultdomain";
+String paystruct = "Paystruct";
