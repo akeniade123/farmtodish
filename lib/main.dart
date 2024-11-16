@@ -50,17 +50,19 @@ class _MyAppState extends State<MyApp> {
     // NotificationController.startListeningNotificationEvents();
     super.initState();
 
+    pref = SharedPref();
+
     WidgetsBinding.instance
         .addObserver(LifecycleEventHandler(resumeCallBack: () async {
       // The app is now resumed, so let's change the value to false
       setState(() {
-        logger("At Foreground");
+        logger("At Foreground ****");
       });
     }, suspendingCallBack: () async {
       // The app is now inactive, so let's change the value to true
       setState(() {
         //  isAppInactive = true;
-        logger("In the Background");
+        logger("In the Background ****");
       });
     }));
 
