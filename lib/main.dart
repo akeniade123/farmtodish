@@ -29,7 +29,7 @@ void main() async {
   await NotificationController.initializeLocalNotifications();
   await NotificationController.initializeIsolateReceivePort();
 
-  await initializeService();
+  // await initializeService();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
