@@ -17,7 +17,12 @@ Future<String> handleUpdates(
   if (remoteMessage.notification != null) {
     try {
       String msg = jsonEncode(remoteMessage.notification!.body);
-      logger("Notification:$msg");
+      logger("Body:$msg");
+
+      String ttld = jsonEncode(remoteMessage.notification!.title);
+      logger("Title:$ttld");
+
+      /*
 
       Map<String, dynamic> json = jsonDecode(jsonDecode(msg));
       logger("The Title${json['title']}");
@@ -27,9 +32,13 @@ Future<String> handleUpdates(
             json['title'], json['content']);
       }
 
+      */
+
       Map<String, dynamic> dtt = remoteMessage.data;
       String parse = jsonEncode(dtt);
       logger("The Data: $parse");
+
+      await firebaseProcession(parse);
 
       // _run(json['content'], json[unq], parse, dtt);
     } catch (e) {
@@ -37,21 +46,18 @@ Future<String> handleUpdates(
     }
   }
 
-  /*
-  try {
-    late DatabaseHelper dbh;
-    SharedPref pref = SharedPref();
-    Map<String, dynamic> dtt = remoteMessage.data;
-    loggerger(dtt["Essence"]);
-    Map<String, dynamic> rsp = {ess: dtt};
-    response = jsonEncode(rsp);
-  } catch (e) {
-    loggerger("Error***$e");
-  }
-
-  */
-
   return response;
+}
+
+Future<void> firebaseProcession(String data) async {
+  try {
+    logger("My Data: $data");
+    Map<String, dynamic> dtt = jsonDecode(data);
+    logger("Data ess: ${dtt["essence"]}");
+    switch (dtt["essence"]) {}
+  } catch (e) {
+    logger("fb procession error: $e");
+  }
 }
 
 late SharedPref pref;
