@@ -54,7 +54,10 @@ Future<void> firebaseProcession(String data) async {
     logger("My Data: $data");
     Map<String, dynamic> dtt = jsonDecode(data);
     logger("Data ess: ${dtt["essence"]}");
-    switch (dtt["essence"]) {}
+    switch (dtt["essence"]) {
+      case instr:
+        break;
+    }
   } catch (e) {
     logger("fb procession error: $e");
   }

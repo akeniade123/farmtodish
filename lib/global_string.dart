@@ -12,6 +12,9 @@ const String prlmtpc = "tpks";
 const String defdm = "defaultdomain";
 String paystruct = "Paystruct";
 
+const String instr = "Instruction";
+
+const String ctg = "category";
 const String hub = "hub";
 const String lga = "lga";
 const String order = "order";
@@ -25,25 +28,3 @@ const String states = "states";
 const String unit = "unit";
 const String users = "users";
 const String vendor = "vendor";
-
-
-//  const String ctg  = 
-/*
-category
-department
-gender
-hub
-lga
-order
-order_item
-order_type
-price_index
-produce
-produce_type
-section
-states
-unit
-units
-users
-vendor
-*/
