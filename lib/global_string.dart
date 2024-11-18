@@ -12,6 +12,20 @@ const String prlmtpc = "tpks";
 const String defdm = "defaultdomain";
 String paystruct = "Paystruct";
 
+const String id = "id";
+const String nmm = "name";
+const String addr = "address";
+const String phn = "phone";
+const String dob = "dob";
+const String tag = "tag";
+const String core = "core";
+const String latlong = "latlong";
+const String ctt = "contact";
+const String stId = "state_id";
+const String usr = "user";
+const String prDtl = "productDetails";
+const String dlvAr = "deliveryArea";
+
 const String instr = "Instruction";
 
 const String ctg = "category";
