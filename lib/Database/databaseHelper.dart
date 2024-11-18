@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'package:path/path.dart';
 
-import 'global_handlers.dart';
+import '../global_handlers.dart';
 import 'tbl_procession.dart';
 
 class DatabaseHelper {
