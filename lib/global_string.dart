@@ -40,6 +40,17 @@ const String phn_ = "Phone";
 const String cph = "Cipher";
 const String slt = "Salt";
 const String prfPx = "profile_pix";
+const String gnd = "Gender";
+const String dvc = "Device_ID";
+const String ctg_ = "Category";
+const String sct = "Section";
+const String eml = "Email";
+const String fb_uid = "Fb_UID";
+const String indx = "indexed";
+const String phs = "Phase";
+const String elg = "Eligible";
+const String crt_ = "created_at";
+const String upd = "Updated_at";
 
 const String instr = "Instruction";
 
