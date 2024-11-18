@@ -25,6 +25,21 @@ const String stId = "state_id";
 const String usr = "user";
 const String prDtl = "productDetails";
 const String dlvAr = "deliveryArea";
+const String itm = "item";
+const String qnt = "quantity";
+const String rate = "amount";
+const String crr = "currency";
+const String cdr = "cadre";
+const String avl = "availability";
+const String typ = "type";
+const String crt = "created";
+const String img = "image";
+const String abbrv = "abbrv";
+const String unq = "Unique_ID";
+const String phn_ = "Phone";
+const String cph = "Cipher";
+const String slt = "Salt";
+const String prfPx = "profile_pix";
 
 const String instr = "Instruction";
 
