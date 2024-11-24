@@ -57,6 +57,7 @@ const String upd = "Updated_at";
 const String instr = "Instruction";
 
 const String ctg = "category";
+const String dept = "department";
 const String hub = "hub";
 const String opr = "operator";
 const String lga = "lga";
