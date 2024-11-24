@@ -27,7 +27,8 @@ const String prDtl = "productDetails";
 const String dlvAr = "deliveryArea";
 const String itm = "item";
 const String qnt = "quantity";
-const String rate = "amount";
+const String rate = "rate";
+const String amt = "amount";
 const String crr = "currency";
 const String cdr = "cadre";
 const String avl = "availability";
@@ -57,6 +58,7 @@ const String instr = "Instruction";
 
 const String ctg = "category";
 const String hub = "hub";
+const String opr = "operator";
 const String lga = "lga";
 const String order = "order";
 const String orderItem = "order_item";

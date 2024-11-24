@@ -21,3 +21,17 @@ List<String> usrCln = [
   crt_,
   upd
 ];
+
+List<String> vndCln = [id, hub, opr, latlong, ctt];
+List<String> untzCln = [id, nmm, sct.toLowerCase()];
+List<String> untCln = [id, tag, abbrv];
+List<String> defaultCln = [id, nmm];
+List<String> defaultCln_ = [id, tag];
+List<String> prtypCln = [id, typ];
+List<String> prdCln = [id, itm, typ, crt, img];
+List<String> prcIdxCln = [id, cdr, produce, unit, amt, crr, avl, qnt];
+List<String> ordItmCln = [id, itm, qnt, rate, amt, crr, order];
+List<String> ordCln = [id, usr, prDtl, dlvAr];
+List<String> lgaCln = [id, stId, nmm];
+List<String> hubCln = [id, nmm, latlong, lga, ctt];
+List<String> dptCln = [id, core];
