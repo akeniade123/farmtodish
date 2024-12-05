@@ -11,7 +11,7 @@ import 'tbl_procession.dart';
 
 class DatabaseHelper {
   static const _databaseName = "MyDatabase.db";
-  static const _databaseVersion = 20;
+  static const _databaseVersion = 1;
   final String table;
 
   DatabaseHelper({required this.table});
