@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:farm_to_dish/Database/databaseHelper.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/global_handlers.dart';
 import 'package:farm_to_dish/notificationcontroller.dart';
@@ -326,6 +327,8 @@ class _MyAppState extends State<MyApp> {
     }));
 
     msgg();
+
+    //  logger("Queued: ${await dbh.queryRowCount()}");
   }
 
   Future<void> msgg() async {
@@ -368,6 +371,10 @@ class _MyAppState extends State<MyApp> {
         // do something
       });
     }
+
+    DatabaseHelper dbh = DatabaseHelper(table: ctg);
+    int ipp = await dbh.queryRowCount();
+    logger("***$ipp");
   }
 
   Future<void> receivedMessage(RemoteMessage remoteMessage) async {
