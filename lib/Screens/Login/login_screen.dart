@@ -1,10 +1,13 @@
 import 'package:farm_to_dish/app_theme_file.dart';
+import 'package:farm_to_dish/env.dart';
 import 'package:farm_to_dish/requester.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../global_objects.dart';
+import '../../global_string.dart';
 import '../../global_widgets.dart';
+import 'login_handler.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -205,31 +208,34 @@ class _LoginScreenState extends State<LoginScreen> {
                     // minWidth: double.maxFinite,
                     onPressed: (hasInternetAccess)
                         ? (() async {
-                            context.go("/HomeScreen");
-                            // await loginHandler.login(
-                            //     context,
-                            //     {
-                            //       'email': emailRetreiver.text,
-                            //       'password': passwordRetriever.text,
-                            //     },
-                            //     rememberBool);
+                            (appStatus == dev)
+                                ? {context.go("/HomeScreen")}
+                                : {
+                                    await LoginHandler().login(
+                                        context,
+                                        {
+                                          'email': emailRetreiver.text,
+                                          'password': passwordRetriever.text,
+                                        },
+                                        rememberBool)
 
-                            // if (!checkLogin) {
-                            //   Navigator.of(rootNavigatorKey
-                            //           .currentState!.overlay!.context)
-                            //       .push(MaterialPageRoute(
-                            //     builder: (context) =>
-                            //         Center(child: ErrorPage()),
-                            //   ));
-                            //   Future.delayed(
-                            //     Duration(seconds: 1),
-                            //     () {
-                            //       Navigator.of(rootNavigatorKey
-                            //               .currentState!.overlay!.context)
-                            //           .pop();
-                            //     },
-                            //   );
-                            // }
+                                    // if (!checkLogin) {
+                                    //   Navigator.of(rootNavigatorKey
+                                    //           .currentState!.overlay!.context)
+                                    //       .push(MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         Center(child: ErrorPage()),
+                                    //   ));
+                                    //   Future.delayed(
+                                    //     Duration(seconds: 1),
+                                    //     () {
+                                    //       Navigator.of(rootNavigatorKey
+                                    //               .currentState!.overlay!.context)
+                                    //           .pop();
+                                    //     },
+                                    //   );
+                                    // }
+                                  };
                           })
                         : () {
                             ScaffoldMessenger.of(context).showSnackBar(

@@ -1,6 +1,8 @@
 import 'package:farm_to_dish/env.dart';
 
 const notifyer = '/notification';
+
+const String dev = "development";
 const String prod = "Production";
 
 String fbId = community;
