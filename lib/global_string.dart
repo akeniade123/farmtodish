@@ -14,6 +14,42 @@ const String prlmtpc = "tpks";
 const String defdm = "defaultdomain";
 String paystruct = "Paystruct";
 
+const String communal = "Communal";
+const String global = "Global";
+
+const String desig = "base";
+const String raw = "raw";
+const String generic = "Generic";
+
+const String dmn = "Domain";
+
+const String usrTbl = "user";
+
+const String reg = "Register";
+const String login = "Login";
+const String pswOTP = "PasswordOTP";
+
+const String ttl = "title";
+
+const String id_ = "id";
+const String dtl = "Detail";
+const String cnt = "content";
+const String syp = "synopsis";
+const String can = "caption";
+const String pln = "plan";
+
+const String dvd = "Device_ID";
+
+const String fbd = "Fb_UID";
+const String ind = "indexed";
+
+const String sbj = "subject";
+
+const String cpt = "caption";
+
+const String rqstAlbum = "album";
+const String rqstElite = "elite";
+
 const String id = "id";
 const String nmm = "name";
 const String addr = "address";
