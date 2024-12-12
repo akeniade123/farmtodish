@@ -89,6 +89,18 @@ class DatabaseHelper {
     return await _db.query(table);
   }
 
+  Future<int> insertData(Map<String, dynamic> row) async {
+    try {
+      await init();
+
+      log("data entry into $table in progress");
+      return await _db.insert(table, row);
+    } catch (e) {
+      log("Entry error $e");
+      return 0;
+    }
+  }
+
   // All of the methods (insert, query, update, delete) can also be done using
   // raw SQL commands. This method uses a raw query to give the row count.
   Future<int> queryRowCount() async {

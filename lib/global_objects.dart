@@ -1,15 +1,23 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:farm_to_dish/Screens/Products/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'Remote/modelstack.dart';
 import 'Screens/Cart/cart_item_model.dart';
+import 'Screens/Login/user.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 bool isLoggedIn = false;
+
+late User ussr_;
+
+late BuildContext? dlg;
+late BuildContext? baseCtx;
 
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
@@ -107,4 +115,73 @@ void custom_print(Object? o, String about) {
   print('starting $about ...' * 50);
   print(o);
   print('ending $about ...' * 50);
+}
+
+late dashNote dnn;
+late liveNote lnt;
+late serverFile svrf;
+late contentMode cstk;
+late liveSession lss;
+late comboNote cmbN;
+late stackStar strr;
+
+class UINotifier extends ChangeNotifier {
+  final _randomGenerator = Random();
+  int? _generatedNumber;
+  int? get generatedNumber => _generatedNumber;
+
+  int min = 0, max = 0;
+  void generateRandomNumber() {
+    _generatedNumber = min + _randomGenerator.nextInt(max + 1 - min);
+    notifyListeners();
+  }
+
+  void dashNotice(dashNote dnn_) {
+    dnn = dnn_;
+    notifyListeners();
+  }
+
+  void liveNotice(liveNote lnv) {
+    lnt = lnv;
+    notifyListeners();
+  }
+
+  void fileObtained(serverFile svr) {
+    svrf = svr;
+    notifyListeners();
+  }
+
+  /*
+
+  void categoryCast(bool ctg) {
+    usdt = ctg;
+    notifyListeners();
+  }
+
+  void userNotify(User usr) {
+    ussr_ = usr;
+    notifyListeners();
+  }
+
+  void listNotify(List<Notice> ntcc) {
+    lntc = ntcc;
+    notifyListeners();
+  }
+
+  */
+
+  void cbtNotify(contentMode cst) {
+    cstk = cst;
+    notifyListeners();
+  }
+
+  void stackChar(stackStar str) {
+    strr = str;
+    notifyListeners();
+  }
+
+  void comboNotify(comboNote cmb) {
+    cmbN = cmb;
+    notifyListeners();
+  }
 }

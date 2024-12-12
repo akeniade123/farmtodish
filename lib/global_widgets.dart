@@ -1,8 +1,8 @@
-
 import 'package:card_swiper/card_swiper.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:provider/provider.dart';
 
 import 'global_objects.dart';
 
@@ -41,6 +41,53 @@ class _SquireState extends State<Squire> {
       ),
     );
   }
+}
+
+SnackBar displaySnackBar(String message) {
+  return SnackBar(
+    content: Text(message),
+  );
+}
+
+void customSnackBar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(displaySnackBar(message));
+}
+
+@override
+Modal(BuildContext context, double hth, Widget? entry) {
+  dlg = context;
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        dlg = context;
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          content: SizedBox(
+            height: hth,
+            child: entry,
+          ),
+        );
+      });
+}
+
+void customMessage(BuildContext context, String title, String message) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        title: Text(title),
+        content: Text(message),
+      );
+    },
+  );
+}
+
+Consumer titled(String title) {
+  return Consumer<UINotifier>(builder: (context, notifier, child) {
+    return Text("");
+  });
 }
 
 class TelephoneNumberWidget extends StatelessWidget {
