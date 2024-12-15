@@ -7,6 +7,9 @@ const String prod = "Production";
 
 String fbId = community;
 
+var shm = "showPrelim";
+var lgn = "loginStatus";
+
 const String tk_id = "tokenId";
 const String token = "token";
 
@@ -37,6 +40,8 @@ const String cnt = "content";
 const String syp = "synopsis";
 const String can = "caption";
 const String pln = "plan";
+
+const String fln = "Full_name";
 
 const String dvd = "Device_ID";
 
