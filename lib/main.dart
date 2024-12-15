@@ -340,12 +340,12 @@ class _MyAppState extends State<MyApp> {
         fbId = (await FirebaseMessaging.instance.getToken())!;
         pref.setPrefString(tk_id, fbId);
         pref.setPrefBool(token, true);
-        logger("UserToken***$fbId");
+        logger("UserToken Indexed***$fbId");
       } catch (e) {}
     }
     try {
       fbId = (await pref.getPrefString(tk_id))!;
-      logger("UserToken***$fbId");
+      logger("UserToken Retrieved***$fbId");
     } catch (e) {}
 
     logger("Chktkn$fbId");
