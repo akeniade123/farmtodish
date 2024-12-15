@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
       case login:
         tag.addEntries({
           "regId": "prelim",
-          "Full_Name": emailRetreiver.text,
+          "Full_Name": phoneNumberRetriever.text,
           "Essence": "Profile",
           "Password": passwordRetriever.text
         }.entries);
@@ -278,10 +278,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     // minWidth: double.maxFinite,
                     onPressed: (hasInternetAccess)
                         ? (() async {
-                            (appStatus == prod)
+                            (appStatus == dev)
                                 ? {context.go("/HomeScreen")}
                                 : {
-                                    if (emailRetreiver.text.isNotEmpty &&
+                                    if (phoneNumberRetriever.text.isNotEmpty &&
                                         passwordRetriever.text.isNotEmpty)
                                       {
                                         FetchData(login)
