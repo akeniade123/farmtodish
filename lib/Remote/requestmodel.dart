@@ -127,6 +127,16 @@ class Navigate {
     return hsh;
   }
 
+  Future<Map<String, dynamic>?> readData(
+      String table,
+      Map<String, dynamic> manifest,
+      String domain,
+      String essence,
+      String designation,
+      bool show,
+      String phase,
+      BuildContext? context) async {}
+
   Future<Map<String, dynamic>?> entry(
       String table,
       Map<String, dynamic> manifest,

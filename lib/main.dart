@@ -16,6 +16,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'Remote/requestmodel.dart';
 import 'env.dart';
 import 'firebaseHandler.dart';
 import 'firebase_options.dart';
@@ -375,6 +376,19 @@ class _MyAppState extends State<MyApp> {
     DatabaseHelper dbh = DatabaseHelper(table: ctg);
     int ipp = await dbh.queryRowCount();
     logger("***$ipp");
+
+    Navigate nvg = Navigate();
+
+    Map<String, dynamic> mnf = {};
+
+    Map<String, Object> tag = {
+      "Essence": "plans",
+      "State": rd_e,
+      "Manifest": mnf
+    };
+
+    Map<String, dynamic>? ressp = await nvg.readData(
+        "produce", mnf, global, "", "", false, upd_, context);
   }
 
   Future<void> receivedMessage(RemoteMessage remoteMessage) async {
