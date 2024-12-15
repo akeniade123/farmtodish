@@ -1,10 +1,14 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
+import 'package:farm_to_dish/env.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 
+import 'Remote/elitebasis.dart';
+import 'Screens/Home/home_screen.dart';
 import 'global_objects.dart';
+import 'global_string.dart';
 
 class Squire extends StatefulWidget {
   final num? height;
@@ -43,6 +47,56 @@ class _SquireState extends State<Squire> {
   }
 }
 
+class NoInternet extends StatelessWidget {
+  const NoInternet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 10),
+      child: SizedBox(
+        height: 300,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 40),
+              child: Column(
+                children: [
+                  const Icon(
+                    Icons.error_outlined,
+                    size: 100,
+                    color: Colors.red,
+                  ),
+                  Container(
+                    width: 200,
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: const Text(
+                        textAlign: TextAlign.center,
+                        ' Could not fetch data at the moment \nplease check your internet access and try again'),
+                  ),
+                ],
+              ),
+            ),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(200, 30), backgroundColor: bgmainclr),
+                onPressed: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ),
+                    ),
+                child: const Text(
+                  'Return to Dashboard',
+                  style: TextStyle(color: accentclr),
+                ))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 SnackBar displaySnackBar(String message) {
   return SnackBar(
     content: Text(message),
@@ -51,6 +105,50 @@ SnackBar displaySnackBar(String message) {
 
 void customSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(displaySnackBar(message));
+}
+
+void modalPane(
+    String title,
+    Map<String, Object> tag,
+    String domain,
+    String essence,
+    String designation,
+    String endgoal,
+    String function,
+    Future<List<Widget>>? futureclasses,
+    bool active,
+    BuildContext context) {
+  drwdlg = context;
+  switch (essence) {
+    case vww:
+      break;
+    default:
+      futureclasses = obtainData(tag, domain, essence, designation, endgoal,
+          function, active, context);
+      Modal(
+          context,
+          320,
+          SingleChildScrollView(
+            child: Container(
+                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                child: SizedBox(
+                  width: 350,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(title),
+                        Container(
+                            child: (futureclasses == null)
+                                ? const Text(" No Data Yet")
+                                : castData(
+                                    futureclasses, function, essence, endgoal)),
+                      ]),
+                )),
+          ));
+
+      break;
+  }
 }
 
 @override

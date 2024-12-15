@@ -19,6 +19,8 @@ late User ussr_;
 late BuildContext? dlg;
 late BuildContext? baseCtx;
 
+late BuildContext drwdlg, basedlg;
+
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
 final GlobalKey<NavigatorState> sectionNavigatorKey =

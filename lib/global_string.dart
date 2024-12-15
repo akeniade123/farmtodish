@@ -13,6 +13,17 @@ var lgn = "loginStatus";
 const String tk_id = "tokenId";
 const String token = "token";
 
+const vww = "View";
+
+const String crtt = "create";
+const String upd_ = "updatezz";
+const String rd = "read";
+const String rd_e = "read_expl";
+
+const String server = "Server";
+const String resident = "Resident";
+const String repository = "Repository";
+
 const String prlmtpc = "tpks";
 const String defdm = "defaultdomain";
 String paystruct = "Paystruct";
