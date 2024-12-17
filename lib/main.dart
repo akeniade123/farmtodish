@@ -31,7 +31,7 @@ void main() async {
   await NotificationController.initializeLocalNotifications();
   await NotificationController.initializeIsolateReceivePort();
 
-  // await initializeService();
+  await initializeService();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -381,14 +381,8 @@ class _MyAppState extends State<MyApp> {
 
     Map<String, dynamic> mnf = {};
 
-    Map<String, Object> tag = {
-      "Essence": "plans",
-      "State": rd_e,
-      "Manifest": mnf
-    };
-
-    Map<String, dynamic>? ressp = await nvg.readData(
-        "produce", mnf, global, "", "", false, upd_, context);
+    Map<String, dynamic>? ressp =
+        await nvg.readData("produce", mnf, global, "", "", false, rd, context);
   }
 
   Future<void> receivedMessage(RemoteMessage remoteMessage) async {

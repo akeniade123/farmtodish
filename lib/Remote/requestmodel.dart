@@ -140,13 +140,21 @@ class Navigate {
 
     Map<String, String> hsh = formRequisite();
 
-    Map<String, dynamic> tag = {
-      "Essence": table,
-      "State": phase,
-      "Manifest": manifest
-    };
+    switch (phase) {
+      case rd_e:
+        Map<String, dynamic> tag = {
+          "Essence": table,
+          "State": phase,
+          "Manifest": manifest
+        };
+        break;
+      case rd:
+        Map<String, dynamic> tag = {"Essence": table, "State": phase};
+        break;
+    }
 
     hsh.addEntries({"Tag": jsonEncode(tag)}.entries);
+
     Endpoint enp = Endpoint();
 
     String dmn = (domain == communal) ? communal : generic;
