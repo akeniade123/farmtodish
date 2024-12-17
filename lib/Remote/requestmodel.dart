@@ -135,7 +135,35 @@ class Navigate {
       String designation,
       bool show,
       String phase,
-      BuildContext? context) async {}
+      BuildContext? context) async {
+    Map<String, dynamic>? obj;
+
+    Map<String, String> hsh = formRequisite();
+
+    switch (phase) {
+      case rd_e:
+        Map<String, dynamic> tag = {
+          "Essence": table,
+          "State": phase,
+          "Manifest": manifest
+        };
+        break;
+      case rd:
+        Map<String, dynamic> tag = {"Essence": table, "State": phase};
+        break;
+    }
+
+    hsh.addEntries({"Tag": jsonEncode(tag)}.entries);
+
+    Endpoint enp = Endpoint();
+
+    String dmn = (domain == communal) ? communal : generic;
+    try {
+      obj = await postReq(enp.getEndpoint(generic, dmn, true), hsh, rqstElite,
+          essence, designation, urlEnc, context, show);
+    } catch (e) {}
+    return obj;
+  }
 
   Future<Map<String, dynamic>?> entry(
       String table,

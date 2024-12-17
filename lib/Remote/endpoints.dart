@@ -3,7 +3,7 @@ import 'dart:developer';
 import '../env.dart';
 import '../global_string.dart';
 
-String base = "https://www.elitepage.com.ng/";
+String base = "https://www.farmtodish.com/";
 
 class Endpoint {
   String getEndpoint(String path, String domain, bool resident) {
