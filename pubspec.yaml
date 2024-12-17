@@ -90,7 +90,7 @@ flutter_icons:
 
 
 flutter_native_splash:
-  background_image: assets/splash.png
+  background_image: "assets/splash.png"
   android: true
   ios: true
   web: true

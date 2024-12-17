@@ -14,7 +14,10 @@ import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import '../../Remote/requestmodel.dart';
 import '../../global_objects.dart';
+import '../../global_string.dart';
+import '../Products/product_model.dart';
 import '../screens.dart';
 
 // import 'common_widget.dart';
@@ -46,6 +49,31 @@ class _HomeScreenState extends State<HomeScreen> {
     // confirmPasswordRetriever.text = 'asdf1234';
     // gender = 'Male';
     super.initState();
+  }
+
+  Future<List<ProductModel>>? product;
+
+  late List<String> thumb;
+  late List<String> owner;
+  late List<String> titles;
+
+  late Navigate nvg;
+
+  Future<List<ProductModel>>? futurefetch() async {
+    List<ProductModel> rslt = [];
+    nvg = Navigate();
+
+    /*
+
+    Map<String, Object> tag = widget.data;
+
+    Map<String, dynamic>? ressp =
+        await nvg.eliteApi(tag, desig, widget.essence, vdr, true, context);
+
+
+*/
+
+    return rslt;
   }
 
   @override
