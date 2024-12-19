@@ -63,6 +63,11 @@ class _HomeScreenState extends State<HomeScreen> {
     List<ProductModel> rslt = [];
     nvg = Navigate();
 
+    Map<String, dynamic> mnf = {};
+
+    Map<String, dynamic>? ressp =
+        await nvg.readData("produce", mnf, global, rd, "", false, rd, context);
+
     /*
 
     Map<String, Object> tag = widget.data;
