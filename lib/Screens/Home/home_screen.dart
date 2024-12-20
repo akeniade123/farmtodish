@@ -78,20 +78,23 @@ class _HomeScreenState extends State<HomeScreen> {
     Map<String, dynamic>? ressp =
         await nvg.readData("produce", mnf, global, rd, "", false, rd, context);
 
+    List<Map<String, dynamic>> cntz = [];
+
+    cntz.add(
+        {"name": "Fruits & Veggies", "imageURL": "${assets}fruitVeggie.png"});
+    // cntz.add(value);
+
     return Wrap(
       runAlignment: WrapAlignment.center,
       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: productTypeDetails.map((e) => _buildCategorySlab(e)).toList(),
     );
-
     /*
 
     Map<String, Object> tag = widget.data;
 
     Map<String, dynamic>? ressp =
         await nvg.eliteApi(tag, desig, widget.essence, vdr, true, context);
-
-
 */
   }
 
