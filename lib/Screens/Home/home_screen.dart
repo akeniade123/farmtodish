@@ -11,6 +11,7 @@ import 'package:farm_to_dish/Screens/DeliveryCar/delivery_car_model.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 // import 'package:sqflite/sqflite.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -34,6 +35,16 @@ class _HomeScreenState extends State<HomeScreen> {
   // late SignUpHandler signUpHandler;
 
   late QRViewController _controller;
+
+  Future<Wrap>? product;
+
+  late List<String> thumb;
+  late List<String> owner;
+  late List<String> titles;
+
+  late Navigate nvg;
+  bool loaded = false;
+
   @override
   void initState() {
     // signUpHandler = SignUpHandler();
@@ -49,17 +60,16 @@ class _HomeScreenState extends State<HomeScreen> {
     // confirmPasswordRetriever.text = 'asdf1234';
     // gender = 'Male';
     super.initState();
+    product = futurefetch();
   }
 
-  Future<List<ProductModel>>? product;
+  Consumer ftr() {
+    return Consumer<UINotifier>(builder: (context, notifier, child) {
+      return castData();
+    });
+  }
 
-  late List<String> thumb;
-  late List<String> owner;
-  late List<String> titles;
-
-  late Navigate nvg;
-
-  Future<List<ProductModel>>? futurefetch() async {
+  Future<Wrap>? futurefetch() async {
     List<ProductModel> rslt = [];
     nvg = Navigate();
 
@@ -67,6 +77,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Map<String, dynamic>? ressp =
         await nvg.readData("produce", mnf, global, rd, "", false, rd, context);
+
+    return Wrap(
+      runAlignment: WrapAlignment.center,
+      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: productTypeDetails.map((e) => _buildCategorySlab(e)).toList(),
+    );
 
     /*
 
@@ -77,8 +93,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 */
+  }
 
-    return rslt;
+  FutureBuilder<Wrap> castData() {
+    return FutureBuilder(
+        future: product,
+        builder: (context, snapshot) {
+          return Wrap(
+            runAlignment: WrapAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children:
+                productTypeDetails.map((e) => _buildCategorySlab(e)).toList(),
+          );
+        });
   }
 
   @override
@@ -108,12 +135,15 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController confirmPasswordRetriever = TextEditingController();
   String? gender;
   bool hasError = false;
+
+  /*
   Map<int, List<String>> sectionSlabs = {
     0: ["Fruits vegetables", "${assets}fruitVeggie.png"],
     1: ["Grains and legumes", "${assets}grains.png"],
     2: ["Tubers", "${assets}tubbers.png"],
     3: ["Spices", "${assets}pepper.png"],
   };
+  */
 
   void showError(errorMessage) {
     // [
@@ -178,85 +208,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 10),
                     _accountDetail(),
                   ]))),
-
-      /*
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 100),
-        child: AppBar(
-          toolbarHeight: 100,
-          centerTitle: true,
-          iconTheme: const IconThemeData(size: 30, color: Colors.white),
-          title: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Tab(
-                height: 90,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: SizedBox(
-                    height: 75,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        //  (initialized == false) ? const ProfLoader() : castData()
-                        SizedBox(height: 30),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            /*
-                            _iconButtonWithBorder(
-                                func: () {},
-                                iconData: Icons.person_outline_outlined),
-                            Text(
-                              "Welcome, Daniel",
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.bold),
-                            ),
-                            /*
-                  _iconButtonWithBorder(
-                      func: () {}, iconData: Icons.notifications),
-                      */
-                            _iconButtonWithBorder(
-                                func: () {}, iconData: Icons.qr_code)
-
-                                */
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        _accountDetail(),
-                        // widget.proDetails,
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          //  backgroundColor: bgmainclr,
-        ),
-      ),
-      */
-
-      /*
-      drawer: Drawer(
-          child: DrawerScreen(
-        ctx_key: scaffoldKey,
-        tagged: const {
-          "Essence": "section",
-          "State": "read_expl",
-          "Manifest": {"availability": "1"}
-        },
-        essence: sct,
-        endgoal: '',
-        title: org_,
-        view_: '',
-        destination: banky,
-        pane: pane,
-      )),
-      */
-
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
