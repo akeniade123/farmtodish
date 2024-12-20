@@ -138,18 +138,16 @@ class Navigate {
       BuildContext? context) async {
     Map<String, dynamic>? obj;
 
+    Map<String, dynamic> tag = {};
+
     Map<String, String> hsh = formRequisite();
 
     switch (phase) {
       case rd_e:
-        Map<String, dynamic> tag = {
-          "Essence": table,
-          "State": phase,
-          "Manifest": manifest
-        };
+        tag = {"Essence": table, "State": phase, "Manifest": manifest};
         break;
       case rd:
-        Map<String, dynamic> tag = {"Essence": table, "State": phase};
+        tag = {"Essence": table, "State": phase};
         break;
     }
 

@@ -4,7 +4,7 @@ import 'dart:isolate';
 import 'firebase_options.dart';
 import 'global_handlers.dart';
 import 'global_string.dart';
-import 'notificationcontroller.dart';
+//import 'notificationcontroller.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

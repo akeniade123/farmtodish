@@ -6,7 +6,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:farm_to_dish/Database/databaseHelper.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/global_handlers.dart';
-import 'package:farm_to_dish/notificationcontroller.dart';
+//import 'package:farm_to_dish/notificationcontroller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +28,8 @@ import 'sharedpref.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
-  await NotificationController.initializeLocalNotifications();
-  await NotificationController.initializeIsolateReceivePort();
+  // await NotificationController.initializeLocalNotifications();
+  // await NotificationController.initializeIsolateReceivePort();
 
   await initializeService();
 
@@ -376,13 +376,6 @@ class _MyAppState extends State<MyApp> {
     DatabaseHelper dbh = DatabaseHelper(table: ctg);
     int ipp = await dbh.queryRowCount();
     logger("***$ipp");
-
-    Navigate nvg = Navigate();
-
-    Map<String, dynamic> mnf = {};
-
-    Map<String, dynamic>? ressp =
-        await nvg.readData("produce", mnf, global, "", "", false, rd, context);
   }
 
   Future<void> receivedMessage(RemoteMessage remoteMessage) async {
