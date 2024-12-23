@@ -78,8 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Map<String, dynamic> mnf = {};
 
-    Map<String, dynamic>? obj =
-        await nvg.readData("produce", mnf, global, rd, "", false, rd, context);
+    Map<String, dynamic>? obj = await nvg.readData(
+        "produce_type", mnf, global, rd, "", false, rd, context);
 
     ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
     if (svp.status) {
