@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late Navigate nvg;
   bool loaded = false;
+  List<Map<String, dynamic>> cntz = [];
 
   @override
   void initState() {
@@ -61,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // confirmPasswordRetriever.text = 'asdf1234';
     // gender = 'Male';
     super.initState();
+    product = null;
     product = futurefetch();
   }
 
@@ -75,8 +77,6 @@ class _HomeScreenState extends State<HomeScreen> {
     nvg = Navigate();
 
     Map<String, dynamic> mnf = {};
-
-    List<Map<String, dynamic>> cntz = [];
 
     Map<String, dynamic>? obj =
         await nvg.readData("produce", mnf, global, rd, "", false, rd, context);
@@ -101,11 +101,8 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         */
       }
-      rsp.data;
       //for()
     }
-
-    // cntz.add(value);
 
     return Wrap(
       runAlignment: WrapAlignment.center,
@@ -128,8 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return Wrap(
             runAlignment: WrapAlignment.center,
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children:
-                productTypeDetails.map((e) => _buildCategorySlab(e)).toList(),
+            children: cntz.map((e) => _buildCategorySlab(e)).toList(),
           );
         });
   }
@@ -242,13 +238,15 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 10),
               _buildPack2(),
               SizedBox(height: 10),
-              Wrap(
-                runAlignment: WrapAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: productTypeDetails
-                    .map((e) => _buildCategorySlab(e))
-                    .toList(),
-              ),
+              (product == null)
+                  ? Wrap(
+                      runAlignment: WrapAlignment.center,
+                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: productTypeDetails
+                          .map((e) => _buildCategorySlab(e))
+                          .toList())
+                  : castData(),
+
               //  sectionSlabs.keys
               //     .map((e) => _buildCategorySlab(e))
               //     .toList()),
