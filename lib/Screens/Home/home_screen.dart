@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../Remote/requestmodel.dart';
+import '../../Remote/server_response.dart';
 import '../../global_objects.dart';
 import '../../global_string.dart';
 import '../Products/product_model.dart';
@@ -44,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late Navigate nvg;
   bool loaded = false;
+  List<Map<String, dynamic>> cntz = [];
 
   @override
   void initState() {
@@ -60,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // confirmPasswordRetriever.text = 'asdf1234';
     // gender = 'Male';
     super.initState();
+    product = null;
     product = futurefetch();
   }
 
@@ -75,19 +78,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Map<String, dynamic> mnf = {};
 
-    Map<String, dynamic>? ressp =
+    Map<String, dynamic>? obj =
         await nvg.readData("produce", mnf, global, rd, "", false, rd, context);
 
-    List<Map<String, dynamic>> cntz = [];
+    ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+    if (svp.status) {
+      ServerResponse rsp = ServerResponse.fromJson(obj);
+      for (final item in rsp.data) {
+        String itm = item["item"];
+        String typ = item["type"];
+        String img = item["image"];
 
-    cntz.add(
-        {"name": "Fruits & Veggies", "imageURL": "${assets}fruitVeggie.png"});
-    // cntz.add(value);
+        cntz.add({"name": itm, "imageURL": "${assets}fruitVeggie.png"});
+
+        /*
+        {
+            "id": "1",
+            "item": "Red Cherry Tomato",
+            "type": "1",
+            "created": "2024-06-08 18:32:54",
+            "image": "https://www.farmtodish.com/app/farm%20produce/Red_Cherry%20Tomato.webp"
+        }
+        */
+      }
+      //for()
+    }
 
     return Wrap(
       runAlignment: WrapAlignment.center,
       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: productTypeDetails.map((e) => _buildCategorySlab(e)).toList(),
+      children: cntz.map((e) => _buildCategorySlab(e)).toList(),
     );
     /*
 
@@ -105,8 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return Wrap(
             runAlignment: WrapAlignment.center,
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children:
-                productTypeDetails.map((e) => _buildCategorySlab(e)).toList(),
+            children: cntz.map((e) => _buildCategorySlab(e)).toList(),
           );
         });
   }
@@ -219,13 +238,15 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 10),
               _buildPack2(),
               SizedBox(height: 10),
-              Wrap(
-                runAlignment: WrapAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: productTypeDetails
-                    .map((e) => _buildCategorySlab(e))
-                    .toList(),
-              ),
+              (product == null)
+                  ? Wrap(
+                      runAlignment: WrapAlignment.center,
+                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: productTypeDetails
+                          .map((e) => _buildCategorySlab(e))
+                          .toList())
+                  : castData(),
+
               //  sectionSlabs.keys
               //     .map((e) => _buildCategorySlab(e))
               //     .toList()),
