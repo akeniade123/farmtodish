@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
 
 import '../../Dialogs/dialog_to_adding_products.dart';
+import '../../global_handlers.dart';
 import '../../global_objects.dart';
 import '../../global_widgets.dart';
 import '../Cart/cart_item_model.dart';
@@ -33,6 +34,7 @@ class _ProductScreenState extends State<ProductScreen> {
     // selectedProducts = currentOrder?.items ?? [];
     currentOrder ??= OrderModel(items: []);
     selectedTabName = widget.initialySelectedTab ?? "";
+    logger("State: $selectedTabName");
     super.initState();
   }
 

@@ -85,11 +85,11 @@ class _HomeScreenState extends State<HomeScreen> {
     if (svp.status) {
       ServerResponse rsp = ServerResponse.fromJson(obj);
       for (final item in rsp.data) {
-        String itm = item["item"];
+        //   String itm = item["item"];
         String typ = item["type"];
-        String img = item["image"];
+        //1  String img = item["image"];
 
-        cntz.add({"name": itm, "imageURL": "${assets}fruitVeggie.png"});
+        cntz.add({"name": typ, "imageURL": "${assets}fruitVeggie.png"});
 
         /*
         {
