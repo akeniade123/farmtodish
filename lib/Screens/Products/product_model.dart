@@ -46,3 +46,11 @@ class ProductModel {
         unit: unit);
   }
 }
+
+class ProduceType {
+  final String name;
+
+  final String image;
+
+  ProduceType({required this.name, required this.image}) {}
+}

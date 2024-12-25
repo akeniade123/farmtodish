@@ -15,8 +15,10 @@ import 'package:provider/provider.dart';
 // import 'package:sqflite/sqflite.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import '../../Database/databaseHelper.dart';
 import '../../Remote/requestmodel.dart';
 import '../../Remote/server_response.dart';
+import '../../global_handlers.dart';
 import '../../global_objects.dart';
 import '../../global_string.dart';
 import '../Products/product_model.dart';
@@ -46,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Navigate nvg;
   bool loaded = false;
   List<Map<String, dynamic>> cntz = [];
+  late DatabaseHelper dbh;
 
   @override
   void initState() {
@@ -63,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // gender = 'Male';
     super.initState();
     product = null;
+    dbh = DatabaseHelper(table: ptyp);
     product = futurefetch();
   }
 
@@ -73,36 +77,38 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<Wrap>? futurefetch() async {
-    List<ProductModel> rslt = [];
-    nvg = Navigate();
-
-    Map<String, dynamic> mnf = {};
-
-    Map<String, dynamic>? obj =
-        await nvg.readData("produce", mnf, global, rd, "", false, rd, context);
-
-    ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
-    if (svp.status) {
-      ServerResponse rsp = ServerResponse.fromJson(obj);
-      for (final item in rsp.data) {
-        String itm = item["item"];
-        String typ = item["type"];
-        String img = item["image"];
-
-        cntz.add({"name": itm, "imageURL": "${assets}fruitVeggie.png"});
-
-        /*
-        {
-            "id": "1",
-            "item": "Red Cherry Tomato",
-            "type": "1",
-            "created": "2024-06-08 18:32:54",
-            "image": "https://www.farmtodish.com/app/farm%20produce/Red_Cherry%20Tomato.webp"
-        }
-        */
+    int qq = await dbh.queryRowCount();
+    if (qq > 0) {
+      //logger()
+      logger("Albert Indexed: $qq");
+      List<Map<String, dynamic>> pp = await dbh.queryAllRows();
+      for (Map<String, dynamic> itm in pp) {
+        cntz.add({"name": itm[typ], "imageURL": "${assets}fruitVeggie.png"});
       }
-      //for()
+    } else {
+      logger("Albert: $qq");
+      List<ProductModel> rslt = [];
+      nvg = Navigate();
+
+      Map<String, dynamic> mnf = {};
+
+      Map<String, dynamic>? obj =
+          await nvg.readData(ptyp, mnf, global, rd, "", false, rd, context);
+
+      ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+      if (svp.status) {
+        ServerResponse rsp = ServerResponse.fromJson(obj);
+        for (final item in rsp.data) {
+          //   String itm = item["item"];
+          String typ = item["type"];
+          //1  String img = item["image"];
+
+          cntz.add({"name": typ, "imageURL": "${assets}fruitVeggie.png"});
+          dbh.insertData(item);
+        }
+      }
     }
+    // List<String> prtypCln = [id, typ];
 
     return Wrap(
       runAlignment: WrapAlignment.center,
@@ -116,6 +122,14 @@ class _HomeScreenState extends State<HomeScreen> {
     Map<String, dynamic>? ressp =
         await nvg.eliteApi(tag, desig, widget.essence, vdr, true, context);
 */
+  }
+
+  Wrap defaultPrdc() {
+    return Wrap(
+        runAlignment: WrapAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children:
+            productTypeDetails.map((e) => _buildCategorySlab(e)).toList());
   }
 
   FutureBuilder<Wrap> castData() {
@@ -238,14 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 10),
               _buildPack2(),
               SizedBox(height: 10),
-              (product == null)
-                  ? Wrap(
-                      runAlignment: WrapAlignment.center,
-                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: productTypeDetails
-                          .map((e) => _buildCategorySlab(e))
-                          .toList())
-                  : castData(),
+              (product == null) ? defaultPrdc() : castData(),
 
               //  sectionSlabs.keys
               //     .map((e) => _buildCategorySlab(e))
@@ -341,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Color(0xff373737),
                   ),
                   Text(
-                    "Main Gate",
+                    "Abule Egba",
                     style: TextStyle(
                       fontSize: 14,
                       // fontWeight: FontWeight.bold,

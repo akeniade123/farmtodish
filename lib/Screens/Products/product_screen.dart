@@ -10,8 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
 
+import '../../Database/databaseHelper.dart';
 import '../../Dialogs/dialog_to_adding_products.dart';
+import '../../global_handlers.dart';
 import '../../global_objects.dart';
+import '../../global_string.dart';
 import '../../global_widgets.dart';
 import '../Cart/cart_item_model.dart';
 // import '../Payment/cart_model.dart';
@@ -33,7 +36,13 @@ class _ProductScreenState extends State<ProductScreen> {
     // selectedProducts = currentOrder?.items ?? [];
     currentOrder ??= OrderModel(items: []);
     selectedTabName = widget.initialySelectedTab ?? "";
+    logger("State: $selectedTabName");
+
     super.initState();
+    // prSect = produceSect();
+    schip = _produceSect();
+    // lst = __produceSect();
+    // bdw = _bodyWidget();
   }
 
   @override
@@ -68,7 +77,9 @@ class _ProductScreenState extends State<ProductScreen> {
                         SizedBox(height: 20),
                         Column(
                           children: [
-                            _buildSelectorTab(),
+                            (schip == null)
+                                ? _buildSelectorTab()
+                                : _bodyWidget(),
                             SizedBox(height: 20),
                             Column(
                                 children: testProducts
@@ -294,6 +305,105 @@ class _ProductScreenState extends State<ProductScreen> {
         )
       ],
     );
+  }
+
+  DatabaseHelper dbh = DatabaseHelper(table: ptyp);
+
+  late Future<List<ProduceType>>? prSect;
+  late Future<List<SelectionChip>>? schip;
+
+  late Future<List<String>>? lst; // = [];
+
+  Future<List<SelectionChip>>? _produceSect() async {
+    List<SelectionChip> plc = [];
+    int ptt = await dbh.queryRowCount();
+    List<Map<String, dynamic>> dd = [];
+    if (ptt > 0) {
+      List<Map<String, dynamic>> fm = await dbh.queryAllRows();
+      for (Map<String, dynamic> itmm in fm) {
+        plc.add(
+          SelectionChip(
+            name: itmm[nmm],
+            imageURL: "${assets}fruitVeggie.png",
+            isSelected: selectedTabName == "fruits And Vegie",
+            onClickFunction: (p0) {
+              selectedTabName = "fruits And Vegie";
+              setState(() {});
+            },
+          ),
+          //SizedBox(width: 10),
+        );
+      }
+    }
+    return plc;
+  }
+
+  Future<List<String>>? __produceSect() async {
+    List<String> plc = [];
+    int ptt = await dbh.queryRowCount();
+    List<Map<String, dynamic>> dd = [];
+    if (ptt > 0) {
+      List<Map<String, dynamic>> fm = await dbh.queryAllRows();
+      for (Map<String, dynamic> itmm in fm) {
+        plc.add(itmm[nmm]
+            //SizedBox(width: 10),
+            );
+      }
+    }
+    return plc;
+  }
+
+  Future<List<ProduceType>>? produceSect() async {
+    List<ProduceType> pstk = [];
+    int ptt = await dbh.queryRowCount();
+    List<Map<String, dynamic>> dd = [];
+    if (ptt > 0) {
+      List<Map<String, dynamic>> fm = await dbh.queryAllRows();
+      for (Map<String, dynamic> itmm in fm) {
+        pstk.add(
+            ProduceType(name: itmm[typ], image: "${assets}fruitVeggie.png"));
+      }
+    }
+    return pstk;
+  }
+
+  late Future<TitleMoreAndBodyWidget>? bdw;
+
+  FutureBuilder<List<SelectionChip>> _bodyWidget() {
+    return FutureBuilder(
+        future: schip,
+        builder: ((context, snapshot) {
+          if (snapshot.hasData) {
+            List<SelectionChip>? data_ = snapshot.data;
+
+            return TitleMoreAndBodyWidget(
+                body: SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    ListView.builder(
+                      itemCount: data_!.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return data_[index];
+                      },
+                    )
+                  ],
+                )),
+                titleWidget: Text(
+                  "Categories",
+                  style: TextStyle(
+                      // color:
+                      // FarmToDishTheme.scaffoldBackgroundColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ));
+          } else if (snapshot.hasError) {
+            return const Text("");
+          }
+          return Text("data");
+        }));
   }
 
   TitleMoreAndBodyWidget _buildSelectorTab() {
