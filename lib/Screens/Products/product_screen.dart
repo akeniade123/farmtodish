@@ -8,10 +8,12 @@
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 // import 'package:sqflite/sqflite.dart';
 
 import '../../Database/databaseHelper.dart';
 import '../../Dialogs/dialog_to_adding_products.dart';
+import '../../env.dart';
 import '../../global_handlers.dart';
 import '../../global_objects.dart';
 import '../../global_string.dart';
@@ -77,9 +79,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         SizedBox(height: 20),
                         Column(
                           children: [
-                            (schip == null)
-                                ? _buildSelectorTab()
-                                : _bodyWidget(),
+                            (schip == null) ? _buildSelectorTab() : stackData(),
                             SizedBox(height: 20),
                             Column(
                                 children: testProducts
@@ -310,29 +310,37 @@ class _ProductScreenState extends State<ProductScreen> {
   DatabaseHelper dbh = DatabaseHelper(table: ptyp);
 
   late Future<List<ProduceType>>? prSect;
-  late Future<List<SelectionChip>>? schip;
+  late Future<List<Widget>>? schip;
 
   late Future<List<String>>? lst; // = [];
 
-  Future<List<SelectionChip>>? _produceSect() async {
-    List<SelectionChip> plc = [];
+  Future<List<Widget>>? _produceSect() async {
+    List<Widget> plc = [];
     int ptt = await dbh.queryRowCount();
     List<Map<String, dynamic>> dd = [];
+    logger("Size $ptt");
     if (ptt > 0) {
       List<Map<String, dynamic>> fm = await dbh.queryAllRows();
       for (Map<String, dynamic> itmm in fm) {
-        plc.add(
-          SelectionChip(
-            name: itmm[nmm],
-            imageURL: "${assets}fruitVeggie.png",
-            isSelected: selectedTabName == "fruits And Vegie",
-            onClickFunction: (p0) {
-              selectedTabName = "fruits And Vegie";
-              setState(() {});
-            },
-          ),
-          //SizedBox(width: 10),
-        );
+        logger("item${itmm[typ]}");
+        try {
+          plc.add(
+            SelectionChip(
+              name: itmm[typ],
+              imageURL: "${assets}fruitVeggie.png",
+              isSelected: selectedTabName == "fruits And Vegie",
+              onClickFunction: (p0) {
+                selectedTabName = "fruits And Vegie";
+                setState(() {});
+              },
+            ),
+          );
+          plc.add(
+            SizedBox(width: 10),
+          );
+        } catch (e) {
+          logger("The error $e");
+        }
       }
     }
     return plc;
@@ -369,38 +377,65 @@ class _ProductScreenState extends State<ProductScreen> {
 
   late Future<TitleMoreAndBodyWidget>? bdw;
 
-  FutureBuilder<List<SelectionChip>> _bodyWidget() {
+  FutureBuilder<List<Widget>> stackData() {
+    return FutureBuilder(
+        future: schip,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Widget>? data_ = snapshot.data;
+
+            return SingleChildScrollView(
+              child: Column(children: [
+                ListView.builder(
+                    itemCount: data_!.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (BuildContext context, index) {
+                      return data_[index];
+                    })
+              ]),
+            );
+            // return cast(essence, data_!);
+          } else if (snapshot.hasError) {
+            return const NoInternet();
+          }
+          return SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Center(
+              child: LoadingAnimationWidget.flickr(
+                  leftDotColor: Color(0xff029534),
+                  rightDotColor: bgmainclr,
+                  size: 30),
+            ),
+          );
+        });
+  }
+
+  FutureBuilder<List<Widget>> _bodyWidget() {
     return FutureBuilder(
         future: schip,
         builder: ((context, snapshot) {
           if (snapshot.hasData) {
-            List<SelectionChip>? data_ = snapshot.data;
+            List<Widget>? data_ = snapshot.data;
 
-            return TitleMoreAndBodyWidget(
-                body: SingleChildScrollView(
-                    child: Column(
-                  children: [
-                    ListView.builder(
-                      itemCount: data_!.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return data_[index];
-                      },
-                    )
-                  ],
-                )),
-                titleWidget: Text(
-                  "Categories",
-                  style: TextStyle(
-                      // color:
-                      // FarmToDishTheme.scaffoldBackgroundColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ));
+            return SingleChildScrollView(
+              child: Row(
+                children: [
+                  ListView.builder(
+                    itemCount: data_!.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Text("This $index"); //data_[index];
+                    },
+                  )
+                ],
+              ),
+            );
           } else if (snapshot.hasError) {
-            return const Text("");
+            return const Text("Cast Error ");
           }
           return Text("data");
         }));
