@@ -13,6 +13,8 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../Database/databaseHelper.dart';
 import '../../Dialogs/dialog_to_adding_products.dart';
+import '../../Remote/requestmodel.dart';
+import '../../Remote/server_response.dart';
 import '../../env.dart';
 import '../../global_handlers.dart';
 import '../../global_objects.dart';
@@ -31,6 +33,16 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  DatabaseHelper dbh = DatabaseHelper(table: ptyp);
+
+  DatabaseHelper dbp = DatabaseHelper(table: produce);
+
+  late Future<List<ProduceType>>? prSect;
+  late Future<List<Widget>>? schip;
+  late Future<List<ProductModel>>? pmdl;
+
+  late Future<List<String>>? lst; // = [];
+
   // List<CartItemModel> selectedProducts = [];
   @override
   void initState() {
@@ -79,8 +91,10 @@ class _ProductScreenState extends State<ProductScreen> {
                         SizedBox(height: 20),
                         Column(
                           children: [
+                            /*
                             (schip == null) ? _buildSelectorTab() : stackData(),
                             SizedBox(height: 20),
+                            */
                             Column(
                                 children: testProducts
                                     .map((e) => _buildProductTab(
@@ -307,20 +321,55 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  DatabaseHelper dbh = DatabaseHelper(table: ptyp);
+  late Navigate nvg;
 
-  late Future<List<ProduceType>>? prSect;
-  late Future<List<Widget>>? schip;
-
-  late Future<List<String>>? lst; // = [];
-
-  Future<List<Widget>>? _produceSect() async {
-    List<Widget> plc = [];
-    int ptt = await dbh.queryRowCount();
+  Future<List<ProductModel>>? _produceStack() async {
+    List<ProductModel> rslt = [];
+    int ptt = await dbp.queryRowCount();
     List<Map<String, dynamic>> dd = [];
     logger("Size $ptt");
     if (ptt > 0) {
-      List<Map<String, dynamic>> fm = await dbh.queryAllRows();
+      List<Map<String, dynamic>> fm = await dbp.queryAllRows();
+      for (Map<String, dynamic> itmm in fm) {
+        logger("item${itmm[typ]}");
+        try {
+          rslt.add(ProductModel());
+        } catch (e) {
+          logger("The error $e");
+        }
+      }
+    } else {
+      nvg = Navigate();
+      Map<String, dynamic> mnf = {};
+
+      Map<String, dynamic>? obj =
+          await nvg.readData(ptyp, mnf, global, rd, "", false, rd, context);
+
+      ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+      if (svp.status) {
+        ServerResponse rsp = ServerResponse.fromJson(obj);
+        for (final item in rsp.data) {
+          //   String itm = item["item"];
+          String typ = item["type"];
+          //1  String img = item["image"];
+
+          rslt.add(ProductModel());
+
+          //  cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
+          dbh.insertData(item);
+        }
+      }
+    }
+    return rslt;
+  }
+
+  Future<List<Widget>>? _produceSect() async {
+    List<Widget> plc = [];
+    int ptt = await dbp.queryRowCount();
+    List<Map<String, dynamic>> dd = [];
+    logger("Size $ptt");
+    if (ptt > 0) {
+      List<Map<String, dynamic>> fm = await dbp.queryAllRows();
       for (Map<String, dynamic> itmm in fm) {
         logger("item${itmm[typ]}");
         try {
@@ -342,7 +391,7 @@ class _ProductScreenState extends State<ProductScreen> {
           logger("The error $e");
         }
       }
-    }
+    } else {}
     return plc;
   }
 
@@ -385,10 +434,9 @@ class _ProductScreenState extends State<ProductScreen> {
             List<Widget>? data_ = snapshot.data;
 
             return SingleChildScrollView(
-              child: Column(children: [
+              child: Row(children: [
                 ListView.builder(
                     itemCount: data_!.length,
-                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (BuildContext context, index) {
