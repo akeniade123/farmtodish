@@ -33,6 +33,8 @@ void main() async {
 
   await initializeService();
 
+  dbCart = DatabaseHelper(table: orderItem);
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // deviceId;

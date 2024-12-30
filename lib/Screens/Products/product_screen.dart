@@ -45,6 +45,8 @@ class _ProductScreenState extends State<ProductScreen> {
 
   late Future<List<String>>? lst; // = [];
 
+  late Future<int>? cart;
+
   // List<CartItemModel> selectedProducts = [];
   @override
   void initState() {
@@ -58,6 +60,7 @@ class _ProductScreenState extends State<ProductScreen> {
     // prSect = produceSect();
     // schip = _produceSect();
     pmdl = _produceStack();
+    cart = _cart();
     // lst = __produceSect();
     // bdw = _bodyWidget();
   }
@@ -99,17 +102,6 @@ class _ProductScreenState extends State<ProductScreen> {
                             SizedBox(height: 20),
                             */
                             (pmdl == null) ? preload() : loadProduct(),
-                            Column(
-                                children: testProducts
-                                    .map((e) => _buildProductTab(
-                                        imageURL: e.imageURL,
-                                        pname: e.name,
-                                        priceStatement: e.priceStatement,
-                                        quantity: e.quantityStatement,
-                                        model: e,
-                                        cartModel:
-                                            e.createCartModelFromProduct()))
-                                    .toList())
                           ],
                         ),
                         SizedBox(height: 80)
@@ -373,6 +365,64 @@ class _ProductScreenState extends State<ProductScreen> {
       }
     }
     return rslt;
+  }
+
+  Future<int>? _cart() async {
+    int i = await dbp.queryRowCount();
+    return i;
+  }
+
+  FutureBuilder<int> _cartdisplay() {
+    return FutureBuilder(
+        future: cart,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            int? data_ = snapshot.data;
+            String qq = "$data_";
+            if (data_! < 1) {
+              qq = "";
+            }
+            return Align(
+              alignment: Alignment.bottomRight,
+              child: CircleAvatar(
+                radius: 7,
+                backgroundColor: FarmToDishTheme.themeRed,
+                child: Text(
+                  qq,
+                  style: TextStyle(
+                      color: FarmToDishTheme.scaffoldBackgroundColor,
+                      fontSize: 10),
+                ),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return const NoInternet();
+          }
+          return SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Center(
+              child: LoadingAnimationWidget.flickr(
+                  leftDotColor: Color(0xff029534),
+                  rightDotColor: bgmainclr,
+                  size: 30),
+            ),
+          );
+        });
+  }
+
+  Align _cartdefault() {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: CircleAvatar(
+        radius: 7,
+        backgroundColor: FarmToDishTheme.themeRed,
+        child: Text(
+          "1",
+          style: TextStyle(
+              color: FarmToDishTheme.scaffoldBackgroundColor, fontSize: 10),
+        ),
+      ),
+    );
   }
 
   Future<List<Widget>>? _produceSect() async {
@@ -680,28 +730,21 @@ class _ProductScreenState extends State<ProductScreen> {
             // color: FarmToDishTheme.accentLightColor,
             height: 26,
             width: 26,
+
             child: Stack(
               children: [
                 Icon(
                   Icons.shopping_cart,
                   color: FarmToDishTheme.scaffoldBackgroundColor,
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: CircleAvatar(
-                    radius: 7,
-                    backgroundColor: FarmToDishTheme.themeRed,
-                    child: Text(
-                      "1",
-                      style: TextStyle(
-                          color: FarmToDishTheme.scaffoldBackgroundColor,
-                          fontSize: 10),
-                    ),
-                  ),
-                )
+                (cart == null) ? _cartdefault() : _cartdisplay(),
               ],
             ),
-          )
+          ),
+          SizedBox(
+              // color: FarmToDishTheme.accentLightColor,
+              height: 0,
+              width: 0)
         ],
       ),
     );

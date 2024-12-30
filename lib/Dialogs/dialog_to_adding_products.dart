@@ -23,8 +23,6 @@ class _DialogToAddingProductsState extends State<DialogToAddingProducts> {
     quantity = widget.model?.quantity ?? 0;
     // nmm =;
     super.initState();
-
-    final String nmm = widget.productModel.name;
   }
 
 /*

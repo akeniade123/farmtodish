@@ -129,3 +129,5 @@ const String users = "users";
 const String vendor = "vendor";
 
 const String despatch = "despatch";
+
+const String cart = "cart";
