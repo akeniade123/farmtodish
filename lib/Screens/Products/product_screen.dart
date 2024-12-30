@@ -1,10 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, prefer_interpolation_to_compose_strings
 
 // import 'dart:js_interop';
-
-// import 'package:flutter/widgets.dart' as w;
-// import 'package:Yomcoin/models/models.dart';
-// import 'package:Yomcoin/screens/login.dart';
 import 'dart:async';
 
 import 'package:farm_to_dish/app_theme_file.dart';
@@ -301,6 +297,160 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
+  Column _productTab(
+      {String? quantity,
+      required String pname,
+      String? priceStatement,
+      String? imageURL,
+      required ProductModel model,
+      required CartItemModel? cartModel}) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 145,
+          width: double.infinity,
+          child: Stack(alignment: Alignment.bottomCenter, children: [
+            Container(
+              width: double.infinity,
+              height: 90,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: FarmToDishTheme.accentLightColor,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      // height: 130,
+                      width: 130,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        // color: Colors.white,
+                      ),
+                      // child: Image.asset(
+                      //     "${assets}tubbers.png"),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          pname.toString(),
+                          style: TextStyle(
+                              // color:
+                              // FarmToDishTheme.scaffoldBackgroundColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          priceStatement.toString(),
+                          style: TextStyle(
+                              // color:
+                              // FarmToDishTheme.scaffoldBackgroundColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        Text(
+                          quantity.toString(),
+                          style: TextStyle(
+                              // color:
+                              // FarmToDishTheme.scaffoldBackgroundColor,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                    Expanded(child: SizedBox()),
+                    Align(
+                      alignment: Alignment.center,
+                      child: AddORRemoveProductButton(
+                        onClickExternalFunction: (add) async {
+                          if (add) {
+                            cartModel = await showDialog<CartItemModel?>(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) => DialogToAddingProducts(
+                                productModel: ProductModel(
+                                    quantity: 12, price: 1200, name: pname),
+                                model: cartModel,
+                                // CartModel("dbcj", quantity: 0, price: 1200),
+                              ),
+                            );
+                            ((cartModel != null)
+                                ? () {
+                                    print("##" * 220);
+                                    // selectedProducts.add(cartModel!);
+                                    currentOrder?.addThis(cartModel!);
+                                    print(currentOrder?.items);
+                                    print("##" * 220);
+                                  }.call()
+                                : "do nothing");
+                          } else {
+                            print("####" * 120);
+
+                            // selectedProducts.remove(cartModel);
+                            currentOrder?.items.remove(cartModel);
+                            // selectedProducts = currentOrder?.items ?? [];
+                            print("####" * 120);
+
+                            // selectedProducts.removeWhere((element) {
+                            //   print("object");
+                            //   print("element id >>> ${element.id}");
+                            //   print("cartModel id >>> ${cartModel?.id}");
+
+                            //   print(element.id == (cartModel)?.id);
+                            //   return element.id == (cartModel)?.id;
+                            // });
+                          }
+                          // print(selectedProducts);
+                          print(cartModel);
+                          print(add);
+
+                          setState(() {});
+
+                          return cartModel != null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Container(
+                    height: 130,
+                    width: 130,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    // error image
+                    child: Image.network(imageURL!)
+
+                    /*
+                  Image.asset(
+                    imageURL ?? "",
+                    errorBuilder: (context, error, stackTrace) =>
+                        Icon(Icons.broken_image),
+                  ),
+                  */
+                    ),
+              ),
+            ),
+          ]),
+        )
+      ],
+    );
+  }
+
   late Navigate nvg;
 
   Future<List<ProductModel>>? _produceStack() async {
@@ -315,7 +465,7 @@ class _ProductScreenState extends State<ProductScreen> {
         try {
           rslt.add(ProductModel(
               name: itmm[itm],
-              imageURL: "${assets}goat_meat.png",
+              imageURL: itmm[img], // "${assets}goat_meat.png",
               price: 4700,
               quantity: 12,
               unit: "kilo"));
@@ -356,7 +506,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
           rslt.add(ProductModel(
               name: item[itm],
-              imageURL: "${assets}goat_meat.png",
+              imageURL: item[img], // "${assets}goat_meat.png",
               price: 4700,
               quantity: 12,
               unit: "kilo"));
@@ -633,7 +783,7 @@ class _ProductScreenState extends State<ProductScreen> {
             List<ProductModel>? pdm = snapshot.data;
             return Column(
                 children: pdm!
-                    .map((e) => _buildProductTab(
+                    .map((e) => _productTab(
                         imageURL: e.imageURL,
                         pname: e.name,
                         priceStatement: e.priceStatement,
