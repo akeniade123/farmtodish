@@ -13,7 +13,7 @@ import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 // import 'package:sqflite/sqflite.dart';
 
-import '../../Database/databaseHelper.dart';
+import '../../Repository/databaseHelper.dart';
 import '../../Dialogs/dialog_to_adding_products.dart';
 import '../../Remote/requestmodel.dart';
 import '../../Remote/server_response.dart';
@@ -46,6 +46,7 @@ class _ProductScreenState extends State<ProductScreen> {
   late Future<List<String>>? lst; // = [];
 
   late Future<int>? cart;
+  late int cartz;
 
   // List<CartItemModel> selectedProducts = [];
   @override
@@ -61,6 +62,7 @@ class _ProductScreenState extends State<ProductScreen> {
     // schip = _produceSect();
     pmdl = _produceStack();
     cart = _cart();
+    cartz = 0;
     // lst = __produceSect();
     // bdw = _bodyWidget();
   }
@@ -368,7 +370,8 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   Future<int>? _cart() async {
-    int i = await dbp.queryRowCount();
+    int i = await dbCart.queryRowCount();
+    cartz = i;
     return i;
   }
 
@@ -726,25 +729,34 @@ class _ProductScreenState extends State<ProductScreen> {
                 fontSize: 20,
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(
-            // color: FarmToDishTheme.accentLightColor,
-            height: 26,
-            width: 26,
+          InkWell(
+            onTap: () {
+              if (cartz > 0) {
+              } else {
+                customSnackBar(
+                    context, "No item in cart yet, please add items to cart");
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: SizedBox(
+                // color: FarmToDishTheme.accentLightColor,
+                height: 26,
+                width: 26,
 
-            child: Stack(
-              children: [
-                Icon(
-                  Icons.shopping_cart,
-                  color: FarmToDishTheme.scaffoldBackgroundColor,
+                child: Stack(
+                  children: [
+                    Icon(
+                      Icons.shopping_cart,
+                      color: FarmToDishTheme.scaffoldBackgroundColor,
+                    ),
+                    (cart == null) ? Text("") : _cartdisplay(),
+                  ],
                 ),
-                (cart == null) ? _cartdefault() : _cartdisplay(),
-              ],
+              ),
             ),
           ),
-          SizedBox(
-              // color: FarmToDishTheme.accentLightColor,
-              height: 0,
-              width: 0)
+          //SizedBox(height: 0, width: 0)
         ],
       ),
     );

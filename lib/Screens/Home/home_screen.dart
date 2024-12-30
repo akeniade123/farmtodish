@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 // import 'package:sqflite/sqflite.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import '../../Database/databaseHelper.dart';
+import '../../Repository/databaseHelper.dart';
 import '../../Remote/requestmodel.dart';
 import '../../Remote/server_response.dart';
 import '../../global_handlers.dart';
