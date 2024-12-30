@@ -5,7 +5,7 @@ import '../../global_objects.dart';
 
 class ProductModel {
   String? productID = "bdbasd";
-  final String? name;
+  final String name;
   final String? unit;
 
   final double? price;
@@ -16,7 +16,7 @@ class ProductModel {
 
   final String? imageURL;
   ProductModel(
-      {this.name,
+      {required this.name,
       this.price,
       this.priceStatement,
       this.imageURL,

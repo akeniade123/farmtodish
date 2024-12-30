@@ -5,13 +5,19 @@
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
 // import 'package:Yomcoin/screens/login.dart';
+import 'dart:async';
+
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 // import 'package:sqflite/sqflite.dart';
 
-import '../../Database/databaseHelper.dart';
+import '../../Repository/databaseHelper.dart';
 import '../../Dialogs/dialog_to_adding_products.dart';
+import '../../Remote/requestmodel.dart';
+import '../../Remote/server_response.dart';
+import '../../env.dart';
 import '../../global_handlers.dart';
 import '../../global_objects.dart';
 import '../../global_string.dart';
@@ -29,6 +35,19 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  DatabaseHelper dbh = DatabaseHelper(table: ptyp);
+
+  DatabaseHelper dbp = DatabaseHelper(table: produce);
+
+  late Future<List<ProduceType>>? prSect;
+  late Future<List<Widget>>? schip;
+  late Future<List<ProductModel>>? pmdl;
+
+  late Future<List<String>>? lst; // = [];
+
+  late Future<int>? cart;
+  late int cartz;
+
   // List<CartItemModel> selectedProducts = [];
   @override
   void initState() {
@@ -40,7 +59,10 @@ class _ProductScreenState extends State<ProductScreen> {
 
     super.initState();
     // prSect = produceSect();
-    schip = _produceSect();
+    // schip = _produceSect();
+    pmdl = _produceStack();
+    cart = _cart();
+    cartz = 0;
     // lst = __produceSect();
     // bdw = _bodyWidget();
   }
@@ -77,39 +99,11 @@ class _ProductScreenState extends State<ProductScreen> {
                         SizedBox(height: 20),
                         Column(
                           children: [
-                            (schip == null)
-                                ? _buildSelectorTab()
-                                : _bodyWidget(),
+                            /*
+                            (schip == null) ? _buildSelectorTab() : stackData(),
                             SizedBox(height: 20),
-                            Column(
-                                children: testProducts
-                                    .map((e) => _buildProductTab(
-                                        imageURL: e.imageURL,
-                                        name: e.name,
-                                        priceStatement: e.priceStatement,
-                                        quantity: e.quantityStatement,
-                                        model: e,
-                                        cartModel:
-                                            e.createCartModelFromProduct()))
-                                    .toList()
-                                // [
-                                //     _buildProductTab(
-                                // imageURL: "${assets}yams.png",
-                                // name: "Yams",
-                                // priceStatement: "N500 per tuber",
-                                // quantity: "4 tubers left"),
-                                //     _buildProductTab(
-                                //         imageURL: "${assets}yams.png",
-                                //         name: "Yams",
-                                //         priceStatement: "N500 per tuber",
-                                //         quantity: "4 tubers left"),
-                                //     _buildProductTab(
-                                //         imageURL: "${assets}yams.png",
-                                //         name: "Yams",
-                                //         priceStatement: "N500 per tuber",
-                                //         quantity: "4 tubers left"),
-                                //   ],
-                                )
+                            */
+                            (pmdl == null) ? preload() : loadProduct(),
                           ],
                         ),
                         SizedBox(height: 80)
@@ -159,7 +153,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
   Column _buildProductTab(
       {String? quantity,
-      String? name,
+      required String pname,
       String? priceStatement,
       String? imageURL,
       required ProductModel model,
@@ -200,7 +194,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          name.toString(),
+                          pname.toString(),
                           style: TextStyle(
                               // color:
                               // FarmToDishTheme.scaffoldBackgroundColor,
@@ -235,11 +229,11 @@ class _ProductScreenState extends State<ProductScreen> {
                               barrierDismissible: false,
                               context: context,
                               builder: (context) => DialogToAddingProducts(
-                                  productModel:
-                                      ProductModel(quantity: 12, price: 1200),
-                                  model: cartModel
-                                  // CartModel("dbcj", quantity: 0, price: 1200),
-                                  ),
+                                productModel: ProductModel(
+                                    quantity: 12, price: 1200, name: pname),
+                                model: cartModel,
+                                // CartModel("dbcj", quantity: 0, price: 1200),
+                              ),
                             );
                             ((cartModel != null)
                                 ? () {
@@ -307,34 +301,162 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  DatabaseHelper dbh = DatabaseHelper(table: ptyp);
+  late Navigate nvg;
 
-  late Future<List<ProduceType>>? prSect;
-  late Future<List<SelectionChip>>? schip;
-
-  late Future<List<String>>? lst; // = [];
-
-  Future<List<SelectionChip>>? _produceSect() async {
-    List<SelectionChip> plc = [];
-    int ptt = await dbh.queryRowCount();
+  Future<List<ProductModel>>? _produceStack() async {
+    List<ProductModel> rslt = [];
+    int ptt = await dbp.queryRowCount();
     List<Map<String, dynamic>> dd = [];
+    logger("Size $ptt");
     if (ptt > 0) {
-      List<Map<String, dynamic>> fm = await dbh.queryAllRows();
+      List<Map<String, dynamic>> fm = await dbp.queryAllRows();
       for (Map<String, dynamic> itmm in fm) {
-        plc.add(
-          SelectionChip(
-            name: itmm[nmm],
-            imageURL: "${assets}fruitVeggie.png",
-            isSelected: selectedTabName == "fruits And Vegie",
-            onClickFunction: (p0) {
-              selectedTabName = "fruits And Vegie";
-              setState(() {});
-            },
-          ),
-          //SizedBox(width: 10),
-        );
+        logger("item${itmm[typ]}");
+        try {
+          rslt.add(ProductModel(
+              name: itmm[itm],
+              imageURL: "${assets}goat_meat.png",
+              price: 4700,
+              quantity: 12,
+              unit: "kilo"));
+
+          /*
+
+           "id": "1",
+            "item": "Red Cherry Tomato",
+            "type": "1",
+            "created": "2024-06-08 18:32:54",
+            "image": "https://www.farmtodish.com/app/farm%20produce/Red_Cherry%20Tomato.webp"
+
+  ProductModel(
+      imageURL: "${assets}goat_meat.png",
+      name: "Goat Meat",
+      price: 4700,
+      quantity: 12,
+      unit: "kilo"),
+          */
+        } catch (e) {
+          logger("The error $e");
+        }
+      }
+    } else {
+      nvg = Navigate();
+      Map<String, dynamic> mnf = {};
+
+      Map<String, dynamic>? obj =
+          await nvg.readData(produce, mnf, global, rd, "", false, rd, context);
+
+      ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+      if (svp.status) {
+        ServerResponse rsp = ServerResponse.fromJson(obj);
+        for (final item in rsp.data) {
+          //   String itm = item["item"];
+          String typ = item["type"];
+          //1  String img = item["image"];
+
+          rslt.add(ProductModel(
+              name: item[itm],
+              imageURL: "${assets}goat_meat.png",
+              price: 4700,
+              quantity: 12,
+              unit: "kilo"));
+
+          //  cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
+          dbp.insertData(item);
+        }
       }
     }
+    return rslt;
+  }
+
+  Future<int>? _cart() async {
+    int i = await dbCart.queryRowCount();
+    cartz = i;
+    return i;
+  }
+
+  FutureBuilder<int> _cartdisplay() {
+    return FutureBuilder(
+        future: cart,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            int? data_ = snapshot.data;
+            String qq = "$data_";
+            if (data_! < 1) {
+              qq = "";
+            }
+            return Align(
+              alignment: Alignment.bottomRight,
+              child: CircleAvatar(
+                radius: 7,
+                backgroundColor: FarmToDishTheme.themeRed,
+                child: Text(
+                  qq,
+                  style: TextStyle(
+                      color: FarmToDishTheme.scaffoldBackgroundColor,
+                      fontSize: 10),
+                ),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return const NoInternet();
+          }
+          return SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Center(
+              child: LoadingAnimationWidget.flickr(
+                  leftDotColor: Color(0xff029534),
+                  rightDotColor: bgmainclr,
+                  size: 30),
+            ),
+          );
+        });
+  }
+
+  Align _cartdefault() {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: CircleAvatar(
+        radius: 7,
+        backgroundColor: FarmToDishTheme.themeRed,
+        child: Text(
+          "1",
+          style: TextStyle(
+              color: FarmToDishTheme.scaffoldBackgroundColor, fontSize: 10),
+        ),
+      ),
+    );
+  }
+
+  Future<List<Widget>>? _produceSect() async {
+    List<Widget> plc = [];
+    int ptt = await dbp.queryRowCount();
+    List<Map<String, dynamic>> dd = [];
+    logger("Size $ptt");
+    if (ptt > 0) {
+      List<Map<String, dynamic>> fm = await dbp.queryAllRows();
+      for (Map<String, dynamic> itmm in fm) {
+        logger("item${itmm[typ]}");
+        try {
+          plc.add(
+            SelectionChip(
+              name: itmm[typ],
+              imageURL: "${assets}fruitVeggie.png",
+              isSelected: selectedTabName == "fruits And Vegie",
+              onClickFunction: (p0) {
+                selectedTabName = "fruits And Vegie";
+                setState(() {});
+              },
+            ),
+          );
+          plc.add(
+            SizedBox(width: 10),
+          );
+        } catch (e) {
+          logger("The error $e");
+        }
+      }
+    } else {}
     return plc;
   }
 
@@ -369,38 +491,64 @@ class _ProductScreenState extends State<ProductScreen> {
 
   late Future<TitleMoreAndBodyWidget>? bdw;
 
-  FutureBuilder<List<SelectionChip>> _bodyWidget() {
+  FutureBuilder<List<Widget>> stackData() {
+    return FutureBuilder(
+        future: schip,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Widget>? data_ = snapshot.data;
+
+            return SingleChildScrollView(
+              child: Row(children: [
+                ListView.builder(
+                    itemCount: data_!.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (BuildContext context, index) {
+                      return data_[index];
+                    })
+              ]),
+            );
+            // return cast(essence, data_!);
+          } else if (snapshot.hasError) {
+            return const NoInternet();
+          }
+          return SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Center(
+              child: LoadingAnimationWidget.flickr(
+                  leftDotColor: Color(0xff029534),
+                  rightDotColor: bgmainclr,
+                  size: 30),
+            ),
+          );
+        });
+  }
+
+  FutureBuilder<List<Widget>> _bodyWidget() {
     return FutureBuilder(
         future: schip,
         builder: ((context, snapshot) {
           if (snapshot.hasData) {
-            List<SelectionChip>? data_ = snapshot.data;
+            List<Widget>? data_ = snapshot.data;
 
-            return TitleMoreAndBodyWidget(
-                body: SingleChildScrollView(
-                    child: Column(
-                  children: [
-                    ListView.builder(
-                      itemCount: data_!.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return data_[index];
-                      },
-                    )
-                  ],
-                )),
-                titleWidget: Text(
-                  "Categories",
-                  style: TextStyle(
-                      // color:
-                      // FarmToDishTheme.scaffoldBackgroundColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ));
+            return SingleChildScrollView(
+              child: Row(
+                children: [
+                  ListView.builder(
+                    itemCount: data_!.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Text("This $index"); //data_[index];
+                    },
+                  )
+                ],
+              ),
+            );
           } else if (snapshot.hasError) {
-            return const Text("");
+            return const Text("Cast Error ");
           }
           return Text("data");
         }));
@@ -462,6 +610,53 @@ class _ProductScreenState extends State<ProductScreen> {
               fontSize: 18,
               fontWeight: FontWeight.bold),
         ));
+  }
+
+  Column preload() {
+    return Column(
+        children: testProducts
+            .map((e) => _buildProductTab(
+                imageURL: e.imageURL,
+                pname: e.name,
+                priceStatement: e.priceStatement,
+                quantity: e.quantityStatement,
+                model: e,
+                cartModel: e.createCartModelFromProduct()))
+            .toList());
+  }
+
+  FutureBuilder<List<ProductModel>> loadProduct() {
+    return FutureBuilder(
+        future: pmdl,
+        builder: ((context, snapshot) {
+          if (snapshot.hasData) {
+            List<ProductModel>? pdm = snapshot.data;
+            return Column(
+                children: pdm!
+                    .map((e) => _buildProductTab(
+                        imageURL: e.imageURL,
+                        pname: e.name,
+                        priceStatement: e.priceStatement,
+                        quantity: e.quantityStatement,
+                        model: e,
+                        cartModel: e.createCartModelFromProduct()))
+                    .toList());
+          } else if (snapshot.hasError) {}
+          return Text("dtt");
+        }));
+
+    /*
+    return Column(
+        children: testProducts
+            .map((e) => _buildProductTab(
+                imageURL: e.imageURL,
+                name: e.name,
+                priceStatement: e.priceStatement,
+                quantity: e.quantityStatement,
+                model: e,
+                cartModel: e.createCartModelFromProduct()))
+            .toList());
+            */
   }
 
   Container _buildSearchBar() {
@@ -534,32 +729,34 @@ class _ProductScreenState extends State<ProductScreen> {
                 fontSize: 20,
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(
-            // color: FarmToDishTheme.accentLightColor,
-            height: 26,
-            width: 26,
-            child: Stack(
-              children: [
-                Icon(
-                  Icons.shopping_cart,
-                  color: FarmToDishTheme.scaffoldBackgroundColor,
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: CircleAvatar(
-                    radius: 7,
-                    backgroundColor: FarmToDishTheme.themeRed,
-                    child: Text(
-                      "1",
-                      style: TextStyle(
-                          color: FarmToDishTheme.scaffoldBackgroundColor,
-                          fontSize: 10),
+          InkWell(
+            onTap: () {
+              if (cartz > 0) {
+              } else {
+                customSnackBar(
+                    context, "No item in cart yet, please add items to cart");
+              }
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: SizedBox(
+                // color: FarmToDishTheme.accentLightColor,
+                height: 26,
+                width: 26,
+
+                child: Stack(
+                  children: [
+                    Icon(
+                      Icons.shopping_cart,
+                      color: FarmToDishTheme.scaffoldBackgroundColor,
                     ),
-                  ),
-                )
-              ],
+                    (cart == null) ? Text("") : _cartdisplay(),
+                  ],
+                ),
+              ),
             ),
-          )
+          ),
+          //SizedBox(height: 0, width: 0)
         ],
       ),
     );

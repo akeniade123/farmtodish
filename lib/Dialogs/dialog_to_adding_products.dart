@@ -7,10 +7,9 @@ import 'package:flutter/material.dart';
 
 class DialogToAddingProducts extends StatefulWidget {
   CartItemModel? model;
-  ProductModel? productModel;
+  final ProductModel productModel;
 
-  DialogToAddingProducts(
-      {super.key, required this.model, required this.productModel});
+  DialogToAddingProducts({super.key, this.model, required this.productModel});
 
   @override
   State<DialogToAddingProducts> createState() => _DialogToAddingProductsState();
@@ -18,11 +17,22 @@ class DialogToAddingProducts extends StatefulWidget {
 
 class _DialogToAddingProductsState extends State<DialogToAddingProducts> {
   int quantity = 0;
+  late ProductModel? pmdl;
   @override
   void initState() {
     quantity = widget.model?.quantity ?? 0;
+    // nmm =;
     super.initState();
   }
+
+/*
+  Future<ProductModel> product() {
+    ProductModel _pmdl = null;
+   // widget.productModel;
+    if (widget.productModel == null) {}
+    return _pmdl;
+  }
+  */
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +54,10 @@ class _DialogToAddingProductsState extends State<DialogToAddingProducts> {
                 child: Image.asset("${assets}yams.png"),
               ),
               const SizedBox(width: 10),
-              const Column(
+              Column(
                 children: [
                   Text(
-                    "Yams",
+                    widget.productModel.name,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
                   Text(

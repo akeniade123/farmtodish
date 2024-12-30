@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:farm_to_dish/Database/databaseHelper.dart';
+import 'package:farm_to_dish/Repository/databaseHelper.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/global_handlers.dart';
 //import 'package:farm_to_dish/notificationcontroller.dart';
@@ -32,6 +32,8 @@ void main() async {
   // await NotificationController.initializeIsolateReceivePort();
 
   await initializeService();
+
+  dbCart = DatabaseHelper(table: orderItem);
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 

@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 // import 'package:sqflite/sqflite.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import '../../Database/databaseHelper.dart';
+import '../../Repository/databaseHelper.dart';
 import '../../Remote/requestmodel.dart';
 import '../../Remote/server_response.dart';
 import '../../global_handlers.dart';
@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
       logger("Albert Indexed: $qq");
       List<Map<String, dynamic>> pp = await dbh.queryAllRows();
       for (Map<String, dynamic> itm in pp) {
-        cntz.add({"name": itm[typ], "imageURL": "${assets}fruitVeggie.png"});
+        cntz.add({"name": itm[typ], "imageURL": "${assets}foodplate.png"});
       }
     } else {
       logger("Albert: $qq");
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
           String typ = item["type"];
           //1  String img = item["image"];
 
-          cntz.add({"name": typ, "imageURL": "${assets}fruitVeggie.png"});
+          cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
           dbh.insertData(item);
         }
       }

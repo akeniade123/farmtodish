@@ -7,7 +7,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
-import '../../Database/databaseHelper.dart';
+import '../../Repository/databaseHelper.dart';
 import '../../Remote/endpoints.dart';
 import '../../Remote/requester.dart';
 import '../../Remote/server_response.dart';
