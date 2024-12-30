@@ -5,6 +5,8 @@
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
 // import 'package:Yomcoin/screens/login.dart';
+import 'dart:async';
+
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -54,7 +56,8 @@ class _ProductScreenState extends State<ProductScreen> {
 
     super.initState();
     // prSect = produceSect();
-    schip = _produceSect();
+    // schip = _produceSect();
+    pmdl = _produceStack();
     // lst = __produceSect();
     // bdw = _bodyWidget();
   }
@@ -95,35 +98,18 @@ class _ProductScreenState extends State<ProductScreen> {
                             (schip == null) ? _buildSelectorTab() : stackData(),
                             SizedBox(height: 20),
                             */
+                            (pmdl == null) ? preload() : loadProduct(),
                             Column(
                                 children: testProducts
                                     .map((e) => _buildProductTab(
                                         imageURL: e.imageURL,
-                                        name: e.name,
+                                        pname: e.name,
                                         priceStatement: e.priceStatement,
                                         quantity: e.quantityStatement,
                                         model: e,
                                         cartModel:
                                             e.createCartModelFromProduct()))
-                                    .toList()
-                                // [
-                                //     _buildProductTab(
-                                // imageURL: "${assets}yams.png",
-                                // name: "Yams",
-                                // priceStatement: "N500 per tuber",
-                                // quantity: "4 tubers left"),
-                                //     _buildProductTab(
-                                //         imageURL: "${assets}yams.png",
-                                //         name: "Yams",
-                                //         priceStatement: "N500 per tuber",
-                                //         quantity: "4 tubers left"),
-                                //     _buildProductTab(
-                                //         imageURL: "${assets}yams.png",
-                                //         name: "Yams",
-                                //         priceStatement: "N500 per tuber",
-                                //         quantity: "4 tubers left"),
-                                //   ],
-                                )
+                                    .toList())
                           ],
                         ),
                         SizedBox(height: 80)
@@ -173,7 +159,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
   Column _buildProductTab(
       {String? quantity,
-      String? name,
+      required String pname,
       String? priceStatement,
       String? imageURL,
       required ProductModel model,
@@ -214,7 +200,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          name.toString(),
+                          pname.toString(),
                           style: TextStyle(
                               // color:
                               // FarmToDishTheme.scaffoldBackgroundColor,
@@ -249,11 +235,11 @@ class _ProductScreenState extends State<ProductScreen> {
                               barrierDismissible: false,
                               context: context,
                               builder: (context) => DialogToAddingProducts(
-                                  productModel:
-                                      ProductModel(quantity: 12, price: 1200),
-                                  model: cartModel
-                                  // CartModel("dbcj", quantity: 0, price: 1200),
-                                  ),
+                                productModel: ProductModel(
+                                    quantity: 12, price: 1200, name: pname),
+                                model: cartModel,
+                                // CartModel("dbcj", quantity: 0, price: 1200),
+                              ),
                             );
                             ((cartModel != null)
                                 ? () {
@@ -333,7 +319,28 @@ class _ProductScreenState extends State<ProductScreen> {
       for (Map<String, dynamic> itmm in fm) {
         logger("item${itmm[typ]}");
         try {
-          rslt.add(ProductModel());
+          rslt.add(ProductModel(
+              name: itmm[itm],
+              imageURL: "${assets}goat_meat.png",
+              price: 4700,
+              quantity: 12,
+              unit: "kilo"));
+
+          /*
+
+           "id": "1",
+            "item": "Red Cherry Tomato",
+            "type": "1",
+            "created": "2024-06-08 18:32:54",
+            "image": "https://www.farmtodish.com/app/farm%20produce/Red_Cherry%20Tomato.webp"
+
+  ProductModel(
+      imageURL: "${assets}goat_meat.png",
+      name: "Goat Meat",
+      price: 4700,
+      quantity: 12,
+      unit: "kilo"),
+          */
         } catch (e) {
           logger("The error $e");
         }
@@ -343,7 +350,7 @@ class _ProductScreenState extends State<ProductScreen> {
       Map<String, dynamic> mnf = {};
 
       Map<String, dynamic>? obj =
-          await nvg.readData(ptyp, mnf, global, rd, "", false, rd, context);
+          await nvg.readData(produce, mnf, global, rd, "", false, rd, context);
 
       ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
       if (svp.status) {
@@ -353,10 +360,15 @@ class _ProductScreenState extends State<ProductScreen> {
           String typ = item["type"];
           //1  String img = item["image"];
 
-          rslt.add(ProductModel());
+          rslt.add(ProductModel(
+              name: item[itm],
+              imageURL: "${assets}goat_meat.png",
+              price: 4700,
+              quantity: 12,
+              unit: "kilo"));
 
           //  cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
-          dbh.insertData(item);
+          dbp.insertData(item);
         }
       }
     }
@@ -545,6 +557,53 @@ class _ProductScreenState extends State<ProductScreen> {
               fontSize: 18,
               fontWeight: FontWeight.bold),
         ));
+  }
+
+  Column preload() {
+    return Column(
+        children: testProducts
+            .map((e) => _buildProductTab(
+                imageURL: e.imageURL,
+                pname: e.name,
+                priceStatement: e.priceStatement,
+                quantity: e.quantityStatement,
+                model: e,
+                cartModel: e.createCartModelFromProduct()))
+            .toList());
+  }
+
+  FutureBuilder<List<ProductModel>> loadProduct() {
+    return FutureBuilder(
+        future: pmdl,
+        builder: ((context, snapshot) {
+          if (snapshot.hasData) {
+            List<ProductModel>? pdm = snapshot.data;
+            return Column(
+                children: pdm!
+                    .map((e) => _buildProductTab(
+                        imageURL: e.imageURL,
+                        pname: e.name,
+                        priceStatement: e.priceStatement,
+                        quantity: e.quantityStatement,
+                        model: e,
+                        cartModel: e.createCartModelFromProduct()))
+                    .toList());
+          } else if (snapshot.hasError) {}
+          return Text("dtt");
+        }));
+
+    /*
+    return Column(
+        children: testProducts
+            .map((e) => _buildProductTab(
+                imageURL: e.imageURL,
+                name: e.name,
+                priceStatement: e.priceStatement,
+                quantity: e.quantityStatement,
+                model: e,
+                cartModel: e.createCartModelFromProduct()))
+            .toList());
+            */
   }
 
   Container _buildSearchBar() {
