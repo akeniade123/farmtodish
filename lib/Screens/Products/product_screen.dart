@@ -426,23 +426,26 @@ class _ProductScreenState extends State<ProductScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Container(
-                    height: 130,
-                    width: 130,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
-                    ),
-                    // error image
-                    child: Image.network(imageURL!)
-
-                    /*
+                  height: 130,
+                  width: 130,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                  ),
+                  // error image
+                  child: Image.network(
+                    imageURL ?? "",
+                    errorBuilder: (context, error, stackTrace) =>
+                        Icon(Icons.broken_image),
+                  ),
+                  /*
                   Image.asset(
                     imageURL ?? "",
                     errorBuilder: (context, error, stackTrace) =>
                         Icon(Icons.broken_image),
                   ),
                   */
-                    ),
+                ),
               ),
             ),
           ]),

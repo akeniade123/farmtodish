@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
       logger("Albert Indexed: $qq");
       List<Map<String, dynamic>> pp = await dbh.queryAllRows();
       for (Map<String, dynamic> itm in pp) {
-        cntz.add({"name": itm[typ], "imageURL": "${assets}foodplate.png"});
+        cntz.add({"name": itm[typ], "imageURL": itm[img]});
       }
     } else {
       logger("Albert: $qq");
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
           String typ = item["type"];
           //1  String img = item["image"];
 
-          cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
+          cntz.add({"name": typ, "imageURL": item[img]});
           dbh.insertData(item);
         }
       }
@@ -389,7 +389,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   CircleAvatar(
                     backgroundColor: Colors.white,
                     radius: 30,
-                    child: Image.asset(e["imageURL"] ?? ""),
+                    child: Image.network(
+                      e["imageURL"] ?? "",
+                      errorBuilder: (context, error, stackTrace) =>
+                          Icon(Icons.broken_image),
+                    ),
                   ),
                   Text(
                     e["name"],
