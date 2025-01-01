@@ -470,7 +470,15 @@ class _CartScreenState extends State<CartScreen> {
                     color: FarmToDishTheme.scaffoldBackgroundColor,
                   ),
                 )
-              : SizedBox(),
+              : IconButton(
+                  onPressed: () {
+                    context.pop();
+                  },
+                  icon: Icon(
+                    Icons.chevron_left,
+                    color: FarmToDishTheme.scaffoldBackgroundColor,
+                  ),
+                ),
           Text(
             "Cart",
             style: TextStyle(
