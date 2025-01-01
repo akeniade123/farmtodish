@@ -472,7 +472,8 @@ class _CartScreenState extends State<CartScreen> {
                 )
               : IconButton(
                   onPressed: () {
-                    context.pop();
+                    context.goNamed("ProductScreen");
+                    //  context.pop();
                   },
                   icon: Icon(
                     Icons.chevron_left,
