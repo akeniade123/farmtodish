@@ -376,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> {
             boxShadow: List.filled(4, FarmToDishTheme.genericBoxShadow)),
 
         // height: 110,
-        width: 95, height: 120,
+        width: 95, height: 140,
         // MediaQuery.of(context).size.width * .25 - 30,
 
         child: AspectRatio(
@@ -387,8 +387,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 30,
+                    backgroundColor: Color.fromARGB(255, 202, 231, 197),
+                    radius: 42,
                     child: Image.network(
                       e["imageURL"] ?? "",
                       errorBuilder: (context, error, stackTrace) =>

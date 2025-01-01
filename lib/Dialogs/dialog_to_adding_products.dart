@@ -40,7 +40,7 @@ class _DialogToAddingProductsState extends State<DialogToAddingProducts> {
     return Dialog(
       child: Container(
         padding: const EdgeInsets.all(20),
-        height: 320,
+        height: 340,
         width: 290,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -56,10 +56,38 @@ class _DialogToAddingProductsState extends State<DialogToAddingProducts> {
               const SizedBox(width: 10),
               Column(
                 children: [
+                  (widget.productModel.name.length > 7)
+                      ? SizedBox(
+                          width: 95,
+                          child: FittedBox(
+                            // TRY THIS: Try changing the fit types to see how they change the way
+                            // the placeholder fits into the container.
+                            fit: BoxFit.fill,
+                            child: Text(
+                              widget.productModel.name,
+                              style: const TextStyle(
+                                  // color:
+                                  // FarmToDishTheme.scaffoldBackgroundColor,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        )
+                      : Text(widget.productModel.name,
+                          style: const TextStyle(
+                              // color:
+                              // FarmToDishTheme.scaffoldBackgroundColor,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold)),
+
+                  /*
                   Text(
                     widget.productModel.name,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
+
+                  */
+
                   Text(
                     "in Tubers",
                     style: TextStyle(

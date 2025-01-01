@@ -339,14 +339,29 @@ class _ProductScreenState extends State<ProductScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          pname.toString(),
-                          style: TextStyle(
-                              // color:
-                              // FarmToDishTheme.scaffoldBackgroundColor,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                        ),
+                        (pname.length > 10)
+                            ? Container(
+                                width: 100,
+                                child: FittedBox(
+                                  // TRY THIS: Try changing the fit types to see how they change the way
+                                  // the placeholder fits into the container.
+                                  fit: BoxFit.fill,
+                                  child: Text(
+                                    pname,
+                                    style: TextStyle(
+                                        // color:
+                                        // FarmToDishTheme.scaffoldBackgroundColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              )
+                            : Text(pname,
+                                style: TextStyle(
+                                    // color:
+                                    // FarmToDishTheme.scaffoldBackgroundColor,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold)),
                         Text(
                           priceStatement.toString(),
                           style: TextStyle(
@@ -411,7 +426,9 @@ class _ProductScreenState extends State<ProductScreen> {
                           print(cartModel);
                           print(add);
 
-                          setState(() {});
+                          try {
+                            setState(() {});
+                          } catch (e) {}
 
                           return cartModel != null;
                         },
@@ -426,26 +443,37 @@ class _ProductScreenState extends State<ProductScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Container(
-                  height: 130,
-                  width: 130,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                  ),
-                  // error image
-                  child: Image.network(
-                    imageURL ?? "",
-                    errorBuilder: (context, error, stackTrace) =>
-                        Icon(Icons.broken_image),
-                  ),
-                  /*
-                  Image.asset(
-                    imageURL ?? "",
-                    errorBuilder: (context, error, stackTrace) =>
-                        Icon(Icons.broken_image),
-                  ),
+                    height: 130,
+                    width: 130,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: FarmToDishTheme.scaffoldBackgroundColor,
+                    ),
+                    // error image
+
+                    /*
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(120),
+                    child: Image.network(
+                      'https://picsum.photos/seed/picsum/200/300',
+                      fit: BoxFit.cover,
+                      width: 120,
+                      height: 120,
+                    ),
+                  )
                   */
-                ),
+
+                    child: Card(
+                      shape: const CircleBorder(),
+                      clipBehavior: Clip.antiAlias,
+                      elevation: 5,
+                      child: Image.network(
+                        imageURL ?? "",
+                        errorBuilder: (context, error, stackTrace) =>
+                            Icon(Icons.broken_image),
+                        fit: BoxFit.cover,
+                      ),
+                    )),
               ),
             ),
           ]),
@@ -933,7 +961,9 @@ class _AddORRemoveProductButtonState extends State<AddORRemoveProductButton> {
       onTap: () async {
         bool tochange = await widget.onClickExternalFunction.call(!isAdded);
         if (tochange) isAdded = !isAdded;
-        setState(() {});
+        try {
+          setState(() {});
+        } catch (e) {}
       },
       child: Container(
         width: 34,
