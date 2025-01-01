@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
       logger("Albert Indexed: $qq");
       List<Map<String, dynamic>> pp = await dbh.queryAllRows();
       for (Map<String, dynamic> itm in pp) {
-        cntz.add({"name": itm[typ], "imageURL": "${assets}foodplate.png"});
+        cntz.add({"name": itm[typ], "imageURL": itm[img]});
       }
     } else {
       logger("Albert: $qq");
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
           String typ = item["type"];
           //1  String img = item["image"];
 
-          cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
+          cntz.add({"name": typ, "imageURL": item[img]});
           dbh.insertData(item);
         }
       }
@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    //_controller.dispose();
     super.dispose();
   }
 
@@ -376,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> {
             boxShadow: List.filled(4, FarmToDishTheme.genericBoxShadow)),
 
         // height: 110,
-        width: 95, height: 120,
+        width: 95, height: 140,
         // MediaQuery.of(context).size.width * .25 - 30,
 
         child: AspectRatio(
@@ -387,9 +387,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 30,
-                    child: Image.asset(e["imageURL"] ?? ""),
+                    backgroundColor: Color.fromARGB(255, 202, 231, 197),
+                    radius: 42,
+                    child: Image.network(
+                      e["imageURL"] ?? "",
+                      errorBuilder: (context, error, stackTrace) =>
+                          Icon(Icons.broken_image),
+                    ),
                   ),
                   Text(
                     e["name"],
