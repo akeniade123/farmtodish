@@ -206,8 +206,37 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool obscurePasswordText = true;
   List<DeliveryCarModel> deliveryCarList = [
-    DeliveryCarModel(),
-    DeliveryCarModel(),
+    DeliveryCarModel(
+        doorStepDeliveryPrice: 1200,
+        price: 1,
+        900,
+        isAvailable: true,
+        name: 'Estate 12 Redemption Camp'),
+    DeliveryCarModel(
+        doorStepDeliveryPrice: 8000,
+        price: 1,
+        6500,
+        isAvailable: true,
+        name: 'Royal Garden Estate, Lekki'),
+    DeliveryCarModel(
+        doorStepDeliveryPrice: 8000,
+        price: 1,
+        6500,
+        isAvailable: true,
+        name: 'Chevy View, Lekki'),
+    DeliveryCarModel(
+        doorStepDeliveryPrice: 8000,
+        price: 1,
+        6500,
+        isAvailable: true,
+        name: 'Lake View, Lekki'),
+    DeliveryCarModel(
+        doorStepDeliveryPrice: 7000,
+        price: 1,
+        5500,
+        isAvailable: true,
+        name: 'Century, Ago Okota'),
+    //DeliveryCarModel(),
   ];
   @override
   Widget build(BuildContext context) {

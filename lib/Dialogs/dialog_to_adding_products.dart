@@ -49,9 +49,21 @@ class _DialogToAddingProductsState extends State<DialogToAddingProducts> {
           Row(
             children: [
               Container(
+                height: 95,
+                width: 95,
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                child: Image.asset("${assets}yams.png"),
+                child: Card(
+                  shape: const CircleBorder(),
+                  clipBehavior: Clip.antiAlias,
+                  elevation: 5,
+                  child: Image.network(
+                    widget.model!.imageURL ?? "",
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Icon(Icons.broken_image),
+                    fit: BoxFit.cover,
+                  ),
+                ), // Image.asset("${assets}yams.png"),
               ),
               const SizedBox(width: 10),
               Column(
@@ -89,8 +101,8 @@ class _DialogToAddingProductsState extends State<DialogToAddingProducts> {
                   */
 
                   Text(
-                    "in Tubers",
-                    style: TextStyle(
+                    "in ${widget.productModel.unit}",
+                    style: const TextStyle(
                         // fontWeight: FontWeight.bold,
                         fontSize: 16),
                   ),
