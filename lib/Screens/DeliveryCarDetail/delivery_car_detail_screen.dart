@@ -53,7 +53,7 @@ class _DeliveryCarDetailScreenState extends State<DeliveryCarDetailScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Name",
+                          "Destination",
                           style: TextStyle(
                               // color:
                               // FarmToDishTheme.scaffoldBackgroundColor,
@@ -84,7 +84,7 @@ class _DeliveryCarDetailScreenState extends State<DeliveryCarDetailScreen> {
                               fontWeight: FontWeight.w300),
                         ),
                         Text(
-                          "$currency${widget.model.price}",
+                          "$currency${widget.model.doorStepDeliveryPrice}",
                           style: TextStyle(
                               // color:
                               // FarmToDishTheme.scaffoldBackgroundColor,
@@ -93,11 +93,38 @@ class _DeliveryCarDetailScreenState extends State<DeliveryCarDetailScreen> {
                         ),
                       ],
                     ),
+
+                    /*
+                    (widget.model.rating != null)
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Rating",
+                                style: TextStyle(
+                                    // color:
+                                    // FarmToDishTheme.scaffoldBackgroundColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                              Text(
+                                "⭐️ ${widget.model.rating}",
+                                style: TextStyle(
+                                    // color:
+                                    // FarmToDishTheme.scaffoldBackgroundColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w800),
+                              ),
+                            ],
+                          )
+                        : Text(""),
+                    */
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "rating",
+                          "Door step delivery Price",
                           style: TextStyle(
                               // color:
                               // FarmToDishTheme.scaffoldBackgroundColor,
@@ -105,28 +132,7 @@ class _DeliveryCarDetailScreenState extends State<DeliveryCarDetailScreen> {
                               fontWeight: FontWeight.w300),
                         ),
                         Text(
-                          "⭐️ ${widget.model.rating}",
-                          style: TextStyle(
-                              // color:
-                              // FarmToDishTheme.scaffoldBackgroundColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "door step delivery Price",
-                          style: TextStyle(
-                              // color:
-                              // FarmToDishTheme.scaffoldBackgroundColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w300),
-                        ),
-                        Text(
-                          "${currency}2000",
+                          "$currency${widget.model.doorStepDeliveryPrice}",
                           style: TextStyle(
                               // color:
                               // FarmToDishTheme.scaffoldBackgroundColor,

@@ -1,7 +1,7 @@
 class DeliveryCarModel {
   final String name, driver;
   final double price, doorStepDeliveryPrice;
-  double rating;
+  double? rating;
   final bool isAvailable;
 
   DeliveryCarModel(this.rating,
