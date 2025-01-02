@@ -84,7 +84,7 @@ class _DeliveryCarDetailScreenState extends State<DeliveryCarDetailScreen> {
                               fontWeight: FontWeight.w300),
                         ),
                         Text(
-                          "$currency${widget.model.doorStepDeliveryPrice}",
+                          "$currency${widget.model.price}",
                           style: TextStyle(
                               // color:
                               // FarmToDishTheme.scaffoldBackgroundColor,
@@ -93,8 +93,6 @@ class _DeliveryCarDetailScreenState extends State<DeliveryCarDetailScreen> {
                         ),
                       ],
                     ),
-
-                    /*
                     (widget.model.rating != null)
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,8 +116,6 @@ class _DeliveryCarDetailScreenState extends State<DeliveryCarDetailScreen> {
                             ],
                           )
                         : Text(""),
-                    */
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

@@ -33,19 +33,19 @@ class _DeliveryCarScreenState extends State<DeliveryCarScreen> {
   ];
   List<DeliveryCarModel> deliveryCarList = [
     DeliveryCarModel(
-        doorStepDeliveryPrice: 1200,
-        price: 1,
-        900,
-        driver: "Olakunle Samuel",
+        doorStepDeliveryPrice: 8000,
+        price: 7500,
+        4.9,
+        driver: "Tobi Samuel",
         isAvailable: true,
-        name: 'Estate 12 Redemption Camp'),
+        name: 'Chevy View, Lekki'),
     DeliveryCarModel(
         doorStepDeliveryPrice: 8000,
-        price: 1,
-        6500,
-        driver: "Okon Samuel",
+        price: 6500,
+        5.0,
+        driver: "Olakunle Samuel",
         isAvailable: true,
-        name: 'Royal Garden Estate, Lekki'),
+        name: 'Lake View, Lekki'),
   ];
   @override
   Widget build(BuildContext context) {
