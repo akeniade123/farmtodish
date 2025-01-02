@@ -206,8 +206,42 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool obscurePasswordText = true;
   List<DeliveryCarModel> deliveryCarList = [
-    DeliveryCarModel(),
-    DeliveryCarModel(),
+    DeliveryCarModel(
+        doorStepDeliveryPrice: 1200,
+        price: 900,
+        4.5,
+        driver: "Olakunle Samuel",
+        isAvailable: true,
+        name: 'Estate 12 Redemption Camp'),
+    DeliveryCarModel(
+        doorStepDeliveryPrice: 8000,
+        price: 6500,
+        4.2,
+        driver: "Okon Samuel",
+        isAvailable: true,
+        name: 'Royal Garden Estate, Lekki'),
+    DeliveryCarModel(
+        doorStepDeliveryPrice: 8000,
+        price: 7500,
+        4.9,
+        driver: "Tobi Samuel",
+        isAvailable: true,
+        name: 'Chevy View, Lekki'),
+    DeliveryCarModel(
+        doorStepDeliveryPrice: 8000,
+        price: 6500,
+        5.0,
+        driver: "Olakunle Samuel",
+        isAvailable: true,
+        name: 'Lake View, Lekki'),
+    DeliveryCarModel(
+        doorStepDeliveryPrice: 7000,
+        price: 6300,
+        3.5,
+        driver: "Buhari Musa",
+        isAvailable: true,
+        name: 'Century, Ago Okota'),
+    //DeliveryCarModel(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -311,9 +345,11 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         height: 185,
         width: 180,
+        padding: EdgeInsets.all(8.0),
+        margin: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           color: FarmToDishTheme.accentLightColor,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(3),
           boxShadow: List.filled(
             4,
             FarmToDishTheme.genericBoxShadow,
@@ -335,7 +371,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   child: Image.asset("${assets}map.png")),
               Text(
-                "Delivery Pools",
+                e.driver,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -347,13 +383,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.location_on,
                     color: Color(0xff373737),
                   ),
-                  Text(
-                    "Abule Egba",
-                    style: TextStyle(
-                      fontSize: 14,
-                      // fontWeight: FontWeight.bold,
+                  Container(
+                    width: 100,
+                    child: FittedBox(
+                      // TRY THIS: Try changing the fit types to see how they change the way
+                      // the placeholder fits into the container.
+                      fit: BoxFit.fill,
+                      child: Text(
+                        e.name,
+                        style: TextStyle(
+                            // color:
+                            // FarmToDishTheme.scaffoldBackgroundColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
+                  )
                 ],
               )
             ],

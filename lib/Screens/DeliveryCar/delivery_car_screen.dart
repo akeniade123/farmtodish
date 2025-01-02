@@ -32,8 +32,20 @@ class _DeliveryCarScreenState extends State<DeliveryCarScreen> {
     "${assets}tubbers.png",
   ];
   List<DeliveryCarModel> deliveryCarList = [
-    DeliveryCarModel(),
-    DeliveryCarModel(),
+    DeliveryCarModel(
+        doorStepDeliveryPrice: 8000,
+        price: 7500,
+        4.9,
+        driver: "Tobi Samuel",
+        isAvailable: true,
+        name: 'Chevy View, Lekki'),
+    DeliveryCarModel(
+        doorStepDeliveryPrice: 8000,
+        price: 6500,
+        5.0,
+        driver: "Olakunle Samuel",
+        isAvailable: true,
+        name: 'Lake View, Lekki'),
   ];
   @override
   Widget build(BuildContext context) {

@@ -390,8 +390,7 @@ class _ProductScreenState extends State<ProductScreen> {
                               barrierDismissible: false,
                               context: context,
                               builder: (context) => DialogToAddingProducts(
-                                productModel: ProductModel(
-                                    quantity: 12, price: 1200, name: pname),
+                                productModel: model,
                                 model: cartModel,
                                 // CartModel("dbcj", quantity: 0, price: 1200),
                               ),
@@ -823,7 +822,12 @@ class _ProductScreenState extends State<ProductScreen> {
                         cartModel: e.createCartModelFromProduct()))
                     .toList());
           } else if (snapshot.hasError) {}
-          return Text("dtt");
+          return Center(
+            child: LoadingAnimationWidget.flickr(
+                leftDotColor: Color(0xff029534),
+                rightDotColor: bgmainclr,
+                size: 30),
+          );
         }));
 
     /*

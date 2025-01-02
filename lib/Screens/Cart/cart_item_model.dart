@@ -34,7 +34,7 @@ class CartItemModel {
   }
 
   String getQuantityStatement() {
-    return "$quantity $unit left";
+    return "$quantity $unit ordered";
   }
 
   double getTotalPriceStatment() {
@@ -54,7 +54,8 @@ class OrderModel {
   double getTotalPrice() {
     double result = 0;
     for (var element in items) {
-      result += (element.price) ?? 0;
+      double? p = element.quantity!.toDouble();
+      result += (element.price! * p!) ?? 0;
     }
     return result;
   }
