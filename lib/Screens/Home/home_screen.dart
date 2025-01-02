@@ -503,7 +503,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 20,
                       minWidth: 100,
                       onPressed: () {
-                        context.go("/ProductScreen");
+                        //  context.go("/ProductScreen");
+                        context.go("/PaymentScreen");
                       },
                       color: FarmToDishTheme.faintGreen,
                       shape: RoundedRectangleBorder(
