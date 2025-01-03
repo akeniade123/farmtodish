@@ -29,10 +29,10 @@ class DeliveryCarDetailScreen extends StatefulWidget {
 class _DeliveryCarDetailScreenState extends State<DeliveryCarDetailScreen> {
   // List<ProductModel> selectedProducts = [ProductModel()];
   List<String> imageURLList = [
-    "${assets}fruitVeggie.png",
-    "${assets}grains.png",
-    "${assets}pepper.png",
-    "${assets}tubbers.png",
+    "${assets}cabster.png",
+    "${assets}keke.png",
+    "${assets}minibus.png",
+    "${assets}truck.png"
   ];
   @override
   Widget build(BuildContext context) {

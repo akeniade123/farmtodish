@@ -330,20 +330,23 @@ class _ImageDisplayerState extends State<ImageDisplayer> {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Container(
-            // width: 00,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: const Icon(
+              // width: 00,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: Image.asset(widget.imageURLList[index])
+
+              /* const Icon(
               Icons.image,
               size: 50,
             ),
-            // Image.asset(
-            //   "assets/foodDetail1.png",
-            //   fit: BoxFit.fill,
-            // ),
-          ),
+            */
+              // Image.asset(
+              //   "assets/foodDetail1.png",
+              //   fit: BoxFit.fill,
+              // ),
+              ),
         );
       },
       itemCount: widget.imageURLList.length,
