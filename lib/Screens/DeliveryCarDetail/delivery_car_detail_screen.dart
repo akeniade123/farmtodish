@@ -93,6 +93,27 @@ class _DeliveryCarDetailScreenState extends State<DeliveryCarDetailScreen> {
                         ),
                       ],
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Door step delivery Price",
+                          style: TextStyle(
+                              // color:
+                              // FarmToDishTheme.scaffoldBackgroundColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w300),
+                        ),
+                        Text(
+                          "$currency${widget.model.doorStepDeliveryPrice}",
+                          style: TextStyle(
+                              // color:
+                              // FarmToDishTheme.scaffoldBackgroundColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800),
+                        ),
+                      ],
+                    ),
                     (widget.model.rating != null)
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,27 +137,6 @@ class _DeliveryCarDetailScreenState extends State<DeliveryCarDetailScreen> {
                             ],
                           )
                         : Text(""),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Door step delivery Price",
-                          style: TextStyle(
-                              // color:
-                              // FarmToDishTheme.scaffoldBackgroundColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w300),
-                        ),
-                        Text(
-                          "$currency${widget.model.doorStepDeliveryPrice}",
-                          style: TextStyle(
-                              // color:
-                              // FarmToDishTheme.scaffoldBackgroundColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800),
-                        ),
-                      ],
-                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
