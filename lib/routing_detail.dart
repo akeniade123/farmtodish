@@ -3,6 +3,7 @@ import 'package:farm_to_dish/global_widgets.dart';
 import 'package:go_router/go_router.dart';
 import "package:flutter/material.dart";
 
+import 'Screens/Schedule/schedule_screen.dart';
 import 'Screens/screens.dart';
 import 'global_objects.dart';
 // import "screens/screens.dart";
@@ -116,6 +117,15 @@ final GoRouter myRouter = GoRouter(
                 path: '/DeliveryCarScreen',
                 name: 'DeliveryCarScreen',
                 builder: (context, state) => const DeliveryCarScreen(),
+              )
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/Schedule',
+                name: 'Schedule',
+                builder: (context, state) => const Schedule(),
               )
             ],
           ),
