@@ -9,6 +9,41 @@ class Schedule extends StatefulWidget {
 }
 
 class _ScheduleState extends State<Schedule> {
+  /*
+  Widget build(BuildContext context) {
+    return Container(
+      child: SfCalendar(
+        view: CalendarView.schedule,
+        dataSource: MeetingDataSource(_getDataSource()),
+        scheduleViewSettings: const ScheduleViewSettings(
+            monthHeaderSettings: MonthHeaderSettings(
+                monthFormat: 'MMMM, yyyy',
+                height: 100,
+                textAlign: TextAlign.left,
+                backgroundColor: Colors.green,
+                monthTextStyle: TextStyle(
+                    color: Colors.red,
+                    fontSize: 25,
+                    fontWeight: FontWeight.w400))),
+      ),
+    );
+  }
+  */
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: SfCalendar(
+        view: CalendarView.schedule,
+        dataSource: MeetingDataSource(_getDataSource()),
+        scheduleViewSettings: ScheduleViewSettings(
+            appointmentTextStyle: TextStyle(
+                fontSize: 12, fontWeight: FontWeight.w500, color: Colors.lime)),
+      ),
+    );
+  }
+
+  /*
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +57,7 @@ class _ScheduleState extends State<Schedule> {
           appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
     ));
   }
+  */
 
   List<Meeting> _getDataSource() {
     final List<Meeting> meetings = <Meeting>[];
