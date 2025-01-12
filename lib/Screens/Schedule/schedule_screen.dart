@@ -9,6 +9,17 @@ class Schedule extends StatefulWidget {
 }
 
 class _ScheduleState extends State<Schedule> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: SfCalendar(
+      view: CalendarView.workWeek,
+      timeSlotViewSettings: const TimeSlotViewSettings(
+          startHour: 9,
+          endHour: 16,
+          nonWorkingDays: <int>[DateTime.friday, DateTime.saturday]),
+    ));
+  }
   /*
   Widget build(BuildContext context) {
     return Container(
@@ -30,18 +41,22 @@ class _ScheduleState extends State<Schedule> {
   }
   */
 
+  /*
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: SfCalendar(
         view: CalendarView.schedule,
         dataSource: MeetingDataSource(_getDataSource()),
-        scheduleViewSettings: ScheduleViewSettings(
+        scheduleViewSettings: const ScheduleViewSettings(
             appointmentTextStyle: TextStyle(
                 fontSize: 12, fontWeight: FontWeight.w500, color: Colors.lime)),
       ),
     );
   }
+
+  */
 
   /*
   @override
