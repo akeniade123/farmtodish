@@ -14,10 +14,9 @@ class _ScheduleState extends State<Schedule> {
     return Scaffold(
         body: SfCalendar(
       view: CalendarView.workWeek,
+      dataSource: MeetingDataSource(_getDataSource()),
       timeSlotViewSettings: const TimeSlotViewSettings(
-          startHour: 9,
-          endHour: 16,
-          nonWorkingDays: <int>[DateTime.friday, DateTime.saturday]),
+          startHour: 6, endHour: 16, nonWorkingDays: <int>[DateTime.sunday]),
     ));
   }
   /*
@@ -77,10 +76,19 @@ class _ScheduleState extends State<Schedule> {
   List<Meeting> _getDataSource() {
     final List<Meeting> meetings = <Meeting>[];
     final DateTime today = DateTime.now();
-    final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
-    final DateTime endTime = startTime.add(const Duration(hours: 2));
-    meetings.add(Meeting(
-        'Conference', startTime, endTime, const Color(0xFF0F8644), false));
+    //
+    final DateTime startTime_Mon = DateTime(2025, 01, 13, 9);
+    final DateTime endTime_Mon =
+        startTime_Mon.add(const Duration(minutes: 120));
+
+    meetings.add(Meeting('Farm Alpha Irrigation', startTime_Mon, endTime_Mon,
+        Color.fromARGB(255, 159, 221, 188), false));
+    final DateTime startTime_Tue = DateTime(2025, 01, 14, 10);
+    final DateTime endTime_Tue =
+        startTime_Tue.add(const Duration(minutes: 145));
+
+    meetings.add(Meeting('Farm Gamma Irrigation', startTime_Tue, endTime_Tue,
+        Color.fromARGB(255, 223, 154, 214), false));
     return meetings;
   }
 }
