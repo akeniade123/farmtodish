@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import 'schedule_model.dart';
+import 'dart:math' as math;
+
 class Schedule extends StatefulWidget {
   const Schedule({super.key});
 
@@ -73,22 +76,81 @@ class _ScheduleState extends State<Schedule> {
   }
   */
 
+  List<Scheduler> lst = [
+    Scheduler(
+        division: "6746QQ1",
+        task: "Irrigation",
+        commencement: DateTime(2025, 01, 13, 6),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "NPK Side Placing",
+        commencement: DateTime(2025, 01, 13, 8),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Nursery Seedling",
+        commencement: DateTime(2025, 01, 13, 10),
+        duration: const Duration(minutes: 240)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Transplanting",
+        commencement: DateTime(2025, 01, 14, 6),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Bamboo Cutting",
+        commencement: DateTime(2025, 01, 14, 8),
+        duration: const Duration(minutes: 240)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Nursery Seedling",
+        commencement: DateTime(2025, 01, 14, 12),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Beans Farm Clearing",
+        commencement: DateTime(2025, 01, 15, 6),
+        duration: const Duration(minutes: 360)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Beans Separation",
+        commencement: DateTime(2025, 01, 15, 12, 30),
+        duration: const Duration(minutes: 90))
+  ];
+
   List<Meeting> _getDataSource() {
     final List<Meeting> meetings = <Meeting>[];
+    for (Scheduler item in lst) {
+      meetings.add(Meeting(
+          item.task,
+          item.commencement,
+          item.commencement.add(item.duration),
+          Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+              .withOpacity(1.0),
+          false));
+    }
+    /*
     final DateTime today = DateTime.now();
     //
-    final DateTime startTime_Mon = DateTime(2025, 01, 13, 9);
-    final DateTime endTime_Mon =
-        startTime_Mon.add(const Duration(minutes: 120));
+    final DateTime startTime_Mon_1 = DateTime(2025, 01, 13, 6);
+    final DateTime endTime_Mon_1 =
+        startTime_Mon_1.add(const Duration(minutes: 120));
 
-    meetings.add(Meeting('Farm Alpha Irrigation', startTime_Mon, endTime_Mon,
+    final DateTime startTime_Mon_2 = DateTime(2025, 01, 13, 8);
+    final DateTime endTime_Mon_2 =
+        startTime_Mon_1.add(const Duration(minutes: 120));
+
+    meetings.add(Meeting('Irrigation', startTime_Mon_1, endTime_Mon_1,
         Color.fromARGB(255, 159, 221, 188), false));
+
     final DateTime startTime_Tue = DateTime(2025, 01, 14, 10);
     final DateTime endTime_Tue =
         startTime_Tue.add(const Duration(minutes: 145));
 
-    meetings.add(Meeting('Farm Gamma Irrigation', startTime_Tue, endTime_Tue,
+    meetings.add(Meeting('NPK Side Placing', startTime_Tue, endTime_Tue,
         Color.fromARGB(255, 223, 154, 214), false));
+        */
     return meetings;
   }
 }

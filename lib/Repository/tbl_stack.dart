@@ -35,3 +35,4 @@ List<String> ordCln = [id, usr, prDtl, dlvAr];
 List<String> lgaCln = [id, stId, nmm];
 List<String> hubCln = [id, nmm, latlong, lga, ctt];
 List<String> dptCln = [id, core];
+List<String> schCln = [id, div, tsk, dtme, dur];
