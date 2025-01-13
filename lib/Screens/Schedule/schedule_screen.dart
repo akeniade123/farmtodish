@@ -19,7 +19,7 @@ class _ScheduleState extends State<Schedule> {
       view: CalendarView.workWeek,
       dataSource: MeetingDataSource(_getDataSource()),
       timeSlotViewSettings: const TimeSlotViewSettings(
-          startHour: 6, endHour: 16, nonWorkingDays: <int>[DateTime.sunday]),
+          startHour: 6, endHour: 18, nonWorkingDays: <int>[DateTime.sunday]),
     ));
   }
   /*
@@ -84,24 +84,19 @@ class _ScheduleState extends State<Schedule> {
         duration: const Duration(minutes: 120)),
     Scheduler(
         division: "6746QQ1",
-        task: "NPK Side Placing",
+        task: "Farm Levelling",
         commencement: DateTime(2025, 01, 13, 8),
-        duration: const Duration(minutes: 120)),
-    Scheduler(
-        division: "6746QQ1",
-        task: "Nursery Seedling",
-        commencement: DateTime(2025, 01, 13, 10),
         duration: const Duration(minutes: 240)),
     Scheduler(
         division: "6746QQ1",
-        task: "Transplanting",
+        task: "Manure Sourcing",
+        commencement: DateTime(2025, 01, 13, 12),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Farm Gamma Clearing",
         commencement: DateTime(2025, 01, 14, 6),
-        duration: const Duration(minutes: 120)),
-    Scheduler(
-        division: "6746QQ1",
-        task: "Bamboo Cutting",
-        commencement: DateTime(2025, 01, 14, 8),
-        duration: const Duration(minutes: 240)),
+        duration: const Duration(minutes: 360)),
     Scheduler(
         division: "6746QQ1",
         task: "Nursery Seedling",
@@ -109,14 +104,44 @@ class _ScheduleState extends State<Schedule> {
         duration: const Duration(minutes: 120)),
     Scheduler(
         division: "6746QQ1",
-        task: "Beans Farm Clearing",
+        task: "Bamboo Cutting",
         commencement: DateTime(2025, 01, 15, 6),
         duration: const Duration(minutes: 360)),
     Scheduler(
         division: "6746QQ1",
         task: "Beans Separation",
-        commencement: DateTime(2025, 01, 15, 12, 30),
-        duration: const Duration(minutes: 90))
+        commencement: DateTime(2025, 01, 15, 12, 20),
+        duration: const Duration(minutes: 100)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Beans Planting  & Transplanting",
+        commencement: DateTime(2025, 01, 16, 6),
+        duration: const Duration(minutes: 480)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Pen Construction",
+        commencement: DateTime(2025, 01, 17, 6),
+        duration: const Duration(minutes: 480)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Pen Construction",
+        commencement: DateTime(2025, 01, 18, 6),
+        duration: const Duration(minutes: 360)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Irrigation",
+        commencement: DateTime(2025, 01, 20, 6),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Transplanting",
+        commencement: DateTime(2025, 01, 20, 8),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "NPK Side Placing",
+        commencement: DateTime(2025, 01, 20, 10),
+        duration: const Duration(minutes: 240)),
   ];
 
   List<Meeting> _getDataSource() {
