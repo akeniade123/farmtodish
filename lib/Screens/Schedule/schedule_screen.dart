@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../global_handlers.dart';
 import 'schedule_model.dart';
 import 'dart:math' as math;
+import 'package:intl/intl.dart';
 
 class Schedule extends StatefulWidget {
   const Schedule({super.key});
@@ -17,6 +19,7 @@ class _ScheduleState extends State<Schedule> {
     return Scaffold(
         body: SfCalendar(
       view: CalendarView.workWeek,
+      onTap: calendarTapped,
       dataSource: MeetingDataSource(_getDataSource()),
       timeSlotViewSettings: const TimeSlotViewSettings(
           startHour: 6, endHour: 18, nonWorkingDays: <int>[DateTime.sunday]),
@@ -75,6 +78,38 @@ class _ScheduleState extends State<Schedule> {
     ));
   }
   */
+
+  CalendarController _controller = CalendarController();
+  String? _text = '', _titleText = '';
+  Color? _headerColor, _viewHeaderColor, _calendarColor;
+
+  void calendarTapped(CalendarTapDetails details) {
+    if (details.targetElement == CalendarElement.header) {
+      _text = DateFormat('MMMM yyyy').format(details.date!).toString();
+      _titleText = 'Header';
+    } else if (details.targetElement == CalendarElement.viewHeader) {
+      _text = DateFormat('EEEE dd, MMMM yyyy').format(details.date!).toString();
+      _titleText = 'View Header';
+    } else if (details.targetElement == CalendarElement.calendarCell) {
+      _text = DateFormat('EEEE dd, MMMM yyyy').format(details.date!).toString();
+      _titleText = 'Calendar cell';
+    }
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(" $_titleText"),
+            content: Text(" $_text"),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('close'))
+            ],
+          );
+        });
+  }
 
   List<Scheduler> lst = [
     Scheduler(
