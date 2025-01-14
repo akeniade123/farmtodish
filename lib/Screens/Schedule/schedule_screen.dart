@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../global_handlers.dart';
+import 'pages/home_page.dart';
 import 'schedule_model.dart';
 import 'dart:math' as math;
 import 'package:intl/intl.dart';
@@ -34,10 +35,42 @@ class _ScheduleState extends State<Schedule> {
             PointerDeviceKind.touch,
           },
         ),
-        //  home: HomePage(),
+        home: const HomePage(),
       ),
     );
+
+    /*
+
+    return MaterialApp(
+        title: 'Flutter Week View Demo',
+        initialRoute: '/',
+        routes: {
+          '/': (context) => inScaffold(body: _FlutterWeekViewDemoAppBody()),
+          '/day-view': (context) => inScaffold(
+                title: 'Demo day view',
+                body: _DemoDayView(),
+              ),
+          '/week-view': (context) => inScaffold(
+                title: 'Demo week view',
+                body: _DemoWeekView(),
+              ),
+          '/dynamic-day-view': (context) => _DynamicDayView(),
+        },
+      );
+
+      */
   }
+
+  static Widget inScaffold({
+    String title = 'Flutter Week View',
+    required Widget body,
+  }) =>
+      Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+        ),
+        body: body,
+      );
 
   List<CalendarEventData> _events = [
     CalendarEventData(
