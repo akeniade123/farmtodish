@@ -36,3 +36,24 @@ List<String> lgaCln = [id, stId, nmm];
 List<String> hubCln = [id, nmm, latlong, lga, ctt];
 List<String> dptCln = [id, core];
 List<String> schCln = [id, div, tsk, dtme, dur];
+
+
+/*
+static void raiseCalendarTapCallback(
+      SfCalendar calendar,
+      DateTime? date,
+      List<dynamic>? appointments,
+      CalendarElement element,
+      CalendarResource? resource) {
+    if (appointments != null && appointments.isNotEmpty) {
+      for (final dynamic appointment in appointments) {
+        String? notes = appointment.notes;
+        if (notes != null && notes.isNotEmpty) {
+          notes = notes.replaceAll('isOccurrenceAppointment', '');
+          appointment.notes = notes;
+        }
+      }
+    }
+    calendar.onTap!(CalendarTapDetails(appointments, date, element, resource));
+  }
+*/
