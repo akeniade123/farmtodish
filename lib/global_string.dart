@@ -131,3 +131,9 @@ const String vendor = "vendor";
 const String despatch = "despatch";
 
 const String cart = "cart";
+
+const String sch = "schedule";
+const String div = "division";
+const String tsk = "task";
+const String dtme = "datetime";
+const String dur = "duration";

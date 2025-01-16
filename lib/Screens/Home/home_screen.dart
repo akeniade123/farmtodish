@@ -210,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
         doorStepDeliveryPrice: 1200,
         price: 900,
         4.5,
-        driver: "Olakunle Samuel",
+        driver: "Olakunle Ajayi",
         isAvailable: true,
         name: 'Estate 12 Redemption Camp'),
     DeliveryCarModel(
@@ -224,14 +224,14 @@ class _HomeScreenState extends State<HomeScreen> {
         doorStepDeliveryPrice: 8000,
         price: 7500,
         4.9,
-        driver: "Tobi Samuel",
+        driver: "Tobi Adebayo",
         isAvailable: true,
         name: 'Chevy View, Lekki'),
     DeliveryCarModel(
         doorStepDeliveryPrice: 8000,
         price: 6500,
         5.0,
-        driver: "Olakunle Samuel",
+        driver: "Oluwatobi Fadipe",
         isAvailable: true,
         name: 'Lake View, Lekki'),
     DeliveryCarModel(
@@ -503,7 +503,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 20,
                       minWidth: 100,
                       onPressed: () {
-                        context.go("/ProductScreen");
+                        //  context.go("/ProductScreen");
+                        context.go("/PaymentScreen");
                       },
                       color: FarmToDishTheme.faintGreen,
                       shape: RoundedRectangleBorder(

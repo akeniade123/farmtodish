@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
 
-
 // import 'common_widget.dart';
 // import 'screen_data_handler/signup_handler.dart';
 class MainPage extends StatefulWidget {
@@ -62,12 +61,12 @@ class _MainPageState extends State<MainPage> {
           icon: Icons.local_shipping
           // title: 'Shop',
           ),
-      // TabItem(
+      TabItem(
 
-      //     // icon: ImageIcon(Image.asset("coffee.png").image),
-      //     icon: Icons.dynamic_form_sharp
-      //     // title: 'Shop',
-      //     ),
+          // icon: ImageIcon(Image.asset("coffee.png").image),
+          icon: Icons.schedule_send_sharp
+          // title: 'Shop',
+          ),
     ];
 
     void onTap(index) {
