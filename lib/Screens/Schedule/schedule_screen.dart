@@ -167,21 +167,19 @@ class _ScheduleState extends State<Schedule> {
     ),
   ];
 
-  /*
+/*
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SfCalendar(
       view: CalendarView.workWeek,
       onTap: calendarTapped,
-
-
       dataSource: MeetingDataSource(_getDataSource()),
       timeSlotViewSettings: const TimeSlotViewSettings(
           startHour: 6, endHour: 18, nonWorkingDays: <int>[DateTime.sunday]),
     ));
   }
-
   */
 
   /*
@@ -298,17 +296,17 @@ class _ScheduleState extends State<Schedule> {
         duration: const Duration(minutes: 120)),
     Scheduler(
         division: "6746QQ1",
-        task: "Bamboo Cutting",
+        task: "Tomato Transplanting & Manure Spread",
         commencement: DateTime(2025, 01, 15, 6),
         duration: const Duration(minutes: 360)),
     Scheduler(
         division: "6746QQ1",
-        task: "Beans Separation",
+        task: "NPK Side Placing & Irrigation Extension",
         commencement: DateTime(2025, 01, 15, 12, 20),
         duration: const Duration(minutes: 100)),
     Scheduler(
         division: "6746QQ1",
-        task: "Beans Planting  & Transplanting",
+        task: "Bamboo Cutting",
         commencement: DateTime(2025, 01, 16, 6),
         duration: const Duration(minutes: 480)),
     Scheduler(
