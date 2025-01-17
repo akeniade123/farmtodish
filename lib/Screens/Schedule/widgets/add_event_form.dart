@@ -88,7 +88,7 @@ class _AddOrEditEventFormState extends State<AddOrEditEventForm> {
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           Row(
