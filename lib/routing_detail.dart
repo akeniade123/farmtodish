@@ -126,7 +126,7 @@ final GoRouter myRouter = GoRouter(
               GoRoute(
                 path: '/Schedule',
                 name: 'Schedule',
-                builder: (context, state) => const ChatPage(),
+                builder: (context, state) => const Schedule(),
               )
             ],
           ),
