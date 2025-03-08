@@ -113,7 +113,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 5),
                           child: Text(
-                            "Pay $currency${currentOrder?.getTotalPrice() ?? 0}",
+                            "Pay $currency${currentOrder?.getTotalPrice() ?? amount}",
                             style: TextStyle(
                               color: FarmToDishTheme.scaffoldBackgroundColor,
                               // fontSize: 14,

@@ -18,9 +18,11 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../Repository/databaseHelper.dart';
 import '../../Remote/requestmodel.dart';
 import '../../Remote/server_response.dart';
+import '../../env.dart';
 import '../../global_handlers.dart';
 import '../../global_objects.dart';
 import '../../global_string.dart';
+import '../../global_widgets.dart';
 import '../Products/product_model.dart';
 import '../screens.dart';
 
@@ -49,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool loaded = false;
   List<Map<String, dynamic>> cntz = [];
   late DatabaseHelper dbh;
+  final TextEditingController _amount = TextEditingController();
 
   @override
   void initState() {
@@ -576,7 +579,64 @@ class _HomeScreenState extends State<HomeScreen> {
                       minWidth: 100,
                       onPressed: () {
                         //  context.go("/ProductScreen");
-                        context.go("/PaymentScreen");
+                        Widget wdg = Column(
+                          children: [
+                            const Center(
+                              child: Text("Enter an Amount"),
+                            ),
+                            const Divider(
+                              thickness: 2,
+                            ),
+                            TextField(
+                              controller: _amount,
+                              decoration: InputDecoration(
+                                  hintText: 'Amount',
+                                  helperText: "Amount must be in digits",
+                                  border: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(12),
+                                      ),
+                                      borderSide: BorderSide(
+                                          color: Color.fromARGB(
+                                              255, 249, 249, 249))),
+                                  filled: true,
+                                  fillColor:
+                                      const Color.fromARGB(255, 249, 249, 249)),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            SizedBox(
+                                width: double.infinity,
+                                height: 60,
+                                child: MaterialButton(
+                                  height: 20,
+                                  minWidth: 100,
+                                  onPressed: () async {
+                                    if (_amount.text.isNotEmpty &&
+                                        _amount is int) {
+                                      context.go("/PaymentScreen");
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(displaySnackBar(
+                                              "empty required field"));
+                                    }
+                                  },
+                                  color: FarmToDishTheme.faintGreen,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Text(
+                                    "Pay",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                )),
+                          ],
+                        );
+
+                        Modal(context, 220, wdg);
                       },
                       color: FarmToDishTheme.faintGreen,
                       shape: RoundedRectangleBorder(

@@ -16,6 +16,7 @@ final rootNavigatorKey = GlobalKey<NavigatorState>();
 bool isLoggedIn = false;
 
 late User ussr_;
+late int amount;
 
 late DatabaseHelper dbCart;
 
