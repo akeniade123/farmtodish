@@ -65,8 +65,6 @@ class UserHandler extends ChangeNotifier {
     return result;
   }
 
-  bool isDigit(int rune) => rune ^ 0x30 <= 9;
-
   void storeCryptoDetail(Map<String, dynamic> crytoDetail) {
     crytoDetailStored = crytoDetail;
     notifyListeners();
@@ -141,6 +139,8 @@ bool isAppActive = false;
 void logger(String message) {
   log(message);
 }
+
+bool isDigit(int rune) => rune ^ 0x30 <= 9;
 
 class TransactionHistoryHandler extends ChangeNotifier {
   List<Map<String, dynamic>> allHistory = [];
