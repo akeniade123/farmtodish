@@ -65,6 +65,8 @@ class UserHandler extends ChangeNotifier {
     return result;
   }
 
+  bool isDigit(int rune) => rune ^ 0x30 <= 9;
+
   void storeCryptoDetail(Map<String, dynamic> crytoDetail) {
     crytoDetailStored = crytoDetail;
     notifyListeners();
@@ -332,7 +334,7 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
         logger("Background_Engagement");
 
         await suspendingCallBack();
-              break;
+        break;
       case AppLifecycleState.hidden:
         logger("Hidden_Engagement");
         break;
