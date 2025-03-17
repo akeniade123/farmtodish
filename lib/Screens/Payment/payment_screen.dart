@@ -76,7 +76,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Card owner",
+                          "Card Owner",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -143,7 +143,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         padding: const EdgeInsets.all(8.0),
         child: TextField(
           decoration: InputDecoration(
-              hintText: "Expiry date",
+              hintText: "Expiry Date",
               fillColor: FarmToDishTheme.deepGreen,
               border: InputBorder.none
               // OutlineInputBorder(
@@ -202,7 +202,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         padding: const EdgeInsets.all(8.0),
         child: TextField(
           decoration: InputDecoration(
-              hintText: "card number",
+              hintText: "Card Number",
               fillColor: FarmToDishTheme.deepGreen,
               border: InputBorder.none
               // OutlineInputBorder(

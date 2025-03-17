@@ -12,7 +12,7 @@ import 'Screens/Cart/cart_item_model.dart';
 import 'Screens/Login/user.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
-
+//08030750148    Mr. Segun Emmanuel...
 bool isLoggedIn = false;
 
 late User ussr_;
