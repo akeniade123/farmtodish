@@ -178,15 +178,58 @@ class Navigate {
 
     Map<String, String> hsh = formRequisite();
 
-    Map<String, dynamic> tag = {
-      "Essence": table,
-      "State": phase,
-      "Manifest": manifest,
-      "Entries": entries,
-      "Constraint": constraint
-    };
+    switch (essence) {
+      case chg:
+        hsh = {
+          "Essence": "Charge",
+          "regId": ";lkmlkmflkmlfkmf",
+          "Designation": "Charge",
+          "sect": "lone"
+        };
+//"data":{↵   "email":"adeyinkaakeni@gmail.com",↵   "amount":"20000",↵   "metadata":{↵      "value":"Lagos",↵      "display_name":"Fund Wallet",↵      "variable_name":"Card Funding",↵      "sect":"wallet",↵      "time":"2023-10-20 15:34",↵      "amount":"20000",↵      "reg_Id":"954948848484848",↵      "domain":"107",↵      "name":"Akeni Adeyinka David",↵      "user_id":"909891",↵      "description":"Fund Wallet"↵   },↵   "card":{↵      "cvv":"408",↵      "number":"4084084084084081",↵      "expiry_month":"02",↵      "expiry_year":"26"↵   },↵   "pin":"1234"↵}
 
-    hsh.addEntries({"Tag": jsonEncode(tag)}.entries);
+        Map<String, dynamic> dtt_ = {
+          "email": "adeyinkaakeni@gmail.com",
+          "amount": "20000",
+          "metadata": {
+            "value": "Lagos",
+            "display_name": "Fund Wallet",
+            "variable_name": "Card Funding",
+            "sect": "wallet",
+            "time": "2023-10-20 15:34",
+            "amount": "20000",
+            "reg_Id": "954948848484848",
+            "domain": "107",
+            "name": "Akeni Adeyinka David",
+            "user_id": "909891",
+            "description": "Fund Wallet"
+          },
+          "card": {
+            "cvv": "408",
+            "number": "4084084084084081",
+            "expiry_month": "02",
+            "expiry_year": "26"
+          },
+          "pin": "1234"
+        };
+
+        hsh.addEntries({"data": jsonEncode(dtt_)}.entries);
+
+        break;
+
+      default:
+        Map<String, dynamic> tag = {
+          "Essence": table,
+          "State": phase,
+          "Manifest": manifest,
+          "Entries": entries,
+          "Constraint": constraint
+        };
+
+        hsh.addEntries({"Tag": jsonEncode(tag)}.entries);
+        break;
+    }
+
     Endpoint enp = Endpoint();
 
     String dmn = (domain == communal) ? communal : generic;
