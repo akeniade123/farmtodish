@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 // import 'package:sqflite/sqflite.dart';
 
 import '../../global_objects.dart';
+import '../../global_string.dart';
 // import '../screens.dart';
 // import 'cart_model.dart';
 
@@ -22,6 +23,12 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
+  TextEditingController cdnumRetriever = TextEditingController();
+  TextEditingController cvnumRetriever = TextEditingController();
+  TextEditingController exnumRetriever = TextEditingController();
+
+//var cdnum, cvnum, exnum, pnum;
+
   // List<CartModel> selectedProducts = [CartModel("")];
   @override
   Widget build(BuildContext context) {
@@ -101,6 +108,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         onPressed: () {
+                          cdnum = cdnumRetriever.text;
+                          cvnum = cvnumRetriever.text;
+                          exnum = exnumRetriever.text;
                           Navigator.of(rootNavigatorKey
                                   .currentState!.overlay!.context)
                               .push(DialogRoute(
@@ -142,17 +152,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
+          controller: exnumRetriever,
           decoration: InputDecoration(
-              hintText: "Expiry Date",
-              fillColor: FarmToDishTheme.deepGreen,
-              border: InputBorder.none
-              // OutlineInputBorder(
-              //     borderRadius: BorderRadius.circular(10),
-              //     borderSide: BorderSide(
-              //         color: FarmToDishTheme.faintGreen,
-              //         width: 100)
-              //         ),
-              ),
+            hintText: "Expiry Date",
+            fillColor: FarmToDishTheme.deepGreen,
+            border: InputBorder.none,
+            // OutlineInputBorder(
+            //     borderRadius: BorderRadius.circular(10),
+            //     borderSide: BorderSide(
+            //         color: FarmToDishTheme.faintGreen,
+            //         width: 100)
+            //         ),
+          ),
         ),
       ),
       height: 50,
@@ -172,6 +183,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
+          controller: cvnumRetriever,
           decoration: InputDecoration(
               hintText: "CVV",
               fillColor: FarmToDishTheme.deepGreen,
@@ -201,6 +213,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
+          controller: cdnumRetriever,
           decoration: InputDecoration(
               hintText: "Card Number",
               fillColor: FarmToDishTheme.deepGreen,
