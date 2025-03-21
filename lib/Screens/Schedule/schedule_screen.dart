@@ -20,12 +20,13 @@ class Schedule extends StatefulWidget {
 DateTime get _now => DateTime.now();
 
 class _ScheduleState extends State<Schedule> {
+  /*
   @override
   Widget build(BuildContext context) {
     return CalendarControllerProvider(
       controller: EventController()..addAll(_events),
       child: MaterialApp(
-        title: 'Flutter Calendar Page Demo',
+        title: 'Blueprint',
         debugShowCheckedModeBanner: false,
         theme: ThemeData.light(),
         scrollBehavior: ScrollBehavior().copyWith(
@@ -38,8 +39,9 @@ class _ScheduleState extends State<Schedule> {
         home: const HomePage(),
       ),
     );
+    */
 
-    /*
+  /*
 
     return MaterialApp(
         title: 'Flutter Week View Demo',
@@ -58,11 +60,12 @@ class _ScheduleState extends State<Schedule> {
         },
       );
 
-      */
+      
   }
+  */
 
   static Widget inScaffold({
-    String title = 'Flutter Week View',
+    String title = 'Week View',
     required Widget body,
   }) =>
       Scaffold(
@@ -167,22 +170,17 @@ class _ScheduleState extends State<Schedule> {
     ),
   ];
 
-  /*
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SfCalendar(
       view: CalendarView.workWeek,
       onTap: calendarTapped,
-
-
       dataSource: MeetingDataSource(_getDataSource()),
       timeSlotViewSettings: const TimeSlotViewSettings(
-          startHour: 6, endHour: 18, nonWorkingDays: <int>[DateTime.sunday]),
+          startHour: 7, endHour: 15, nonWorkingDays: <int>[DateTime.sunday]),
     ));
   }
-
-  */
 
   /*
   Widget build(BuildContext context) {
@@ -205,8 +203,7 @@ class _ScheduleState extends State<Schedule> {
   }
   */
 
-  /*
-
+/*
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -219,7 +216,6 @@ class _ScheduleState extends State<Schedule> {
       ),
     );
   }
-
   */
 
   /*
@@ -298,17 +294,17 @@ class _ScheduleState extends State<Schedule> {
         duration: const Duration(minutes: 120)),
     Scheduler(
         division: "6746QQ1",
-        task: "Bamboo Cutting",
+        task: "Tomato Transplanting & Manure Spread",
         commencement: DateTime(2025, 01, 15, 6),
         duration: const Duration(minutes: 360)),
     Scheduler(
         division: "6746QQ1",
-        task: "Beans Separation",
+        task: "NPK Side Placing & Irrigation Extension",
         commencement: DateTime(2025, 01, 15, 12, 20),
         duration: const Duration(minutes: 100)),
     Scheduler(
         division: "6746QQ1",
-        task: "Beans Planting  & Transplanting",
+        task: "Bamboo Cutting",
         commencement: DateTime(2025, 01, 16, 6),
         duration: const Duration(minutes: 480)),
     Scheduler(
@@ -318,24 +314,199 @@ class _ScheduleState extends State<Schedule> {
         duration: const Duration(minutes: 480)),
     Scheduler(
         division: "6746QQ1",
-        task: "Pen Construction",
+        task: "Ugu Farm Clearing",
         commencement: DateTime(2025, 01, 18, 6),
         duration: const Duration(minutes: 360)),
     Scheduler(
         division: "6746QQ1",
-        task: "Irrigation",
+        task: "Ugu Planting",
         commencement: DateTime(2025, 01, 20, 6),
         duration: const Duration(minutes: 120)),
     Scheduler(
         division: "6746QQ1",
-        task: "Transplanting",
+        task: "Livestock Farm Clearing",
         commencement: DateTime(2025, 01, 20, 8),
         duration: const Duration(minutes: 120)),
     Scheduler(
         division: "6746QQ1",
-        task: "NPK Side Placing",
+        task: "Irrigation Networking & Wood Shave Mulching",
         commencement: DateTime(2025, 01, 20, 10),
         duration: const Duration(minutes: 240)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Manure Application on ridges",
+        commencement: DateTime(2025, 01, 21, 6),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Farm H Ridge Levelling",
+        commencement: DateTime(2025, 01, 21, 8),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Farm G Weeding",
+        commencement: DateTime(2025, 01, 21, 10),
+        duration: const Duration(minutes: 240)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Batch B Transplanting",
+        commencement: DateTime(2025, 01, 22, 6),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Bamboo Haulage & Pond digging",
+        commencement: DateTime(2025, 01, 22, 8),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Farm B & C Clearing, Fish feed market research",
+        commencement: DateTime(2025, 01, 22, 10),
+        duration: const Duration(minutes: 240)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Tomato Seed Nursery",
+        commencement: DateTime(2025, 01, 23, 6),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Pond digging & Bagging",
+        commencement: DateTime(2025, 01, 23, 8),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Fingerlings Convey",
+        commencement: DateTime(2025, 01, 23, 10),
+        duration: const Duration(minutes: 240)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Beans Planting",
+        commencement: DateTime(2025, 01, 24, 6),
+        duration: const Duration(minutes: 120)),
+  
+
+    Scheduler(
+        division: "6746QQ1",
+        task: "Irrigation",
+        commencement: DateTime(2025, 03, 10, 7),
+        duration: const Duration(minutes: 60)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Nursery Seedlings",
+        commencement: DateTime(2025, 03, 10, 8),
+        duration: const Duration(minutes: 180)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Lavaerium Trenching",
+        commencement: DateTime(2025, 03, 10, 11),
+        duration: const Duration(minutes: 180)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Solar Pump FIx",
+        commencement: DateTime(2025, 03, 10, 14),
+        duration: const Duration(minutes: 60)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Irrigation",
+        commencement: DateTime(2025, 03, 11, 7),
+        duration: const Duration(minutes: 60)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Bamboo Staking (D)",
+        commencement: DateTime(2025, 03, 11, 8),
+        duration: const Duration(minutes: 420)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Tomato Transplanting & Manure Spread",
+        commencement: DateTime(2025, 01, 15, 6),
+        duration: const Duration(minutes: 360)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "NPK Side Placing & Irrigation Extension",
+        commencement: DateTime(2025, 01, 15, 12, 20),
+        duration: const Duration(minutes: 100)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Bamboo Cutting",
+        commencement: DateTime(2025, 01, 16, 6),
+        duration: const Duration(minutes: 480)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Pen Construction",
+        commencement: DateTime(2025, 01, 17, 6),
+        duration: const Duration(minutes: 480)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Ugu Farm Clearing",
+        commencement: DateTime(2025, 01, 18, 6),
+        duration: const Duration(minutes: 360)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Ugu Planting",
+        commencement: DateTime(2025, 01, 20, 6),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Livestock Farm Clearing",
+        commencement: DateTime(2025, 01, 20, 8),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Irrigation Networking & Wood Shave Mulching",
+        commencement: DateTime(2025, 01, 20, 10),
+        duration: const Duration(minutes: 240)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Manure Application on ridges",
+        commencement: DateTime(2025, 01, 21, 6),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Farm H Ridge Levelling",
+        commencement: DateTime(2025, 01, 21, 8),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Farm G Weeding",
+        commencement: DateTime(2025, 01, 21, 10),
+        duration: const Duration(minutes: 240)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Batch B Transplanting",
+        commencement: DateTime(2025, 01, 22, 6),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Bamboo Haulage & Pond digging",
+        commencement: DateTime(2025, 01, 22, 8),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Farm B & C Clearing, Fish feed market research",
+        commencement: DateTime(2025, 01, 22, 10),
+        duration: const Duration(minutes: 240)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Tomato Seed Nursery",
+        commencement: DateTime(2025, 01, 23, 6),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Pond digging & Bagging",
+        commencement: DateTime(2025, 01, 23, 8),
+        duration: const Duration(minutes: 120)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Fingerlings Convey",
+        commencement: DateTime(2025, 01, 23, 10),
+        duration: const Duration(minutes: 240)),
+    Scheduler(
+        division: "6746QQ1",
+        task: "Beans Planting",
+        commencement: DateTime(2025, 01, 24, 6),
+        duration: const Duration(minutes: 120)),
+
+  
+  
   ];
 
   List<Meeting> _getDataSource() {

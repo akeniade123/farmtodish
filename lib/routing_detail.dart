@@ -3,6 +3,7 @@ import 'package:farm_to_dish/global_widgets.dart';
 import 'package:go_router/go_router.dart';
 import "package:flutter/material.dart";
 
+import 'Screens/Chat/chatScreen.dart';
 import 'Screens/Schedule/schedule_screen.dart';
 import 'Screens/screens.dart';
 import 'global_objects.dart';

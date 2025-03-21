@@ -140,6 +140,8 @@ void logger(String message) {
   log(message);
 }
 
+bool isDigit(int rune) => rune ^ 0x30 <= 9;
+
 class TransactionHistoryHandler extends ChangeNotifier {
   List<Map<String, dynamic>> allHistory = [];
   List<Map<String, dynamic>> tempAllHistoryHolder = [];
@@ -332,7 +334,7 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
         logger("Background_Engagement");
 
         await suspendingCallBack();
-              break;
+        break;
       case AppLifecycleState.hidden:
         logger("Hidden_Engagement");
         break;

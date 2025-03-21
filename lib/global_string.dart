@@ -10,6 +10,8 @@ String fbId = community;
 var shm = "showPrelim";
 var lgn = "loginStatus";
 
+var cdnum, cvnum, exnum, pnum;
+
 const String tk_id = "tokenId";
 const String token = "token";
 
@@ -19,6 +21,9 @@ const String crtt = "create";
 const String upd_ = "updatezz";
 const String rd = "read";
 const String rd_e = "read_expl";
+const String chg = "Charge";
+
+const String NA = "NA";
 
 const String server = "Server";
 const String resident = "Resident";

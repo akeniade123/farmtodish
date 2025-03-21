@@ -73,7 +73,7 @@ class _AddOrEditEventFormState extends State<AddOrEditEventForm> {
             decoration: AppConstants.inputDecoration.copyWith(
               labelText: "Event Title",
             ),
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.black,
               fontSize: 17.0,
             ),
@@ -83,13 +83,12 @@ class _AddOrEditEventFormState extends State<AddOrEditEventForm> {
               if (title == null || title == "") {
                 return "Please enter event title.";
               }
-
               return null;
             },
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           Row(

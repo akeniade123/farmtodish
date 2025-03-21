@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:numpad_layout/numpad.dart';
 
+import '../Remote/requestmodel.dart';
+import '../global_string.dart';
+
 class EnterPinDialog extends StatefulWidget {
   const EnterPinDialog({super.key});
 
@@ -73,7 +76,15 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
               color: FarmToDishTheme.faintGreen,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
-              onPressed: () {
+              onPressed: () async {
+                Navigate nvg = Navigate();
+                Map<String, dynamic> mnf = {};
+
+                Map<String, dynamic>? obj = await nvg.entry(
+                    NA, {}, {}, {}, global, chg, chg, true, NA, context);
+                //    await nvg.readData(produce, mnf, global, rd, "", false, rd, context);
+
+                /*
                 Navigator.pop(context);
                 context.go("/HomeScreen");
                 // ScaffoldMessenger.of()
@@ -84,6 +95,8 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
                     content: const Text("your goods are on the way"),
                   ),
                 );
+
+                */
                 // ScaffoldMessenger.of(snackbarKey.currentState!.context)
                 // .showSnackBar(
                 //     );

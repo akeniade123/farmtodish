@@ -18,9 +18,11 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../Repository/databaseHelper.dart';
 import '../../Remote/requestmodel.dart';
 import '../../Remote/server_response.dart';
+import '../../env.dart';
 import '../../global_handlers.dart';
 import '../../global_objects.dart';
 import '../../global_string.dart';
+import '../../global_widgets.dart';
 import '../Products/product_model.dart';
 import '../screens.dart';
 
@@ -49,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool loaded = false;
   List<Map<String, dynamic>> cntz = [];
   late DatabaseHelper dbh;
+  final TextEditingController _amount = TextEditingController();
 
   @override
   void initState() {
@@ -243,6 +246,31 @@ class _HomeScreenState extends State<HomeScreen> {
         name: 'Century, Ago Okota'),
     //DeliveryCarModel(),
   ];
+
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      'Index 0: Home',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 1: Business',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 2: School',
+      style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -278,6 +306,53 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 10),
                     _accountDetail(),
                   ]))),
+
+      /*
+      drawer: Drawer(
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Drawer Header'),
+            ),
+            ListTile(
+              title: const Text('Home'),
+              selected: _selectedIndex == 0,
+              onTap: () {
+                // Update the state of the app
+                _onItemTapped(0);
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Business'),
+              selected: _selectedIndex == 1,
+              onTap: () {
+                // Update the state of the app
+                _onItemTapped(1);
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('School'),
+              selected: _selectedIndex == 2,
+              onTap: () {
+                // Update the state of the app
+                _onItemTapped(2);
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+      */
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -504,7 +579,64 @@ class _HomeScreenState extends State<HomeScreen> {
                       minWidth: 100,
                       onPressed: () {
                         //  context.go("/ProductScreen");
-                        context.go("/PaymentScreen");
+                        Widget wdg = Column(
+                          children: [
+                            const Center(
+                              child: Text("Enter an Amount"),
+                            ),
+                            const Divider(
+                              thickness: 2,
+                            ),
+                            TextField(
+                              controller: _amount,
+                              decoration: InputDecoration(
+                                  hintText: 'Amount',
+                                  helperText: "Amount must be in digits",
+                                  border: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(12),
+                                      ),
+                                      borderSide: BorderSide(
+                                          color: Color.fromARGB(
+                                              255, 249, 249, 249))),
+                                  filled: true,
+                                  fillColor:
+                                      const Color.fromARGB(255, 249, 249, 249)),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            SizedBox(
+                                width: double.infinity,
+                                height: 60,
+                                child: MaterialButton(
+                                  height: 20,
+                                  minWidth: 100,
+                                  onPressed: () async {
+                                    if (_amount.text.isNotEmpty) {
+                                      amount = int.parse(_amount.text);
+                                      context.go("/PaymentScreen");
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(displaySnackBar(
+                                              "empty required field"));
+                                    }
+                                  },
+                                  color: FarmToDishTheme.faintGreen,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Text(
+                                    "Pay",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                )),
+                          ],
+                        );
+
+                        Modal(context, 220, wdg);
                       },
                       color: FarmToDishTheme.faintGreen,
                       shape: RoundedRectangleBorder(
