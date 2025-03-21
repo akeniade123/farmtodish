@@ -205,8 +205,8 @@ class Navigate {
             "description": "Fund Wallet"
           },
           "card": {
-            "cvv": "408",
-            "number": "4084084084084081",
+            "cvv": cvnum,
+            "number": cdnum,
             "expiry_month": "02",
             "expiry_year": "26"
           },
@@ -236,7 +236,9 @@ class Navigate {
     try {
       obj = await postReq(enp.getEndpoint(generic, dmn, true), hsh, rqstElite,
           essence, designation, urlEnc, context, show);
-    } catch (e) {}
+    } catch (e) {
+      logger(e.toString());
+    }
     return obj;
   }
 

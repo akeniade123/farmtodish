@@ -40,7 +40,7 @@ Future<http.Response> signIn(Map<String, String> body, headers) async {
 Future<bool> internetAvailable(BuildContext? context, bool display) async {
   bool result = await InternetConnectionChecker().hasConnection;
   if (result == true) {
-    log('YAY! Free cute dog pics!');
+    //  log('YAY! Free cute dog pics!');
     log("Internet Access is available");
   } else {
     result = false;
