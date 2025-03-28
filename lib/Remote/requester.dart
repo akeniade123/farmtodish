@@ -241,6 +241,10 @@ Map<String, dynamic>? handleJsonResponse(http.Response response,
         pref.setPrefString("i$sct", jsonEncode(jsonResponse));
         // cache.putFile(designation, jsonResponse as Uint8List);
         break;
+      case chg:
+        log("Transaction Check...");
+
+        break;
     }
     log('Parsed JSON: $jsonResponse');
   } else if (code == 408) {

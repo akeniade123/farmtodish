@@ -81,6 +81,7 @@ dependencies:
   mime: ^2.0.0
   supabase_flutter: ^2.8.3
   timeago: ^3.7.0
+  fluttertoast: ^8.2.8
   # path: ./packages_list/liquid_progress_indicator-master 
 
 dev_dependencies:

@@ -11,6 +11,19 @@ class ServerResponse {
   }
 }
 
+class CustomResponse {
+  final bool status;
+  final Map<String, dynamic> data;
+  final Object msg;
+
+  CustomResponse({required this.status, required this.data, required this.msg});
+
+  factory CustomResponse.fromJson(Map<String, dynamic> json) {
+    return CustomResponse(
+        status: json["status"], data: json["data"], msg: json["message"]);
+  }
+}
+
 class ServerPrelim {
   final bool status;
   final Object msg;
