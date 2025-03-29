@@ -27,5 +27,6 @@ Map<String, List<String>> procession() {
   prc.addEntries({users: usrCln}.entries);
   prc.addEntries({vendor: vndCln}.entries);
   prc.addEntries({sch: schCln}.entries);
+  prc.addEntries({usrWlt: wltCln}.entries);
   return prc;
 }

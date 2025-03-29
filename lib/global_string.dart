@@ -72,6 +72,8 @@ const String rqstAlbum = "album";
 const String rqstElite = "elite";
 
 const String id = "id";
+const String usrId = "user_id";
+const String lstTrnz = "last_transaction";
 const String nmm = "name";
 const String addr = "address";
 const String phn = "phone";
@@ -131,6 +133,7 @@ const String states = "states";
 const String unit = "unit";
 const String untz = "units";
 const String users = "users";
+const String usrWlt = "user_wallet";
 const String vendor = "vendor";
 
 const String despatch = "despatch";

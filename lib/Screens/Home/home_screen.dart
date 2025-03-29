@@ -43,6 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<Wrap>? product;
 
+  Future<Text>? account;
+
   late List<String> thumb;
   late List<String> owner;
   late List<String> titles;
@@ -50,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Navigate nvg;
   bool loaded = false;
   List<Map<String, dynamic>> cntz = [];
-  late DatabaseHelper dbh;
+  late DatabaseHelper dba, dbh;
   final TextEditingController _amount = TextEditingController();
 
   @override
@@ -69,7 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
     // gender = 'Male';
     super.initState();
     product = null;
+    account = null;
     dbh = DatabaseHelper(table: ptyp);
+    dba = DatabaseHelper(table: usrWlt);
     product = futurefetch();
   }
 
@@ -77,6 +81,30 @@ class _HomeScreenState extends State<HomeScreen> {
     return Consumer<UINotifier>(builder: (context, notifier, child) {
       return castData();
     });
+  }
+
+  Future<Text>? futureAccount() async {
+    Map<String, dynamic> cls = {usrId: "909891"};
+    Map<String, dynamic> pp = dba.whereClause(cls);
+    if (pp.isNotEmpty) {
+    } else {
+      Map<String, dynamic>? obj =
+          await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
+
+      ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+      if (svp.status) {
+        ServerResponse rsp = ServerResponse.fromJson(obj);
+        for (final item in rsp.data) {
+          //   String itm = item["item"];
+          //   String typ = item["type"];
+          //1  String img = item["image"];
+
+          //  cntz.add({"name": typ, "imageURL": item[img]});
+          dbh.insertData(item);
+        }
+      }
+    }
+    return Text("");
   }
 
   Future<Wrap>? futurefetch() async {
