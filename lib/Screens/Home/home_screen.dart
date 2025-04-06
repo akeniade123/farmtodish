@@ -2,6 +2,7 @@
 
 // import 'dart:js_interop';
 
+import 'dart:convert';
 import 'dart:math';
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
@@ -43,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<Wrap>? product;
 
-  Future<Text>? account;
+  Future<String>? account;
 
   late List<String> thumb;
   late List<String> owner;
@@ -52,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Navigate nvg;
   bool loaded = false;
   List<Map<String, dynamic>> cntz = [];
+  late String bal;
   late DatabaseHelper dba, dbh;
   final TextEditingController _amount = TextEditingController();
 
@@ -71,10 +73,14 @@ class _HomeScreenState extends State<HomeScreen> {
     // gender = 'Male';
     super.initState();
     product = null;
+    bal = "---";
     account = null;
+
+    nvg = Navigate();
     dbh = DatabaseHelper(table: ptyp);
     dba = DatabaseHelper(table: usrWlt);
     product = futurefetch();
+    account = futureAccount();
   }
 
   Consumer ftr() {
@@ -83,10 +89,17 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future<Text>? futureAccount() async {
+  Future<String>? futureAccount() async {
     Map<String, dynamic> cls = {usrId: "909891"};
-    Map<String, dynamic> pp = dba.whereClause(cls);
-    if (pp.isNotEmpty) {
+    List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
+
+    int ant = pp.length;
+    logger("Qnt: $ant");
+    if (ant > 0) {
+      logger("fetching $ant ***");
+      logger(pp[0]["amount"]);
+
+      bal = pp[0]["amount"];
     } else {
       Map<String, dynamic>? obj =
           await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
@@ -98,13 +111,13 @@ class _HomeScreenState extends State<HomeScreen> {
           //   String itm = item["item"];
           //   String typ = item["type"];
           //1  String img = item["image"];
-
           //  cntz.add({"name": typ, "imageURL": item[img]});
-          dbh.insertData(item);
+          dba.insertData(item);
+          bal = item["amount"];
         }
       }
     }
-    return Text("");
+    return bal;
   }
 
   Future<Wrap>? futurefetch() async {
@@ -119,7 +132,6 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       logger("Albert: $qq");
       List<ProductModel> rslt = [];
-      nvg = Navigate();
 
       Map<String, dynamic> mnf = {};
 
@@ -161,6 +173,21 @@ class _HomeScreenState extends State<HomeScreen> {
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children:
             productTypeDetails.map((e) => _buildCategorySlab(e)).toList());
+  }
+
+  FutureBuilder<String> balCast() {
+    return FutureBuilder(
+        future: account,
+        builder: ((context, snapshot) {
+          return Text(
+            "₦$bal",
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          );
+        }));
   }
 
   FutureBuilder<Wrap> castData() {
@@ -591,14 +618,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Align(
                     alignment: Alignment.bottomLeft,
-                    child: Text(
-                      "₦35,762.33",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: (account == null) ? Text("---") : balCast(),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,

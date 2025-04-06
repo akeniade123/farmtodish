@@ -3,6 +3,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:farm_to_dish/global_handlers.dart';
+
 import '../global_string.dart';
 import '../global_widgets.dart';
 import 'package:flutter/material.dart';
@@ -242,11 +244,11 @@ Map<String, dynamic>? handleJsonResponse(http.Response response,
         // cache.putFile(designation, jsonResponse as Uint8List);
         break;
       case chg:
-        log("Transaction Check...");
+        logger("Transaction Check...");
 
         break;
     }
-    log('Parsed JSON: $jsonResponse');
+    logger('Parsed JSON: $jsonResponse');
   } else if (code == 408) {
     if (display == true) {
       customSnackBar(context!, "message");

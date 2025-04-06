@@ -89,6 +89,15 @@ class DatabaseHelper {
     return await _db.query(table);
   }
 
+  Future<List<Map<String, dynamic>>> queryRowsClause(
+      Map<String, dynamic> fields) async {
+    await init();
+    Map<String, dynamic> whr = whereClause(fields);
+
+    return await _db.query(table,
+        where: whr["constraint"], whereArgs: whr["entries"]);
+  }
+
   Future<int> insertData(Map<String, dynamic> row) async {
     try {
       await init();
