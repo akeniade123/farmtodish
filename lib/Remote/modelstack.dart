@@ -37,6 +37,11 @@ class dashNote {
   }
 }
 
+class balance {
+  final String bal;
+  balance({required this.bal});
+}
+
 class category {
   final String text, selected;
   category({required this.text, required this.selected});

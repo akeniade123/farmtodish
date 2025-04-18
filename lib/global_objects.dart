@@ -130,6 +130,7 @@ late contentMode cstk;
 late liveSession lss;
 late comboNote cmbN;
 late stackStar strr;
+late balance bll;
 
 class UINotifier extends ChangeNotifier {
   final _randomGenerator = Random();
@@ -149,6 +150,11 @@ class UINotifier extends ChangeNotifier {
 
   void liveNotice(liveNote lnv) {
     lnt = lnv;
+    notifyListeners();
+  }
+
+  void accountBalance(balance bal_) {
+    bll = bal_;
     notifyListeners();
   }
 

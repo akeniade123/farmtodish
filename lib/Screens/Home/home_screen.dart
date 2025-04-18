@@ -89,6 +89,12 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Consumer bal_() {
+    return Consumer<UINotifier>(builder: (context, notifier, child) {
+      return castData(); //07033280489
+    });
+  }
+
   Future<String>? futureAccount() async {
     Map<String, dynamic> cls = {usrId: "909891"};
     List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
