@@ -18,12 +18,14 @@ bool isLoggedIn = false;
 late User ussr_;
 late int amount;
 
+late BuildContext drwdlg, dshCtx, crrctx, bbCtx, cbtCtx;
+
 late DatabaseHelper dbCart;
 
 late BuildContext? dlg;
 late BuildContext? baseCtx;
 
-late BuildContext drwdlg, basedlg;
+late BuildContext basedlg;
 
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();

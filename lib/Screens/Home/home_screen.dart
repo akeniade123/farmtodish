@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 // import 'package:sqflite/sqflite.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import '../../Remote/modelstack.dart';
 import '../../Repository/databaseHelper.dart';
 import '../../Remote/requestmodel.dart';
 import '../../Remote/server_response.dart';
@@ -91,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Consumer bal_() {
     return Consumer<UINotifier>(builder: (context, notifier, child) {
-      return castData(); //07033280489
+      return balCast(); // castData(); //07033280489
     });
   }
 
@@ -123,6 +124,21 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     }
+
+    balance blh = balance(bal: bal);
+    dshCtx.read<UINotifier>().accountBalance(blh);
+
+    /*
+
+    dashNote dnn_ = dashNote(
+        title: dtt["title"],
+        content: dtt["Content"],
+        end: dtt["Suffix"],
+        info: dtt["Info"],
+        details: dtt["Details"]);
+    dshCtx.read<UINotifier>().dashNotice(dnn_);
+    */
+
     return bal;
   }
 
@@ -157,6 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     }
+
     // List<String> prtypCln = [id, typ];
 
     return Wrap(
@@ -624,7 +641,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Align(
                     alignment: Alignment.bottomLeft,
-                    child: (account == null) ? Text("---") : balCast(),
+                    child:
+                        (account == null) ? Text("---") : bal_(), // balCast(),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
