@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -384,9 +385,15 @@ class _MyAppState extends State<MyApp> {
     await handleUpdates(remoteMessage, true);
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+        create: (context) => UINotifier(), child: routeDefs(_scaffoldKey));
+
+    /*
     return MaterialApp.router(
       // navigatorKey: rootNavigatorKey,
       scaffoldMessengerKey: snackbarKey,
@@ -408,6 +415,21 @@ class _MyAppState extends State<MyApp> {
       //   },
       //   child: const loggerinScreen(),
       // ),
+    );
+    */
+  }
+
+  MaterialApp routeDefs(GlobalKey<ScaffoldState> ctxKey) {
+    //  FlutterNativeSplash.remove();
+    return MaterialApp.router(
+      // navigatorKey: rootNavigatorKey,
+      scaffoldMessengerKey: snackbarKey,
+      routerConfig: myRouter,
+      title: 'FarmToDish',
+      theme: FarmToDishTheme.light(),
+      // home: const Splashscreen(),
+
+      // pDt: (context) => const Profile()
     );
   }
 }

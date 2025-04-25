@@ -81,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
     dbh = DatabaseHelper(table: ptyp);
     dba = DatabaseHelper(table: usrWlt);
     product = futurefetch();
+    bll = balance(bal: "---");
     account = futureAccount();
   }
 
@@ -96,48 +97,50 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Consumer brdc_() {
+    return Consumer<UINotifier>(builder: (context, notifier, child) {
+      return balCast(); // castData(); //07033280489
+    });
+  }
+
   Future<String>? futureAccount() async {
-    Map<String, dynamic> cls = {usrId: "909891"};
-    List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
+    try {
+      Map<String, dynamic> cls = {usrId: "909891"};
+      List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
 
-    int ant = pp.length;
-    logger("Qnt: $ant");
-    if (ant > 0) {
-      logger("fetching $ant ***");
-      logger(pp[0]["amount"]);
+      int ant = pp.length;
+      logger("Qnt: $ant");
+      if (ant > 0) {
+        logger("fetching $ant ***");
+        logger(pp[0]["amount"]);
 
-      bal = pp[0]["amount"];
-    } else {
-      Map<String, dynamic>? obj =
-          await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
+        bal = pp[0]["amount"];
+      } else {
+        Map<String, dynamic>? obj =
+            await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
 
-      ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
-      if (svp.status) {
-        ServerResponse rsp = ServerResponse.fromJson(obj);
-        for (final item in rsp.data) {
-          //   String itm = item["item"];
-          //   String typ = item["type"];
-          //1  String img = item["image"];
-          //  cntz.add({"name": typ, "imageURL": item[img]});
-          dba.insertData(item);
-          bal = item["amount"];
+        ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+        if (svp.status) {
+          ServerResponse rsp = ServerResponse.fromJson(obj);
+          for (final item in rsp.data) {
+            //   String itm = item["item"];
+            //   String typ = item["type"];
+            //1  String img = item["image"];
+            //  cntz.add({"name": typ, "imageURL": item[img]});
+            dba.insertData(item);
+            bal = item["amount"];
+          }
         }
       }
+
+      // bal = "***";
+
+      balance blh = balance(bal: bal);
+      //bll = blh;
+      dshCtx.read<UINotifier>().accountBalance(blh);
+    } catch (e) {
+      logger("Cast Error*** $e");
     }
-
-    balance blh = balance(bal: bal);
-    dshCtx.read<UINotifier>().accountBalance(blh);
-
-    /*
-
-    dashNote dnn_ = dashNote(
-        title: dtt["title"],
-        content: dtt["Content"],
-        end: dtt["Suffix"],
-        info: dtt["Info"],
-        details: dtt["Details"]);
-    dshCtx.read<UINotifier>().dashNotice(dnn_);
-    */
 
     return bal;
   }
@@ -203,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
         future: account,
         builder: ((context, snapshot) {
           return Text(
-            "₦$bal",
+            "₦${bll.bal}",
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
@@ -351,6 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    dshCtx = context;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
@@ -641,8 +645,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Align(
                     alignment: Alignment.bottomLeft,
-                    child:
-                        (account == null) ? Text("---") : bal_(), // balCast(),
+                    child: (account == null) ? Text("---") : bal_(),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
@@ -772,6 +775,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  //FutureBuilder<String>
 
   SizedBox _buildPack2() {
     return SizedBox(

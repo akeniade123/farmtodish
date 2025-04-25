@@ -116,6 +116,8 @@ const String crt_ = "created_at";
 const String upd = "Updated_at";
 
 const String instr = "Instruction";
+const String acct = "account";
+const String brdc = "broadcast";
 
 const String ctg = "category";
 const String dept = "department";
