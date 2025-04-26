@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late QRViewController _controller;
 
   Future<Wrap>? product;
+  Future<SizedBox>? brdcc;
 
   Future<String>? account;
 
@@ -55,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool loaded = false;
   List<Map<String, dynamic>> cntz = [];
   late String bal;
-  late DatabaseHelper dba, dbh;
+  late DatabaseHelper dba, dbh, dbc;
   final TextEditingController _amount = TextEditingController();
 
   @override
@@ -76,13 +77,21 @@ class _HomeScreenState extends State<HomeScreen> {
     product = null;
     bal = "---";
     account = null;
+    brdcc = null;
+    brdcst = broadcast(
+        caption: "Facilitating healthy food to dishes",
+        cta: "Fund Wallet",
+        image: "");
 
     nvg = Navigate();
     dbh = DatabaseHelper(table: ptyp);
     dba = DatabaseHelper(table: usrWlt);
+    dbc = DatabaseHelper(table: cpt);
     product = futurefetch();
     bll = balance(bal: "---");
+
     account = futureAccount();
+    brdcc = futureCaption();
   }
 
   Consumer ftr() {
@@ -99,8 +108,32 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Consumer brdc_() {
     return Consumer<UINotifier>(builder: (context, notifier, child) {
-      return balCast(); // castData(); //07033280489
+      return _buildPack2(); // castData(); //07033280489
     });
+  }
+
+  Future<SizedBox>? futureCaption() async {
+    broadcast brf;
+
+    try {
+      int p = await dbc.queryRowCount();
+      if (p > 0) {
+        List<Map<String, dynamic>> pp = await dbc.queryAllRows();
+        brf =
+            broadcast(caption: pp[0][cpt], cta: pp[0][cta], image: pp[0][img]);
+      } else {
+        brf = broadcast(
+            caption: "...facilitating healthy food to dishes",
+            cta: "Fund Wallet",
+            image: "image");
+      }
+
+      dshCtx.read<UINotifier>().broadCast(brf);
+    } catch (e) {}
+    return SizedBox(
+      height: 20,
+      child: Text(""),
+    );
   }
 
   Future<String>? futureAccount() async {
@@ -441,7 +474,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SingleChildScrollView(
             child: Column(children: [
               SizedBox(height: 10),
-              _buildPack2(),
+              (brdcc != null) ? brdc_() : Text(""),
               SizedBox(height: 10),
               (product == null) ? defaultPrdc() : castData(),
 
@@ -776,9 +809,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //FutureBuilder<String>
-
-  SizedBox _buildPack2() {
+  SizedBox _broadCast() {
     return SizedBox(
       height: 180,
       child: Stack(
@@ -803,7 +834,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     width: 155,
                     child: Text(
-                      "Facilitating healthy food to dishes...",
+                      brdcst.caption,
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -824,7 +855,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "Order Now",
+                      brdcst.cta,
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -846,6 +877,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  FutureBuilder<SizedBox> _buildPack2() {
+    return FutureBuilder(
+        future: brdcc,
+        builder: ((context, snapshot) {
+          return _broadCast();
+        }));
   }
 
   Container _iconButtonWithBorder({IconData? iconData, Function()? func}) {

@@ -133,6 +133,7 @@ late liveSession lss;
 late comboNote cmbN;
 late stackStar strr;
 late balance bll;
+late broadcast brdcst;
 
 class UINotifier extends ChangeNotifier {
   final _randomGenerator = Random();
@@ -157,6 +158,11 @@ class UINotifier extends ChangeNotifier {
 
   void accountBalance(balance bal_) {
     bll = bal_;
+    notifyListeners();
+  }
+
+  void broadCast(broadcast brdc) {
+    brdcst = brdc;
     notifyListeners();
   }
 

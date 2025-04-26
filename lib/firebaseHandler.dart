@@ -63,6 +63,9 @@ Future<void> firebaseProcession(String data) async {
       case instr:
         break;
       case brdc:
+        broadcast bdc =
+            broadcast(caption: dtt[cpt], cta: dtt[cta], image: dtt[img]);
+        dshCtx.read<UINotifier>().broadCast(bdc);
         break;
       case acct:
         String bal = dtt["amount"];
