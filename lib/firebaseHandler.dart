@@ -59,17 +59,23 @@ Future<void> firebaseProcession(String data) async {
     logger("My Data: $data");
     Map<String, dynamic> dtt = jsonDecode(data);
     logger("Data ess: ${dtt["essence"]}");
+    pref = SharedPref();
     switch (dtt["essence"]) {
       case instr:
         break;
       case brdc:
         broadcast bdc =
             broadcast(caption: dtt[cpt], cta: dtt[cta], image: dtt[img]);
+
+        Map<String, String> hd = {cpt: dtt[cpt], cta: dtt[cta], img: dtt[img]};
+        pref.setPrefString(cpt, jsonEncode(hd));
+
         dshCtx.read<UINotifier>().broadCast(bdc);
         break;
       case acct:
-        String bal = dtt["amount"];
+        String bal = dtt[amt];
         try {
+          /*
           DatabaseHelper dba = DatabaseHelper(table: usrWlt);
 
           //   [id, usrId, amt, lstTrnz];
@@ -80,8 +86,13 @@ Future<void> firebaseProcession(String data) async {
             lstTrnz: ""
           };
 
+          
+
           dba.insertData(item);
-          bal = item[amt];
+          */
+
+          pref.setPrefString(acct, bal);
+
           balance blh = balance(bal: bal);
           //bll = blh;
           dshCtx.read<UINotifier>().accountBalance(blh);
