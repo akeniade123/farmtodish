@@ -1,11 +1,17 @@
 import 'package:farm_to_dish/app_theme_file.dart';
+import 'package:farm_to_dish/global_handlers.dart';
 import 'package:farm_to_dish/global_objects.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:numpad_layout/numpad.dart';
 
 import '../Remote/requestmodel.dart';
+import '../Remote/server_response.dart';
 import '../global_string.dart';
+
+import '../../global_objects.dart';
+import '../global_widgets.dart';
 
 class EnterPinDialog extends StatefulWidget {
   const EnterPinDialog({super.key});
@@ -16,6 +22,8 @@ class EnterPinDialog extends StatefulWidget {
 
 class _EnterPinDialogState extends State<EnterPinDialog> {
   String number = '';
+  String pin = '';
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,18 +35,29 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
       ),
       // height: MediaQuery.of(context).size.height * 0.8,
       // width: MediaQuery.of(context).size.width * 0.8,
+
+      //3360
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            "Pay N5,000",
-            style: TextStyle(
+          Text(
+            number,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          /*
+          Text(
+            "Pay $currency${currentOrder?.getTotalPrice() ?? amount}",
+            style: const TextStyle(
               // color: FarmToDishTheme.scaffoldBackgroundColor,
               fontSize: 16,
               // fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 40),
+          */
+          const SizedBox(height: 5),
           Material(
             color: FarmToDishTheme.scaffoldBackgroundColor,
             child: SizedBox(
@@ -48,19 +67,26 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
                 numberStyle: const TextStyle(
                     fontSize: 20, fontWeight: FontWeight.normal),
                 runSpace: 0, mainAxisAlignment: MainAxisAlignment.center,
-                paddingLet: const EdgeInsets.all(8),
+                paddingLet: const EdgeInsets.all(3),
                 // color: FarmToDishTheme.scaffoldBackgroundColor,
                 highlightColor: FarmToDishTheme.accentLightColor,
                 arabicDigits: false,
                 onType: (value) {
-                  number += value;
-                  setState(() {});
+                  if (number.length <= 3) {
+                    number += "*";
+                    pin += value;
+                    logger(pin);
+                    setState(() {});
+                  } else {
+                    customSnackBar(context, "Max character exceeded");
+                  }
                 },
                 rightWidget: IconButton(
                   icon: const Icon(Icons.backspace),
                   onPressed: () {
                     if (number.isNotEmpty) {
                       number = number.substring(0, number.length - 1);
+                      pin = pin.substring(0, pin.length - 1);
                       setState(() {});
                     }
                   },
@@ -80,8 +106,64 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
                 Navigate nvg = Navigate();
                 Map<String, dynamic> mnf = {};
 
-                Map<String, dynamic>? obj = await nvg.entry(
+                Map<String, dynamic>? dtt = await nvg.entry(
                     NA, {}, {}, {}, global, chg, chg, true, NA, context);
+
+                try {
+                  if (dtt!["status"]) {
+                    CustomResponse svv = CustomResponse.fromJson(dtt);
+                    switch (svv.msg) {
+                      /*
+                      {
+    "status": true,
+    "data": {
+        "reference": "3h4s4g5e6x21f1x",
+        "status": "failed",
+        "message": "Transaction declined. Please use the test card."
+    },
+    "message": "Transaction failed"
+}
+                      */
+
+                      case "Transaction failed":
+                        Map<String, dynamic> dty = svv.data;
+
+                        customSnackBar(context, dty["message"]);
+
+                        break;
+
+                      case "Transaction Successful":
+                        Navigator.pop(context);
+                        context.go("/HomeScreen");
+                        // ScaffoldMessenger.of()
+                        snackbarKey.currentState?.showSnackBar(
+                          SnackBar(
+                            backgroundColor:
+                                FarmToDishTheme.scaffoldBackgroundColor,
+                            // onVisible: ,
+                            content: const Text("your goods are on the way"),
+                          ),
+                        );
+
+                        break;
+                    }
+
+                    /*
+
+                    List dts = svv.data;
+                    for (int i = 0; i < dts.length; i++) {
+                      Map<String, dynamic> dtk = dts[i];
+                      // await dbh.insertData(dtk);
+                    }
+                    */
+                    // await pref.setPrefBool(sct, true);
+                    // dbh.insertData(row);
+                    // log("$sct Accomplished");
+                  }
+                } catch (e) {
+                  // log("error: $e");
+                }
+
                 //    await nvg.readData(produce, mnf, global, rd, "", false, rd, context);
 
                 /*
@@ -105,7 +187,7 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 child: Text(
-                  "Pay N5,000",
+                  "Pay $currency${currentOrder?.getTotalPrice() ?? amount}",
                   style: TextStyle(
                     color: FarmToDishTheme.scaffoldBackgroundColor,
                     // fontSize: 14,

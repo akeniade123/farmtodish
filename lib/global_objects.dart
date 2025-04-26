@@ -18,12 +18,14 @@ bool isLoggedIn = false;
 late User ussr_;
 late int amount;
 
+late BuildContext drwdlg, dshCtx, crrctx, bbCtx, cbtCtx;
+
 late DatabaseHelper dbCart;
 
 late BuildContext? dlg;
 late BuildContext? baseCtx;
 
-late BuildContext drwdlg, basedlg;
+late BuildContext basedlg;
 
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
@@ -130,6 +132,8 @@ late contentMode cstk;
 late liveSession lss;
 late comboNote cmbN;
 late stackStar strr;
+late balance bll;
+late broadcast brdcst;
 
 class UINotifier extends ChangeNotifier {
   final _randomGenerator = Random();
@@ -149,6 +153,16 @@ class UINotifier extends ChangeNotifier {
 
   void liveNotice(liveNote lnv) {
     lnt = lnv;
+    notifyListeners();
+  }
+
+  void accountBalance(balance bal_) {
+    bll = bal_;
+    notifyListeners();
+  }
+
+  void broadCast(broadcast brdc) {
+    brdcst = brdc;
     notifyListeners();
   }
 

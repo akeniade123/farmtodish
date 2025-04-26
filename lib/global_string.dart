@@ -67,11 +67,14 @@ const String ind = "indexed";
 const String sbj = "subject";
 
 const String cpt = "caption";
+const String cta = "cta";
 
 const String rqstAlbum = "album";
 const String rqstElite = "elite";
 
 const String id = "id";
+const String usrId = "user_id";
+const String lstTrnz = "last_transaction";
 const String nmm = "name";
 const String addr = "address";
 const String phn = "phone";
@@ -114,6 +117,8 @@ const String crt_ = "created_at";
 const String upd = "Updated_at";
 
 const String instr = "Instruction";
+const String acct = "account";
+const String brdc = "broadcast";
 
 const String ctg = "category";
 const String dept = "department";
@@ -131,6 +136,7 @@ const String states = "states";
 const String unit = "unit";
 const String untz = "units";
 const String users = "users";
+const String usrWlt = "user_wallet";
 const String vendor = "vendor";
 
 const String despatch = "despatch";

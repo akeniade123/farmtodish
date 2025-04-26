@@ -2,6 +2,7 @@
 
 // import 'dart:js_interop';
 
+import 'dart:convert';
 import 'dart:math';
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
@@ -15,6 +16,7 @@ import 'package:provider/provider.dart';
 // import 'package:sqflite/sqflite.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import '../../Remote/modelstack.dart';
 import '../../Repository/databaseHelper.dart';
 import '../../Remote/requestmodel.dart';
 import '../../Remote/server_response.dart';
@@ -42,6 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
   late QRViewController _controller;
 
   Future<Wrap>? product;
+  Future<SizedBox>? brdcc;
+
+  Future<String>? account;
 
   late List<String> thumb;
   late List<String> owner;
@@ -50,7 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late Navigate nvg;
   bool loaded = false;
   List<Map<String, dynamic>> cntz = [];
-  late DatabaseHelper dbh;
+  late String bal;
+  late DatabaseHelper dba, dbh, dbc;
   final TextEditingController _amount = TextEditingController();
 
   @override
@@ -69,14 +75,107 @@ class _HomeScreenState extends State<HomeScreen> {
     // gender = 'Male';
     super.initState();
     product = null;
+    bal = "---";
+    account = null;
+    brdcc = null;
+    brdcst = broadcast(
+        caption: "Facilitating healthy food to dishes",
+        cta: "Fund Wallet",
+        image: "");
+
+    nvg = Navigate();
     dbh = DatabaseHelper(table: ptyp);
+    dba = DatabaseHelper(table: usrWlt);
+    dbc = DatabaseHelper(table: cpt);
     product = futurefetch();
+    bll = balance(bal: "---");
+
+    account = futureAccount();
+    brdcc = futureCaption();
   }
 
   Consumer ftr() {
     return Consumer<UINotifier>(builder: (context, notifier, child) {
       return castData();
     });
+  }
+
+  Consumer bal_() {
+    return Consumer<UINotifier>(builder: (context, notifier, child) {
+      return balCast(); // castData(); //07033280489
+    });
+  }
+
+  Consumer brdc_() {
+    return Consumer<UINotifier>(builder: (context, notifier, child) {
+      return _buildPack2(); // castData(); //07033280489
+    });
+  }
+
+  Future<SizedBox>? futureCaption() async {
+    broadcast brf;
+
+    try {
+      int p = await dbc.queryRowCount();
+      if (p > 0) {
+        List<Map<String, dynamic>> pp = await dbc.queryAllRows();
+        brf =
+            broadcast(caption: pp[0][cpt], cta: pp[0][cta], image: pp[0][img]);
+      } else {
+        brf = broadcast(
+            caption: "...facilitating healthy food to dishes",
+            cta: "Fund Wallet",
+            image: "image");
+      }
+
+      dshCtx.read<UINotifier>().broadCast(brf);
+    } catch (e) {}
+    return SizedBox(
+      height: 20,
+      child: Text(""),
+    );
+  }
+
+  Future<String>? futureAccount() async {
+    try {
+      Map<String, dynamic> cls = {usrId: "909891"};
+      List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
+
+      int ant = pp.length;
+      logger("Qnt: $ant");
+      if (ant > 0) {
+        logger("fetching $ant ***");
+        logger(pp[0]["amount"]);
+
+        bal = pp[0]["amount"];
+      } else {
+        Map<String, dynamic>? obj =
+            await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
+
+        ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+        if (svp.status) {
+          ServerResponse rsp = ServerResponse.fromJson(obj);
+          for (final item in rsp.data) {
+            //   String itm = item["item"];
+            //   String typ = item["type"];
+            //1  String img = item["image"];
+            //  cntz.add({"name": typ, "imageURL": item[img]});
+            dba.insertData(item);
+            bal = item["amount"];
+          }
+        }
+      }
+
+      // bal = "***";
+
+      balance blh = balance(bal: bal);
+      //bll = blh;
+      dshCtx.read<UINotifier>().accountBalance(blh);
+    } catch (e) {
+      logger("Cast Error*** $e");
+    }
+
+    return bal;
   }
 
   Future<Wrap>? futurefetch() async {
@@ -91,7 +190,6 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       logger("Albert: $qq");
       List<ProductModel> rslt = [];
-      nvg = Navigate();
 
       Map<String, dynamic> mnf = {};
 
@@ -111,6 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     }
+
     // List<String> prtypCln = [id, typ];
 
     return Wrap(
@@ -133,6 +232,21 @@ class _HomeScreenState extends State<HomeScreen> {
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children:
             productTypeDetails.map((e) => _buildCategorySlab(e)).toList());
+  }
+
+  FutureBuilder<String> balCast() {
+    return FutureBuilder(
+        future: account,
+        builder: ((context, snapshot) {
+          return Text(
+            "₦${bll.bal}",
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          );
+        }));
   }
 
   FutureBuilder<Wrap> castData() {
@@ -273,6 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    dshCtx = context;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
@@ -359,7 +474,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SingleChildScrollView(
             child: Column(children: [
               SizedBox(height: 10),
-              _buildPack2(),
+              (brdcc != null) ? brdc_() : Text(""),
               SizedBox(height: 10),
               (product == null) ? defaultPrdc() : castData(),
 
@@ -563,14 +678,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Align(
                     alignment: Alignment.bottomLeft,
-                    child: Text(
-                      "₦35,762.33",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: (account == null) ? Text("---") : bal_(),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
@@ -701,7 +809,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SizedBox _buildPack2() {
+  SizedBox _broadCast() {
     return SizedBox(
       height: 180,
       child: Stack(
@@ -726,7 +834,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     width: 155,
                     child: Text(
-                      "Facilitating healthy food to dishes...",
+                      brdcst.caption,
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -747,7 +855,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     child: Text(
-                      "Order Now",
+                      brdcst.cta,
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -769,6 +877,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  FutureBuilder<SizedBox> _buildPack2() {
+    return FutureBuilder(
+        future: brdcc,
+        builder: ((context, snapshot) {
+          return _broadCast();
+        }));
   }
 
   Container _iconButtonWithBorder({IconData? iconData, Function()? func}) {

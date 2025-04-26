@@ -234,7 +234,13 @@ class Navigate {
 
     String dmn = (domain == communal) ? communal : generic;
     try {
-      obj = await postReq(enp.getEndpoint(generic, dmn, true), hsh, rqstElite,
+      String dmm = generic;
+      switch (essence) {
+        case chg:
+          dmm = chg;
+          break;
+      }
+      obj = await postReq(enp.getEndpoint(dmm, dmn, true), hsh, rqstElite,
           essence, designation, urlEnc, context, show);
     } catch (e) {
       logger(e.toString());

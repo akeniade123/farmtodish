@@ -22,6 +22,9 @@ List<String> usrCln = [
   upd
 ];
 
+List<String> wltCln = [id, usrId, amt, lstTrnz];
+List<String> cptCln = [cpt];
+
 List<String> vndCln = [id, hub, opr, latlong, ctt];
 List<String> untzCln = [id, nmm, sct.toLowerCase()];
 List<String> untCln = [id, tag, abbrv];

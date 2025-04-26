@@ -37,6 +37,17 @@ class dashNote {
   }
 }
 
+class balance {
+  final String bal;
+  balance({required this.bal});
+}
+
+class broadcast {
+  final String caption, cta, image;
+
+  broadcast({required this.caption, required this.cta, required this.image});
+}
+
 class category {
   final String text, selected;
   category({required this.text, required this.selected});

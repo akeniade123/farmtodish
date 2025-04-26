@@ -31,6 +31,9 @@ class Endpoint {
       case generic:
         result += "$dmm/class/prt";
         break;
+      case chg:
+        result += "$dmm/transaction/cards";
+        break;
     }
 
     log("endpoint: $result");

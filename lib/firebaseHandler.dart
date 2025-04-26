@@ -1,6 +1,11 @@
 import 'dart:convert';
 import 'dart:isolate';
 
+import 'package:farm_to_dish/global_objects.dart';
+import 'package:provider/provider.dart';
+
+import 'Remote/modelstack.dart';
+import 'Repository/databaseHelper.dart';
 import 'firebase_options.dart';
 import 'global_handlers.dart';
 import 'global_string.dart';
@@ -56,6 +61,33 @@ Future<void> firebaseProcession(String data) async {
     logger("Data ess: ${dtt["essence"]}");
     switch (dtt["essence"]) {
       case instr:
+        break;
+      case brdc:
+        broadcast bdc =
+            broadcast(caption: dtt[cpt], cta: dtt[cta], image: dtt[img]);
+        dshCtx.read<UINotifier>().broadCast(bdc);
+        break;
+      case acct:
+        String bal = dtt["amount"];
+        try {
+          DatabaseHelper dba = DatabaseHelper(table: usrWlt);
+
+          //   [id, usrId, amt, lstTrnz];
+          Map<String, dynamic> item = {
+            id: "909891",
+            usrId: "909891",
+            amt: bal,
+            lstTrnz: ""
+          };
+
+          dba.insertData(item);
+          bal = item[amt];
+          balance blh = balance(bal: bal);
+          //bll = blh;
+          dshCtx.read<UINotifier>().accountBalance(blh);
+        } catch (e) {
+          logger("$acct Error:  $e");
+        }
         break;
     }
   } catch (e) {
