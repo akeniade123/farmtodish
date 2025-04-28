@@ -7,6 +7,7 @@
 // import 'package:Yomcoin/screens/login.dart';
 import 'package:farm_to_dish/Dialogs/enter_pinDialog.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
+import 'package:farm_to_dish/global_widgets.dart';
 import 'package:flutter/material.dart';
 // import 'package:sqflite/sqflite.dart';
 
@@ -26,6 +27,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   TextEditingController cdnumRetriever = TextEditingController();
   TextEditingController cvnumRetriever = TextEditingController();
   TextEditingController exnumRetriever = TextEditingController();
+  TextEditingController yrnumRetriever = TextEditingController();
+  TextEditingController dynumRetriever = TextEditingController();
 
 //var cdnum, cvnum, exnum, pnum;
 
@@ -72,10 +75,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     Row(
                       children: [
                         _buildCVVTextfield(),
-                        SizedBox(width: 20),
+                        SizedBox(width: 15),
                         Expanded(
-                          child: _buildExpDateTextfield(),
+                          child: _buildExpDateTextfield("Month"),
                         ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: _buildExpDateTextfield("Year"),
+                        )
                       ],
                     ),
                     SizedBox(height: 10),
@@ -83,14 +90,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Card Owner",
+                          "***",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          "Card Payments",
+                          "***",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w300,
@@ -111,13 +118,24 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           cdnum = cdnumRetriever.text;
                           cvnum = cvnumRetriever.text;
                           exnum = exnumRetriever.text;
-                          Navigator.of(rootNavigatorKey
-                                  .currentState!.overlay!.context)
-                              .push(DialogRoute(
-                            context: context,
-                            builder: (context) =>
-                                Dialog(child: EnterPinDialog()),
-                          ));
+                          dynum = dynumRetriever.text;
+                          yrnum = yrnumRetriever.text;
+
+                          if (cdnumRetriever.text.isNotEmpty &&
+                              cvnumRetriever.text.isNotEmpty &&
+                              dynumRetriever.text.isNotEmpty &&
+                              yrnumRetriever.text.isNotEmpty) {
+                            Navigator.of(rootNavigatorKey
+                                    .currentState!.overlay!.context)
+                                .push(DialogRoute(
+                              context: context,
+                              builder: (context) =>
+                                  Dialog(child: EnterPinDialog()),
+                            ));
+                          } else {
+                            customSnackBar(context,
+                                "kindly ensure no field is empty to proceed with payment");
+                          }
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -140,7 +158,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  Container _buildExpDateTextfield() {
+  Container _buildExpDateTextfield(String hint) {
     return Container(
       // color: FarmToDishTheme.deepGreen,
       decoration: BoxDecoration(
@@ -152,9 +170,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
+          keyboardType: TextInputType.number,
           controller: exnumRetriever,
           decoration: InputDecoration(
-            hintText: "Expiry Date",
+            hintText: hint,
             fillColor: FarmToDishTheme.deepGreen,
             border: InputBorder.none,
             // OutlineInputBorder(
@@ -183,6 +202,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
+          keyboardType: TextInputType.number,
           controller: cvnumRetriever,
           decoration: InputDecoration(
               hintText: "CVV",
@@ -213,6 +233,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
+          keyboardType: TextInputType.number,
           controller: cdnumRetriever,
           decoration: InputDecoration(
               hintText: "Card Number",

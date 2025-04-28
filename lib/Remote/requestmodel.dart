@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../Repository/databaseHelper.dart';
 import '../Screens/Login/login_screen.dart';
 import '../global_handlers.dart';
+import '../global_objects.dart';
 import '../global_string.dart';
 import '../sharedpref.dart';
 import 'endpoints.dart';
@@ -190,14 +191,14 @@ class Navigate {
 
         Map<String, dynamic> dtt_ = {
           "email": "adeyinkaakeni@gmail.com",
-          "amount": "20000",
+          "amount": {currentOrder?.getTotalPrice() ?? amount},
           "metadata": {
             "value": "Lagos",
             "display_name": "Fund Wallet",
             "variable_name": "Card Funding",
             "sect": "wallet",
             "time": "2023-10-20 15:34",
-            "amount": "20000",
+            "amount": {currentOrder?.getTotalPrice() ?? amount},
             "reg_Id": "954948848484848",
             "domain": "107",
             "name": "Akeni Adeyinka David",
@@ -207,10 +208,10 @@ class Navigate {
           "card": {
             "cvv": cvnum,
             "number": cdnum,
-            "expiry_month": "02",
-            "expiry_year": "26"
+            "expiry_month": dynum,
+            "expiry_year": yrnum
           },
-          "pin": "1234"
+          "pin": pnum
         };
 
         hsh.addEntries({"data": jsonEncode(dtt_)}.entries);

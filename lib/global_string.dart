@@ -10,7 +10,7 @@ String fbId = community;
 var shm = "showPrelim";
 var lgn = "loginStatus";
 
-var cdnum, cvnum, exnum, pnum;
+var cdnum, cvnum, dynum, yrnum, exnum, pnum;
 
 const String tk_id = "tokenId";
 const String token = "token";

@@ -75,6 +75,7 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
                   if (number.length <= 3) {
                     number += "*";
                     pin += value;
+                    pnum = pin;
                     logger(pin);
                     setState(() {});
                   } else {

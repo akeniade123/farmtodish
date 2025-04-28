@@ -787,7 +787,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 )),
                           ],
                         );
-
                         Modal(context, 220, wdg);
                       },
                       color: FarmToDishTheme.faintGreen,
