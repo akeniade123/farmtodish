@@ -171,7 +171,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         padding: const EdgeInsets.all(8.0),
         child: TextField(
           keyboardType: TextInputType.number,
-          controller: exnumRetriever,
+          controller: (hint == "Month") ? dynumRetriever : yrnumRetriever,
           decoration: InputDecoration(
             hintText: hint,
             fillColor: FarmToDishTheme.deepGreen,
