@@ -83,6 +83,7 @@ dependencies:
   timeago: ^3.7.0
   fluttertoast: ^8.2.8
   firebase_crashlytics: ^4.1.0
+  googleapis_auth: ^1.6.0
   # path: ./packages_list/liquid_progress_indicator-master 
 
 dev_dependencies:

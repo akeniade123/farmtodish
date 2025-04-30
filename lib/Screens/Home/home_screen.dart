@@ -21,6 +21,7 @@ import '../../Repository/databaseHelper.dart';
 import '../../Remote/requestmodel.dart';
 import '../../Remote/server_response.dart';
 import '../../env.dart';
+import '../../firebaseHandler.dart';
 import '../../global_handlers.dart';
 import '../../global_objects.dart';
 import '../../global_string.dart';
@@ -97,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     account = _futureAccount();
     brdcc = futureCaption();
+    obtainPermissions();
   }
 
   Consumer ftr() {
@@ -892,7 +894,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 35,
                     minWidth: 155,
                     onPressed: () {
-                      context.go("/ProductScreen");
+                      // context.go("/ProductScreen");
                     },
                     color: FarmToDishTheme.faintGreen,
                     shape: RoundedRectangleBorder(
