@@ -312,6 +312,18 @@ Future<void> sendNotification(String deviceToken, BuildContext context,
       "data": data
     }
   };
+
+  final http.Response response = await http.post(Uri.parse(fcmendpoint),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $accessToken'
+      },
+      body: jsonEncode(payload));
+  if (response.statusCode == 200) {
+    print('FCM message sent successfully');
+  } else {
+    print('Failed to send FCM message: ${response.statusCode}');
+  }
 }
 
 //Future<void> sendNotice() {}
