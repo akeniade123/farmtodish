@@ -307,21 +307,9 @@ Future<void> sendNotification(String deviceToken, BuildContext context,
 
   Map<String, dynamic> payload = {
     "message": {
-      "token":
-          "df9QLll-R2iNATQXbNegPJ:APA91bGK9fe9BpiwRrxvUdu0h1sg5vu8bEvLuui08ozsI0BKwwb5SyfdDylW6Vw82qW0HJR6WkF6VEiVueRW6Qh1udaUucxdrK7oTSRwq8DJCTKbSir_TYI",
-      "notification": {"body": "Checking", "title": "FCM Message"},
-      "data": {
-        "id": "story_1234567890***",
-        "essence": "account",
-        "amount": "42750.28k"
-
-        /*
-            "essence": "broadcast",
-            "caption": "Get all your deliveries at your doorsteps without stress",
-            "cta": "Start now",
-            "image": ""
-            */
-      }
+      "token": deviceToken,
+      "notification": notification,
+      "data": data
     }
   };
 }
