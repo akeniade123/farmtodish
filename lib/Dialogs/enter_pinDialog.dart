@@ -3,6 +3,8 @@ import 'package:farm_to_dish/global_handlers.dart';
 import 'package:farm_to_dish/global_objects.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:numpad_layout/numpad.dart';
 
@@ -23,6 +25,7 @@ class EnterPinDialog extends StatefulWidget {
 class _EnterPinDialogState extends State<EnterPinDialog> {
   String number = '';
   String pin = '';
+  bool payment = false;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +78,7 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
                   if (number.length <= 3) {
                     number += "*";
                     pin += value;
+                    pnum = pin;
                     logger(pin);
                     setState(() {});
                   } else {
@@ -103,6 +107,7 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               onPressed: () async {
+                payment = true;
                 Navigate nvg = Navigate();
                 Map<String, dynamic> mnf = {};
 
@@ -111,6 +116,7 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
 
                 try {
                   if (dtt!["status"]) {
+                    payment = false;
                     CustomResponse svv = CustomResponse.fromJson(dtt);
                     switch (svv.msg) {
                       /*
@@ -186,14 +192,26 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                child: Text(
-                  "Pay $currency${currentOrder?.getTotalPrice() ?? amount}",
-                  style: TextStyle(
-                    color: FarmToDishTheme.scaffoldBackgroundColor,
-                    // fontSize: 14,
-                    // fontWeight: FontWeight.w500,
-                  ),
-                ),
+                child: (payment == false)
+                    ? Text(
+                        "Pay $currency${currentOrder?.getTotalPrice() ?? amount}",
+                        style: TextStyle(
+                          color: FarmToDishTheme.scaffoldBackgroundColor,
+                          // fontSize: 14,
+                          // fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              'Paying $currency${currentOrder?.getTotalPrice() ?? amount}'),
+                          LoadingAnimationWidget.flickr(
+                              size: 20,
+                              leftDotColor: Colors.white,
+                              rightDotColor: Colors.blue)
+                        ],
+                      ),
               ),
             ),
           ),

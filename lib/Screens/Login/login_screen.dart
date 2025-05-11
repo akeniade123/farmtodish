@@ -183,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           const Text(
                             'keep me',
-                            style: TextStyle(fontSize: 12),
+                            style: TextStyle(fontSize: 10),
                           ),
                           Checkbox(
                               value: rememberBool,

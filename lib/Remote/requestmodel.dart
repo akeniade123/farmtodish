@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../Repository/databaseHelper.dart';
 import '../Screens/Login/login_screen.dart';
 import '../global_handlers.dart';
+import '../global_objects.dart';
 import '../global_string.dart';
 import '../sharedpref.dart';
 import 'endpoints.dart';
@@ -180,40 +181,46 @@ class Navigate {
 
     switch (essence) {
       case chg:
-        hsh = {
-          "Essence": "Charge",
-          "regId": ";lkmlkmflkmlfkmf",
-          "Designation": "Charge",
-          "sect": "lone"
-        };
+        try {
+          hsh = {
+            "Essence": "Charge",
+            "regId": ";lkmlkmflkmlfkmf",
+            "Designation": "Charge",
+            "sect": "lone"
+          };
 //"data":{↵   "email":"adeyinkaakeni@gmail.com",↵   "amount":"20000",↵   "metadata":{↵      "value":"Lagos",↵      "display_name":"Fund Wallet",↵      "variable_name":"Card Funding",↵      "sect":"wallet",↵      "time":"2023-10-20 15:34",↵      "amount":"20000",↵      "reg_Id":"954948848484848",↵      "domain":"107",↵      "name":"Akeni Adeyinka David",↵      "user_id":"909891",↵      "description":"Fund Wallet"↵   },↵   "card":{↵      "cvv":"408",↵      "number":"4084084084084081",↵      "expiry_month":"02",↵      "expiry_year":"26"↵   },↵   "pin":"1234"↵}
 
-        Map<String, dynamic> dtt_ = {
-          "email": "adeyinkaakeni@gmail.com",
-          "amount": "20000",
-          "metadata": {
-            "value": "Lagos",
-            "display_name": "Fund Wallet",
-            "variable_name": "Card Funding",
-            "sect": "wallet",
-            "time": "2023-10-20 15:34",
-            "amount": "20000",
-            "reg_Id": "954948848484848",
-            "domain": "107",
-            "name": "Akeni Adeyinka David",
-            "user_id": "909891",
-            "description": "Fund Wallet"
-          },
-          "card": {
-            "cvv": cvnum,
-            "number": cdnum,
-            "expiry_month": "02",
-            "expiry_year": "26"
-          },
-          "pin": "1234"
-        };
+          Map<String, dynamic> dtt_ = {
+            "email": "adeyinkaakeni@gmail.com",
+            "amount": {currentOrder?.getTotalPrice() ?? amount}.toString(),
+            "metadata": {
+              "value": "Lagos",
+              "display_name": "Fund Wallet",
+              "variable_name": "Card Funding",
+              "sect": "wallet",
+              "time": "2023-10-20 15:34",
+              "amount": {currentOrder?.getTotalPrice() ?? amount}.toString(),
+              "reg_Id": "954948848484848",
+              "domain": "107",
+              "name": "Akeni Adeyinka David",
+              "user_id": "909891",
+              "description": "Fund Wallet"
+            },
+            /*
+            "card": {
+              "cvv": cvnum,
+              "number": cdnum,
+              "expiry_month": dynum,
+              "expiry_year": yrnum
+            },
+            */
+            "pin": pnum.toString()
+          };
 
-        hsh.addEntries({"data": jsonEncode(dtt_)}.entries);
+          hsh.addEntries({"data": jsonEncode(dtt_)}.entries);
+        } catch (e) {
+          logger("Transaction error: $e");
+        }
 
         break;
 

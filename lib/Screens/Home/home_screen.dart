@@ -21,10 +21,12 @@ import '../../Repository/databaseHelper.dart';
 import '../../Remote/requestmodel.dart';
 import '../../Remote/server_response.dart';
 import '../../env.dart';
+import '../../firebaseHandler.dart';
 import '../../global_handlers.dart';
 import '../../global_objects.dart';
 import '../../global_string.dart';
 import '../../global_widgets.dart';
+import '../../sharedpref.dart';
 import '../Products/product_model.dart';
 import '../screens.dart';
 
@@ -51,6 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<String> thumb;
   late List<String> owner;
   late List<String> titles;
+
+  late SharedPref pref;
 
   late Navigate nvg;
   bool loaded = false;
@@ -87,11 +91,14 @@ class _HomeScreenState extends State<HomeScreen> {
     dbh = DatabaseHelper(table: ptyp);
     dba = DatabaseHelper(table: usrWlt);
     dbc = DatabaseHelper(table: cpt);
+    pref = SharedPref();
+
     product = futurefetch();
     bll = balance(bal: "---");
 
-    account = futureAccount();
+    account = _futureAccount();
     brdcc = futureCaption();
+    obtainPermissions();
   }
 
   Consumer ftr() {
@@ -116,11 +123,11 @@ class _HomeScreenState extends State<HomeScreen> {
     broadcast brf;
 
     try {
-      int p = await dbc.queryRowCount();
-      if (p > 0) {
-        List<Map<String, dynamic>> pp = await dbc.queryAllRows();
+      String? ppf = await pref.getPrefString(cpt);
+      if (ppf!.isNotEmpty) {
+        final capt_ = jsonDecode(ppf);
         brf =
-            broadcast(caption: pp[0][cpt], cta: pp[0][cta], image: pp[0][img]);
+            broadcast(caption: capt_[cpt], cta: capt_[cta], image: capt_[img]);
       } else {
         brf = broadcast(
             caption: "...facilitating healthy food to dishes",
@@ -134,6 +141,45 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 20,
       child: Text(""),
     );
+  }
+
+  Future<String>? _futureAccount() async {
+    try {
+      Map<String, dynamic> cls = {usrId: "909891"};
+      List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
+
+      String? act_ = await pref.getPrefString(acct);
+      if (act_!.isNotEmpty) {
+        bal = act_;
+      } else {
+        Map<String, dynamic>? obj =
+            await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
+
+        ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+        if (svp.status) {
+          ServerResponse rsp = ServerResponse.fromJson(obj);
+          for (final item in rsp.data) {
+            //   String itm = item["item"];
+            //   String typ = item["type"];
+            //1  String img = item["image"];
+            //  cntz.add({"name": typ, "imageURL": item[img]});
+            //  dba.insertData(item);
+            pref.setPrefString(acct, item[amt]);
+            bal = item[amt];
+          }
+        }
+      }
+
+      // bal = "***";
+
+      balance blh = balance(bal: bal);
+      //bll = blh;
+      dshCtx.read<UINotifier>().accountBalance(blh);
+    } catch (e) {
+      logger("Cast Error*** $e");
+    }
+
+    return bal;
   }
 
   Future<String>? futureAccount() async {
@@ -743,7 +789,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 )),
                           ],
                         );
-
                         Modal(context, 220, wdg);
                       },
                       color: FarmToDishTheme.faintGreen,
@@ -849,7 +894,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 35,
                     minWidth: 155,
                     onPressed: () {
-                      context.go("/ProductScreen");
+                      // context.go("/ProductScreen");
                     },
                     color: FarmToDishTheme.faintGreen,
                     shape: RoundedRectangleBorder(
