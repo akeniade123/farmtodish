@@ -91,7 +91,7 @@ Future<void> firebaseProcession(String data) async {
 
         dshCtx.read<UINotifier>().broadCast(bdc);
         break;
-      case order:
+      case ord:
         break;
       case acct:
         String bal = dtt[amt];

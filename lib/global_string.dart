@@ -125,6 +125,7 @@ const String dept = "department";
 const String hub = "hub";
 const String opr = "operator";
 const String lga = "lga";
+const String ord = "order";
 const String order = "order_delivery";
 const String orderItem = "order_item";
 const String orderType = "order_type";
