@@ -33,8 +33,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    dbo = DatabaseHelper(table: ord);
+    dbo = DatabaseHelper(table: order);
     pndOrder = _futureOrderStack(true);
+    dlvOrder = _futureOrderStack(false);
   }
 
   Future<List<Map<String, dynamic>>> _futureOrderStack(bool current) async {
@@ -66,7 +67,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildDivider(),
             SizedBox(height: 25),
             TitleMoreAndBodyWidget(
-              body: Column(children: [_stackTranzacts()]),
+              body: (pndOrder == null)
+                  ? (Text("No pending transaction"))
+                  : Column(children: [_stackTranzacts(true)]),
               titleWidget: _buildTitleForLists("Current Order"),
               isSeeAll: true,
             ),
@@ -103,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  FutureBuilder<Wrap> _stackTranzacts() {
+  FutureBuilder<Wrap> _stackTranzacts(bool current) {
     return FutureBuilder(
         future: stack,
         builder: (context, snapshot) {
@@ -134,6 +137,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //         subtitle: "1 day to delivery"),
     //   ],
     // );
+  }
+
+  Container _buildItemz(Map<dynamic, dynamic> content) {
+    return Container(
+      height: 89,
+      width: double.infinity,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(21),
+          color: FarmToDishTheme.accentLightColor,
+          boxShadow: List.filled(4, FarmToDishTheme.genericBoxShadow)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8.0),
+        child: Row(children: [
+          Container(
+              clipBehavior: Clip.hardEdge,
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              child: Image.asset(
+                "${assets}shop.png",
+              )),
+          SizedBox(width: 10),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                content[id],
+                style: FarmToDishTheme.listMainText,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.watch_later,
+                    color: FarmToDishTheme.listSubText.color,
+                    size: 15,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    "***",
+                    style: FarmToDishTheme.listSubText,
+                  ),
+                ],
+              ),
+            ],
+          )
+        ]),
+      ),
+    );
   }
 
   // Widget _stackTranzacts() {}
