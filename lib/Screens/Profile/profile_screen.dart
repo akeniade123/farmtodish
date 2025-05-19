@@ -32,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 33.0, vertical: 20),
         child: Column(
           children: [
+            SizedBox(height: 40),
             _buildTopComponent(),
             _buildSecondBlock(),
             // divider
@@ -39,28 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildDivider(),
             SizedBox(height: 25),
             TitleMoreAndBodyWidget(
-              body: Column(children: [
-                _buildItem(
-                    imageWidget: Image.asset(
-                      "${assets}yams.png",
-                    ),
-                    title: "Yams and peppers",
-                    subtitle: "1 day to delivery"),
-                SizedBox(height: 15),
-                _buildItem(
-                    imageWidget: Image.asset(
-                      "${assets}yams.png",
-                    ),
-                    title: "Yams and peppers",
-                    subtitle: "1 day to delivery"),
-                SizedBox(height: 15),
-                _buildItem(
-                    imageWidget: Image.asset(
-                      "${assets}yams.png",
-                    ),
-                    title: "Yams and peppers",
-                    subtitle: "1 day to delivery"),
-              ]),
+              body: Column(children: [_stackTranzacts()]),
               titleWidget: _buildTitleForLists("Current Order"),
               isSeeAll: true,
             ),
@@ -96,6 +76,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
       )),
     );
   }
+
+  Widget _stackTranzacts() {
+    return Column(
+      children: [
+        _buildItem(
+            imageWidget: Image.asset(
+              "${assets}shop.png",
+            ),
+            title: "Yams and peppers",
+            subtitle: "1 day to delivery"),
+        SizedBox(height: 15),
+        _buildItem(
+            imageWidget: Image.asset(
+              "${assets}yams.png",
+            ),
+            title: "Yams and peppers",
+            subtitle: "1 day to delivery"),
+        SizedBox(height: 15),
+        _buildItem(
+            imageWidget: Image.asset(
+              "${assets}yams.png",
+            ),
+            title: "Yams and peppers",
+            subtitle: "1 day to delivery"),
+      ],
+    );
+  }
+
+  // Widget _stackTranzacts() {}
 
   Container _buildItem({Widget? imageWidget, String? title, String? subtitle}) {
     return Container(
@@ -182,7 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         CircleAvatar(
           // clipBehavior: Clip.hardEdge,
           // decoration: BoxDecoration(shape: BoxShape.circle),
-          radius: 100,
+          radius: 60,
           backgroundImage: Image.asset("${assets}shop.png").image,
           // child: ,
         ),
@@ -198,7 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () {},
                 icon: Icon(
                   Icons.edit_square,
-                  color: FarmToDishTheme.highlightBlue,
+                  color: FarmToDishTheme.deepGreen,
                 ))
           ],
         )
@@ -222,7 +231,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         ),
-        IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_outlined))
+        //   IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_outlined))
       ],
     );
   }
