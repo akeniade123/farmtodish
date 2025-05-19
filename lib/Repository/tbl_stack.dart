@@ -25,6 +25,15 @@ List<String> usrCln = [
 List<String> wltCln = [id, usrId, amt, lstTrnz];
 List<String> cptCln = [cpt];
 
+/*
+
+            // "essence": "order",
+            // "products": "tomato*2kg*2000@4000#pepper*3kg*2000@6000",
+            // "order_id": "234090",
+            // "user":"211678",
+            // "total":"10,000"
+            */
+
 List<String> vndCln = [id, hub, opr, latlong, ctt];
 List<String> untzCln = [id, nmm, sct.toLowerCase()];
 List<String> untCln = [id, tag, abbrv];
@@ -34,7 +43,7 @@ List<String> prtypCln = [id, typ, img];
 List<String> prdCln = [id, itm, typ, crt, img];
 List<String> prcIdxCln = [id, cdr, produce, unit, amt, crr, avl, qnt];
 List<String> ordItmCln = [id, itm, qnt, rate, amt, crr, order];
-List<String> ordCln = [id, usr, prDtl, dlvAr];
+List<String> ordCln = [id, usr, prDtl, dlvAr, stt];
 List<String> lgaCln = [id, stId, nmm];
 List<String> hubCln = [id, nmm, latlong, lga, ctt];
 List<String> dptCln = [id, core];

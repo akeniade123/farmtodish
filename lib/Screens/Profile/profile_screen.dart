@@ -9,7 +9,9 @@ import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
 // import 'package:sqflite/sqflite.dart';
 
+import '../../Repository/databaseHelper.dart';
 import '../../global_objects.dart';
+import '../../global_string.dart';
 import '../../global_widgets.dart';
 
 // import 'common_widget.dart';
@@ -23,6 +25,30 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late DatabaseHelper dbo;
+
+  Future<List<Map<String, dynamic>>>? pndOrder, dlvOrder;
+  Future<Wrap>? stack;
+
+  @override
+  void initState() {
+    super.initState();
+    dbo = DatabaseHelper(table: ord);
+    pndOrder = _futureOrderStack(true);
+  }
+
+  Future<List<Map<String, dynamic>>> _futureOrderStack(bool current) async {
+    List<Map<String, dynamic>> orders = [];
+    if (current == true) {
+      Map<String, dynamic> cls = {stt: pnd};
+      List<Map<String, dynamic>> orders = await dbo.queryRowsClause(cls);
+    } else {
+      Map<String, dynamic> cls = {stt: dlv};
+      List<Map<String, dynamic>> orders = await dbo.queryRowsClause(cls);
+    }
+    return orders;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,31 +103,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _stackTranzacts() {
-    return Column(
-      children: [
-        _buildItem(
-            imageWidget: Image.asset(
-              "${assets}shop.png",
-            ),
-            title: "Yams and peppers",
-            subtitle: "1 day to delivery"),
-        SizedBox(height: 15),
-        _buildItem(
-            imageWidget: Image.asset(
-              "${assets}yams.png",
-            ),
-            title: "Yams and peppers",
-            subtitle: "1 day to delivery"),
-        SizedBox(height: 15),
-        _buildItem(
-            imageWidget: Image.asset(
-              "${assets}yams.png",
-            ),
-            title: "Yams and peppers",
-            subtitle: "1 day to delivery"),
-      ],
-    );
+  FutureBuilder<Wrap> _stackTranzacts() {
+    return FutureBuilder(
+        future: stack,
+        builder: (context, snapshot) {
+          return Wrap(alignment: WrapAlignment.center, children: []);
+        });
+
+    // return Column(
+    //   children: [
+    //     _buildItem(
+    //         imageWidget: Image.asset(
+    //           "${assets}shop.png",
+    //         ),
+    //         title: "Yams and peppers",
+    //         subtitle: "1 day to delivery"),
+    //     SizedBox(height: 15),
+    //     _buildItem(
+    //         imageWidget: Image.asset(
+    //           "${assets}yams.png",
+    //         ),
+    //         title: "Yams and peppers",
+    //         subtitle: "1 day to delivery"),
+    //     SizedBox(height: 15),
+    //     _buildItem(
+    //         imageWidget: Image.asset(
+    //           "${assets}yams.png",
+    //         ),
+    //         title: "Yams and peppers",
+    //         subtitle: "1 day to delivery"),
+    //   ],
+    // );
   }
 
   // Widget _stackTranzacts() {}

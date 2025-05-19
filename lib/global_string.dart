@@ -87,6 +87,10 @@ const String stId = "state_id";
 const String usr = "user";
 const String prDtl = "productDetails";
 const String dlvAr = "deliveryArea";
+const String dlv = "delivered";
+const String pnd = "pending";
+
+const String stt = "status";
 const String itm = "item";
 const String qnt = "quantity";
 const String rate = "rate";
