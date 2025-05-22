@@ -68,6 +68,14 @@ Future<String> handleUpdates(
     } catch (e) {
       logger("handler error: $e");
     }
+  } else {
+    try {
+      Map<String, dynamic> dtt = remoteMessage.data;
+      String parse = jsonEncode(dtt);
+      logger("The Data: $parse");
+
+      await firebaseProcession(parse);
+    } catch (e) {}
   }
 
   return response;
