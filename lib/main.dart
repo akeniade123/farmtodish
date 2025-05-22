@@ -246,8 +246,8 @@ void onStart(ServiceInstance service) async {
 
         // if you don't using custom notification, uncomment this
         service.setForegroundNotificationInfo(
-          title: "My App Service",
-          content: "Updated at ${DateTime.now()}",
+          title: "Farm to Dish ",
+          content: "Background Session at ${DateTime.now()}",
         );
       }
     }

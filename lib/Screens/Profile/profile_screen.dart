@@ -9,7 +9,9 @@ import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
 // import 'package:sqflite/sqflite.dart';
 
+import '../../Repository/databaseHelper.dart';
 import '../../global_objects.dart';
+import '../../global_string.dart';
 import '../../global_widgets.dart';
 
 // import 'common_widget.dart';
@@ -23,6 +25,31 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late DatabaseHelper dbo;
+
+  Future<List<Map<String, dynamic>>>? pndOrder, dlvOrder;
+  Future<Wrap>? stack;
+
+  @override
+  void initState() {
+    super.initState();
+    dbo = DatabaseHelper(table: order);
+    pndOrder = _futureOrderStack(true);
+    dlvOrder = _futureOrderStack(false);
+  }
+
+  Future<List<Map<String, dynamic>>> _futureOrderStack(bool current) async {
+    List<Map<String, dynamic>> orders = [];
+    if (current == true) {
+      Map<String, dynamic> cls = {stt: pnd};
+      List<Map<String, dynamic>> orders = await dbo.queryRowsClause(cls);
+    } else {
+      Map<String, dynamic> cls = {stt: dlv};
+      List<Map<String, dynamic>> orders = await dbo.queryRowsClause(cls);
+    }
+    return orders;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 33.0, vertical: 20),
         child: Column(
           children: [
+            SizedBox(height: 40),
             _buildTopComponent(),
             _buildSecondBlock(),
             // divider
@@ -39,28 +67,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildDivider(),
             SizedBox(height: 25),
             TitleMoreAndBodyWidget(
-              body: Column(children: [
-                _buildItem(
-                    imageWidget: Image.asset(
-                      "${assets}yams.png",
-                    ),
-                    title: "Yams and peppers",
-                    subtitle: "1 day to delivery"),
-                SizedBox(height: 15),
-                _buildItem(
-                    imageWidget: Image.asset(
-                      "${assets}yams.png",
-                    ),
-                    title: "Yams and peppers",
-                    subtitle: "1 day to delivery"),
-                SizedBox(height: 15),
-                _buildItem(
-                    imageWidget: Image.asset(
-                      "${assets}yams.png",
-                    ),
-                    title: "Yams and peppers",
-                    subtitle: "1 day to delivery"),
-              ]),
+              body: (pndOrder == null)
+                  ? (Text("No pending transaction"))
+                  : Column(children: [_stackTranzacts(true)]),
               titleWidget: _buildTitleForLists("Current Order"),
               isSeeAll: true,
             ),
@@ -96,6 +105,89 @@ class _ProfileScreenState extends State<ProfileScreen> {
       )),
     );
   }
+
+  FutureBuilder<Wrap> _stackTranzacts(bool current) {
+    return FutureBuilder(
+        future: stack,
+        builder: (context, snapshot) {
+          return Wrap(alignment: WrapAlignment.center, children: []);
+        });
+
+    // return Column(
+    //   children: [
+    //     _buildItem(
+    //         imageWidget: Image.asset(
+    //           "${assets}shop.png",
+    //         ),
+    //         title: "Yams and peppers",
+    //         subtitle: "1 day to delivery"),
+    //     SizedBox(height: 15),
+    //     _buildItem(
+    //         imageWidget: Image.asset(
+    //           "${assets}yams.png",
+    //         ),
+    //         title: "Yams and peppers",
+    //         subtitle: "1 day to delivery"),
+    //     SizedBox(height: 15),
+    //     _buildItem(
+    //         imageWidget: Image.asset(
+    //           "${assets}yams.png",
+    //         ),
+    //         title: "Yams and peppers",
+    //         subtitle: "1 day to delivery"),
+    //   ],
+    // );
+  }
+
+  Container _buildItemz(Map<dynamic, dynamic> content) {
+    return Container(
+      height: 89,
+      width: double.infinity,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(21),
+          color: FarmToDishTheme.accentLightColor,
+          boxShadow: List.filled(4, FarmToDishTheme.genericBoxShadow)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8.0),
+        child: Row(children: [
+          Container(
+              clipBehavior: Clip.hardEdge,
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              child: Image.asset(
+                "${assets}shop.png",
+              )),
+          SizedBox(width: 10),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                content[id],
+                style: FarmToDishTheme.listMainText,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(
+                    Icons.watch_later,
+                    color: FarmToDishTheme.listSubText.color,
+                    size: 15,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    "***",
+                    style: FarmToDishTheme.listSubText,
+                  ),
+                ],
+              ),
+            ],
+          )
+        ]),
+      ),
+    );
+  }
+
+  // Widget _stackTranzacts() {}
 
   Container _buildItem({Widget? imageWidget, String? title, String? subtitle}) {
     return Container(
@@ -182,7 +274,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         CircleAvatar(
           // clipBehavior: Clip.hardEdge,
           // decoration: BoxDecoration(shape: BoxShape.circle),
-          radius: 100,
+          radius: 60,
           backgroundImage: Image.asset("${assets}shop.png").image,
           // child: ,
         ),
@@ -198,7 +290,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () {},
                 icon: Icon(
                   Icons.edit_square,
-                  color: FarmToDishTheme.highlightBlue,
+                  color: FarmToDishTheme.deepGreen,
                 ))
           ],
         )
@@ -222,7 +314,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         ),
-        IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_outlined))
+        //   IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_outlined))
       ],
     );
   }

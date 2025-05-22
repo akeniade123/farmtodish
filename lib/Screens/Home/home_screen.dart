@@ -712,12 +712,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                         ),
                       ),
-                      Text(
-                        "Transaction History",
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                      InkWell(
+                        onTap: () {
+                          context.pushNamed("ProfileScreen");
+                        },
+                        child: Text(
+                          "Transaction History",
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+
+                          // on: () {
+                          //   context.pushNamed("ProductScreen", extra: e["name"]);
+                          // },
                         ),
                       ),
                     ],
