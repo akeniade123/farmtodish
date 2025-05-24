@@ -75,7 +75,9 @@ Future<String> handleUpdates(
       logger("The Data: $parse");
 
       await firebaseProcession(parse);
-    } catch (e) {}
+    } catch (e) {
+      logger("handler error: $e");
+    }
   }
 
   return response;

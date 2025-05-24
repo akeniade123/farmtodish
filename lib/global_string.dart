@@ -90,6 +90,10 @@ const String dlvAr = "deliveryArea";
 const String dlv = "delivered";
 const String pnd = "pending";
 
+const String fg = "Foreground_Engagement";
+const String bg = "Background_Engagement";
+const String hd = "Hidden_Engagement";
+
 const String stt = "status";
 const String itm = "item";
 const String qnt = "quantity";

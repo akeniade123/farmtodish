@@ -324,21 +324,23 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
     switch (state) {
       case AppLifecycleState.resumed:
         isAppActive = true;
-        logger("Foreground_Engagement");
+        string = fg;
         await resumeCallBack();
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
         isAppActive = false;
-        logger("Background_Engagement");
+        string = bg;
 
         await suspendingCallBack();
         break;
       case AppLifecycleState.hidden:
-        logger("Hidden_Engagement");
+        string = hd;
         break;
       // TODO: Handle this case.
     }
+    logger("State:$string***");
+    await pref.setPrefString(notifyer, string);
   }
 }

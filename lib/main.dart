@@ -43,6 +43,8 @@ void main() async {
 
   dbCart = DatabaseHelper(table: orderItem);
 
+  // FirebaseMessaging.
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // deviceId;
@@ -86,6 +88,7 @@ void crashlyticsBase() {
   };
 }
 
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
@@ -434,10 +437,12 @@ class _MyAppState extends State<MyApp> {
       }
 
       FirebaseMessaging.onMessage.listen(receivedMessage);
-      FirebaseMessaging.onMessageOpenedApp.listen((event) {
-        logger("Fore OPen");
-        // do something
-      });
+      FirebaseMessaging.onMessageOpenedApp.listen(receivedMessage);
+      // FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      //   logger("Fore OPen");
+      //   // do something
+      // });
+      //  FirebaseMessaging.instance.getInitialMessage().then((value) => null)
     }
 
     DatabaseHelper dbh = DatabaseHelper(table: ctg);
