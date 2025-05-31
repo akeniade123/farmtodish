@@ -340,7 +340,7 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
         break;
       // TODO: Handle this case.
     }
-    logger("State:$string***");
+    logger("Current State:$string***");
     await pref.setPrefString(notifyer, string);
   }
 }

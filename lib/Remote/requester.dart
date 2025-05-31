@@ -93,8 +93,13 @@ Map<String, String>? getHeader(String request) {
       headers_ = {'Content-Type': 'application/json; charset=UTF-8'};
       break;
     case rqstElite:
+      // headers_ = {
+      //   'Content-Type': 'application/x-www-form-urlencoded',
+      //   'authentication': '937a4a8c13e317dfd28effdd479cad2f'
+      // };
+
       headers_ = {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json; charset=UTF-8',
         'authentication': '937a4a8c13e317dfd28effdd479cad2f'
       };
       break;
