@@ -326,21 +326,44 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
         isAppActive = true;
         string = fg;
         await resumeCallBack();
+        runUpdate();
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
         isAppActive = false;
         string = bg;
-
+        backLog(string);
         await suspendingCallBack();
         break;
       case AppLifecycleState.hidden:
         string = hd;
+        backLog(string);
         break;
       // TODO: Handle this case.
     }
     logger("Current State:$string***");
     await pref.setPrefString(notifyer, string);
+  }
+
+  Future<void> runUpdate() async {
+    SharedPref pref = SharedPref();
+    String? status = await pref.getPrefString(backlog);
+    if (status!.isNotEmpty) {
+      Map<String, dynamic> stf = jsonDecode(status);
+      if (stf[backlog] == true) {
+        logger("Update needs to be ran against ${stf[time]}");
+      }
+    }
+  }
+
+  Future<void> backLog(String _state) async {
+    SharedPref pref = SharedPref();
+    Map<String, dynamic> state = {
+      backlog: true,
+      stt: _state,
+      time: DateTime.now()
+    };
+    pref.setPrefString(backlog, jsonEncode(state));
   }
 }

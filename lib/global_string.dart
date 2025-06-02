@@ -2,6 +2,7 @@ import 'package:farm_to_dish/env.dart';
 
 const notifyer = '/notification';
 const backlog = 'backlog';
+const time = 'time';
 
 const String dev = "development";
 const String prod = "Production";
