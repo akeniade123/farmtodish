@@ -349,11 +349,30 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
   Future<void> runUpdate() async {
     SharedPref pref = SharedPref();
     String? status = await pref.getPrefString(backlog);
+    await updateEntities();
+  }
+
+  Future<Map<String, dynamic>> updateEntities() async {
+    SharedPref pref = SharedPref();
+    Map<String, dynamic> dtt = {};
+    String? status = await pref.getPrefString("backlogger");
     if (status!.isNotEmpty) {
+      logger("logged already");
       Map<String, dynamic> stf = jsonDecode(status);
       if (stf[backlog] == true) {
-        logger("Update needs to be ran against ${stf[time]}");
+        if (stf[time] != null) {
+          return {stt: true, time: stf[time]};
+        } else {
+          return {stt: true, time: NA};
+        }
+      } else if (stf[backlog] == false) {
+        return {stt: false, time: stf[time]};
+      } else {
+        return {stt: false, time: NA};
       }
+    } else {
+      logger("unlogged yet");
+      return {stt: true, time: NA};
     }
   }
 
@@ -361,8 +380,8 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
     SharedPref pref = SharedPref();
     Map<String, dynamic> state = {
       backlog: true,
-      stt: _state,
-      time: DateTime.now()
+      stt: _state
+      // time: DateTime.now().toString()
     };
     pref.setPrefString(backlog, jsonEncode(state));
   }
