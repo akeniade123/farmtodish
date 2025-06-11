@@ -93,15 +93,15 @@ Map<String, String>? getHeader(String request) {
       headers_ = {'Content-Type': 'application/json; charset=UTF-8'};
       break;
     case rqstElite:
-      // headers_ = {
-      //   'Content-Type': 'application/x-www-form-urlencoded',
-      //   'authentication': '937a4a8c13e317dfd28effdd479cad2f'
-      // };
-
       headers_ = {
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/x-www-form-urlencoded',
         'authentication': '937a4a8c13e317dfd28effdd479cad2f'
       };
+
+      // headers_ = {
+      //   'Content-Type': 'application/json; charset=UTF-8',
+      //   'authentication': '937a4a8c13e317dfd28effdd479cad2f'
+      // };
       break;
   }
   return headers_;
@@ -199,6 +199,8 @@ Future<Map<String, dynamic>?> postReq(
               Map<String, dynamic>? jsonResponse = json.decode(response.body);
               return handleJsonResponse(obj, designation, context, display);
             } catch (e) {
+              logger(
+                  "Error: $e *** ${response.statusCode} ## ${response.body}");
               resp = {};
               resp.addEntries({
                 "status": false,

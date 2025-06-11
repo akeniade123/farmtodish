@@ -7,7 +7,7 @@ const int lonephase = 1;
 const int sect = 4;
 const String org_ = "ElitePage";
 var mantra = "...raising geniuses through mastery";
-var community = "elitepage";
+var community = "base";
 const Color bgmainclr = Color.fromARGB(255, 195, 216, 255);
 
 const Color accentclr = Color.fromARGB(255, 3, 38, 66);
@@ -16,7 +16,7 @@ const Color accentclr = Color.fromARGB(255, 3, 38, 66);
 //...beyond education
 
 int splashTime = 5000;
-var appStatus = dev;
+var appStatus = prod;
 var caller = "1";
 int version = 1;
 

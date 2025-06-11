@@ -42,8 +42,8 @@ class _LoginScreenState extends State<LoginScreen> {
       case login:
         tag.addEntries({
           "regId": "prelim",
-          "Full_Name": phoneNumberRetriever.text,
-          "Essence": "Profile",
+          "Phone": phoneNumberRetriever.text,
+          "Essence": "Phone_No_Login",
           "Password": passwordRetriever.text
         }.entries);
         break;
@@ -79,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ServerResponse svr = ServerResponse.fromJson(jsonDecode(dtt));
         LoginUser(context, obj, svr, essence);
       } else {
-        customSnackBar(context, obj.toString());
+        customSnackBar(context, "***${obj.toString()}***");
       }
     }
 
@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 27),
+            const SizedBox(height: 20),
             // TextFormField(),
             Squire(
               // height: 38,
@@ -157,10 +157,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: TextField(
                                 style: Theme.of(context).textTheme.bodySmall,
                                 obscureText: true,
-                                obscuringCharacter: '#',
+                                obscuringCharacter: '*',
                                 controller: passwordRetriever,
                                 decoration: InputDecoration(
-                                    hintText: "Password :",
+                                    hintText: "Password",
                                     hintStyle:
                                         Theme.of(context).textTheme.bodySmall,
                                     isCollapsed: true,
