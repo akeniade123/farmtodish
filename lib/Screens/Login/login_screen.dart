@@ -407,6 +407,7 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
       ),
     );
   } catch (e) {
+    logger("Login Error: $e");
     customSnackBar(context, svr.msg.toString());
 
     List usrLogin = svr.data;
