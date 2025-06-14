@@ -416,10 +416,14 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
     DatabaseHelper dbh = DatabaseHelper(table: usrTbl);
     await dbh.insertData(User.toMap(ussr_));
 
+    context.go("/HomeScreen");
+
+    /*
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const HomeScreen(), // DashboardLayout(),
       ),
     );
+    */
   }
 }
