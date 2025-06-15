@@ -25,6 +25,8 @@ late DatabaseHelper dbCart;
 late BuildContext? dlg;
 late BuildContext? baseCtx;
 
+late Map<String, dynamic> otp_;
+
 late BuildContext basedlg;
 
 final GlobalKey<ScaffoldMessengerState> snackbarKey =

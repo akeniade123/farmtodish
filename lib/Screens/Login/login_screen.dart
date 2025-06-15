@@ -387,13 +387,17 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
     String essence) async {
   logger("User Logger $obj");
   try {
-    Map<String, dynamic> otp_ = obj as Map<String, dynamic>;
+    otp_ = obj as Map<String, dynamic>;
 
     customSnackBar(context, otp_['message']!);
 
     List usrLogin = svr.data;
-    User ussr_ = User.fromData(usrLogin[0]);
+    ussr_ = User.fromData(usrLogin[0]);
 
+    //Modal(context, 220, wdg);
+    context.go("/OTP");
+
+/*
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) {
@@ -406,6 +410,7 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
         },
       ),
     );
+    */
   } catch (e) {
     logger("Login Error: $e");
     customSnackBar(context, svr.msg.toString());
