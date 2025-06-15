@@ -163,7 +163,7 @@ final GoRouter myRouter = GoRouter(
           return otp(
             value: otp_['code']!.toString(),
             recipient: otp_["Email"],
-            essence: "", // essence,
+            essence: otp_["Essence"], // essence,
             user: ussr_,
           );
           /*

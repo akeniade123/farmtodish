@@ -388,6 +388,7 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
   logger("User Logger $obj");
   try {
     otp_ = obj as Map<String, dynamic>;
+    otp_["Essence"] = "Login";
 
     customSnackBar(context, otp_['message']!);
 

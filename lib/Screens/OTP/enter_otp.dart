@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
@@ -224,12 +225,16 @@ class _otpState extends State<otp> {
                                       await dbh
                                           .insertData(User.toMap(widget.user));
 
+                                      context.go("/HomeScreen");
+
+                                      /*
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               const HomeScreen(),
                                         ),
                                       );
+                                      */
                                       break;
                                     case pswOTP:
                                       Widget wdg = Column(
