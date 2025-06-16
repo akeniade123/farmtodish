@@ -77,7 +77,12 @@ class _LoginScreenState extends State<LoginScreen> {
       Object obj = svp.msg;
       if (svp.status) {
         ServerResponse svr = ServerResponse.fromJson(jsonDecode(dtt));
-        LoginUser(context, obj, svr, essence);
+        // Navigator.pop();
+        try {
+          LoginUser(context, obj, svr, essence);
+        } catch (e) {
+          logger("Login procession error: $e");
+        }
       } else {
         customSnackBar(context, "***${obj.toString()}***");
       }

@@ -16,6 +16,8 @@ import '../sharedpref.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'onboarding.dart';
+
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
 
@@ -196,9 +198,9 @@ class _SplashscreenState extends State<Splashscreen> {
         }
       }
     } else {
-      context.go(onboard);
-      // Navigator.of(context).pushReplacement(
-      //     MaterialPageRoute(builder: (context) => const OnboardingPage()));
+      context.go(login);
+      //  Navigator.of(context).pushReplacement(
+      //      MaterialPageRoute(builder: (context) => const OnboardingPage()));
     }
     // Navigator.pushNamed(context, '/');
   }

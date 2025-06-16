@@ -46,7 +46,7 @@ final GoRouter myRouter = GoRouter(
       GoRoute(
           path: '/',
           builder: (BuildContext context, GoRouterState state) {
-            return const Splashscreen();
+            return const LoginScreen();
           },
           routes: [
             GoRoute(
@@ -81,14 +81,14 @@ final GoRouter myRouter = GoRouter(
               path: login,
               name: login,
               builder: (BuildContext context, GoRouterState state) {
-                return const Splashscreen();
+                return const LoginScreen();
               },
             ),
             GoRoute(
               path: onboard,
-              name: onboard,
+              name: "onboard",
               builder: (BuildContext context, GoRouterState state) {
-                return const OnboardingPage();
+                return const LoginScreen();
               },
             )
           ]),
@@ -149,15 +149,15 @@ final GoRouter myRouter = GoRouter(
               )
             ],
           ),
-          StatefulShellBranch(
-            routes: <RouteBase>[
-              GoRoute(
-                path: '/Schedule',
-                name: 'Schedule',
-                builder: (context, state) => const Schedule(),
-              )
-            ],
-          ),
+          // StatefulShellBranch(
+          //   routes: <RouteBase>[
+          //     GoRoute(
+          //       path: '/Schedule',
+          //       name: 'Schedule',
+          //       builder: (context, state) => const Schedule(),
+          //     )
+          //   ],
+          // ),
         ],
       ),
       // CartScreen

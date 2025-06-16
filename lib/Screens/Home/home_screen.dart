@@ -98,7 +98,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     account = _futureAccount();
     brdcc = futureCaption();
-    obtainPermissions();
+    try {
+      //  obtainPermissions();
+    } catch (e) {}
   }
 
   Consumer ftr() {
