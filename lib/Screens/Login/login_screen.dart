@@ -6,6 +6,7 @@ import 'package:farm_to_dish/requester.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../Remote/requestcore.dart';
 import '../../Repository/databaseHelper.dart';
 import '../../Remote/endpoints.dart';
 import '../../Remote/requester.dart';
@@ -34,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool rememberBool = false;
 
-  Future<Map<String, dynamic>>? FetchData(String essence) async {
+  Future<Map<String, dynamic>>? FetchData_(String essence) async {
     Map<String, dynamic> txt = {}; // Text("Sign in");
     Map<String, String> tag = {};
 
@@ -93,6 +94,17 @@ class _LoginScreenState extends State<LoginScreen> {
     logger("Done with sign in procession");
     setState(() {});
     return txt;
+  }
+
+  Future<void> LoginProcession() async {
+    Map<String, String> body = {
+      "regId": "prelim",
+      "Phone": phoneNumberRetriever.text,
+      "Essence": "Phone_No_Login",
+      "Password": passwordRetriever.text
+    };
+
+    FetchData(context, body, login);
   }
 
   bool signin = false;
@@ -179,28 +191,28 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(width: 4),
-                Squire(
-                    height: 40,
-                    width: 127,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'keep me',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          Checkbox(
-                              value: rememberBool,
-                              onChanged: (e) {
-                                // rememberBool = e;
-                                setState(() {
-                                  rememberBool = !rememberBool;
-                                });
-                              })
-                        ],
-                      ),
-                    )),
+                // Squire(
+                //     height: 40,
+                //     width: 127,
+                //     child: Padding(
+                //       padding: const EdgeInsets.all(8.0),
+                //       child: Row(
+                //         children: [
+                //           const Text(
+                //             'keep me',
+                //             style: TextStyle(fontSize: 10),
+                //           ),
+                //           Checkbox(
+                //               value: rememberBool,
+                //               onChanged: (e) {
+                //                 // rememberBool = e;
+                //                 setState(() {
+                //                   rememberBool = !rememberBool;
+                //                 });
+                //               })
+                //         ],
+                //       ),
+                //     )),
               ],
             ),
             // SizedBox(height: 12),
@@ -289,7 +301,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     if (phoneNumberRetriever.text.isNotEmpty &&
                                         passwordRetriever.text.isNotEmpty)
                                       {
-                                        FetchData(login)
+                                        LoginProcession()
+
+                                        // FetchData_(login)
 
                                         // await LoginHandler().login(
                                         //     context,
