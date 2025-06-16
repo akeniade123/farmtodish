@@ -50,6 +50,9 @@ const String reg = "Register";
 const String login = "Login";
 const String pswOTP = "PasswordOTP";
 
+const String onboard = "Onboard";
+const String home = "/HomeScreen";
+
 const String ttl = "title";
 
 const String id_ = "id";

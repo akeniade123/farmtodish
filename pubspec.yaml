@@ -85,6 +85,8 @@ dependencies:
   firebase_crashlytics: ^4.1.0
   googleapis_auth: ^1.6.0
   googleapis: ^13.1.0
+  video_player: ^2.9.2
+  smooth_page_indicator: ^1.2.1
   # path: ./packages_list/liquid_progress_indicator-master 
 
 dev_dependencies:

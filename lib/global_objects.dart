@@ -29,6 +29,8 @@ late Map<String, dynamic> otp_;
 
 late BuildContext basedlg;
 
+late Widget init;
+
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
 final GlobalKey<NavigatorState> sectionNavigatorKey =
