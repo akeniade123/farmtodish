@@ -16,7 +16,7 @@ const Color accentclr = Color.fromARGB(255, 3, 38, 66);
 //...beyond education
 
 int splashTime = 5000;
-var appStatus = dev;
+var appStatus = prod;
 var caller = "1";
 int version = 1;
 

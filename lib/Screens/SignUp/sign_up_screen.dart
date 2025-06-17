@@ -406,22 +406,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       //Tag:""
                                       */
 
-                                      Map<String, String> body = {
-                                        'email': email,
-                                        "gender": gender.toString(),
-                                        "password": password,
-                                        'PhoneNumber': phoneNumber,
-                                        'Full_Name': fullName,
-                                        // "birthday": (dateOfBirth == null)
-                                        //     ? null
-                                        //     : DateUtils.dateOnly(dateOfBirth!)
-                                        //         .toString(),
-                                        "firstName": fullName.split(' ')[0],
-                                        "lastName":
-                                            (fullName.split(' ').length > 1)
-                                                ? (fullName.split(' ')[1])
-                                                : '',
-                                      };
                                       //                               email:str
                                       // password:str
                                       // firstName: Optional[str] = None
@@ -458,8 +442,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         }
                                       ];
 
-                                      FetchData(context, body, login);
-
                                       for (int i = 0;
                                           hasError == false &&
                                               checkList.length > i;
@@ -471,6 +453,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           ? Future.delayed(
                                               Duration.zero,
                                               () {
+                                                Map<String, String> body = {
+                                                  'regId':
+                                                      'kljnjknkjnkjnbjkkjhkhj',
+                                                  'Essence': 'Register',
+                                                  'Email_Address': email,
+                                                  'Gender': gender.toString(),
+                                                  "Password": password,
+                                                  'Phone_Number': phoneNumber,
+                                                  'DEVICE_ID': '',
+                                                  'Full_Name': fullName,
+                                                  'Designation': 'NA',
+                                                  'Manifest': 'Community',
+                                                  'Unique_ID': "",
+                                                  'Tag': "",
+                                                  // "birthday": (dateOfBirth == null)
+                                                  //     ? null
+                                                  //     : DateUtils.dateOnly(dateOfBirth!)
+                                                  //         .toString(),
+                                                  // "firstName": fullName.split(' ')[0],
+                                                  // "lastName":
+                                                  //     (fullName.split(' ').length > 1)
+                                                  //         ? (fullName.split(' ')[1])
+                                                  //         : '',
+                                                };
+                                                FetchData(context, body, login);
                                                 //
                                                 // signUpHandler.signUp(context, body);
                                               },
