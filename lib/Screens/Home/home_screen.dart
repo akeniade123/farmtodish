@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<Wrap>? product;
   Future<SizedBox>? brdcc;
 
-  Future<String>? account;
+  Future<String>? account, usrNm;
 
   late List<String> thumb;
   late List<String> owner;
@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     product = null;
     bal = "---";
-    account = null;
+    account = usrNm = null;
     brdcc = null;
     brdcst = broadcast(
         caption: "Facilitating healthy food to dishes",
@@ -93,11 +93,16 @@ class _HomeScreenState extends State<HomeScreen> {
     dbc = DatabaseHelper(table: cpt);
     pref = SharedPref();
 
-    product = futurefetch();
-    bll = balance(bal: "---");
+    usrdtlz = userDtlz(nmm: "---");
+    usrNm = _userDtls();
 
+    bll = balance(bal: "---");
     account = _futureAccount();
+
+    product = futurefetch();
+
     brdcc = futureCaption();
+
     try {
       //  obtainPermissions();
     } catch (e) {}
@@ -109,9 +114,9 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Consumer bal_() {
+  Consumer usrDtl(String essence, Future<String>? dtl) {
     return Consumer<UINotifier>(builder: (context, notifier, child) {
-      return balCast(); // castData(); //07033280489
+      return dtlCast(essence, dtl); // castData(); //07033280489
     });
   }
 
@@ -143,6 +148,25 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 20,
       child: Text(""),
     );
+  }
+
+  Future<String>? _userDtls() async {
+    Map<String, dynamic> pp = {};
+    try {
+      String? prf = await pref.getPrefString(acct);
+
+      logger("Usernm: $prf");
+
+      pp = jsonDecode(prf!);
+
+      usrdtlz = userDtlz(nmm: pp[nmm]);
+      // usrNm = "Done";
+      // pp[nmm];
+    } catch (e) {
+      logger("Usernm error $e");
+    }
+
+    return pp[nmm];
   }
 
   Future<String>? _futureAccount() async {
@@ -282,18 +306,32 @@ class _HomeScreenState extends State<HomeScreen> {
             productTypeDetails.map((e) => _buildCategorySlab(e)).toList());
   }
 
-  FutureBuilder<String> balCast() {
+  FutureBuilder<String> dtlCast(String essence, Future<String>? plch) {
+    Text wdg = Text("");
+
     return FutureBuilder(
         future: account,
         builder: ((context, snapshot) {
-          return Text(
-            "₦${bll.bal}",
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          );
+          switch (essence) {
+            case acct:
+              wdg = Text(
+                "₦${bll.bal}",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              );
+              break;
+            case usr:
+              wdg = Text(
+                "Welcome ${usrdtlz.nmm}!",
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              );
+              break;
+          }
+
+          return wdg;
         }));
   }
 
@@ -458,11 +496,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           _iconButtonWithBorder(
                               func: () {},
                               iconData: Icons.person_outline_outlined),
-                          Text(
-                            "Welcome, Adeyinka",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
+                          (usrNm == null) ? Text("Hi!") : usrDtl(usr, usrNm),
                           _iconButtonWithBorder(
                               func: () {}, iconData: Icons.notifications),
                         ]),
@@ -735,7 +769,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Align(
                     alignment: Alignment.bottomLeft,
-                    child: (account == null) ? Text("---") : bal_(),
+                    child:
+                        (account == null) ? Text("---") : usrDtl(acct, account),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,

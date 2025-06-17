@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/env.dart';
 import 'package:farm_to_dish/requester.dart';
+import 'package:farm_to_dish/sharedpref.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -34,6 +35,19 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailRetreiver = TextEditingController();
 
   bool rememberBool = false;
+
+  @override
+  void initState() {
+    checkState();
+  }
+
+  Future<void> checkState() async {
+    SharedPref pref = SharedPref();
+    String? prf = await pref.getPrefString(acct);
+    if (prf != null) {
+      context.go(home);
+    }
+  }
 
   Future<Map<String, dynamic>>? FetchData_(String essence) async {
     Map<String, dynamic> txt = {}; // Text("Sign in");
@@ -414,6 +428,9 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
     List usrLogin = svr.data;
     ussr_ = User.fromData(usrLogin[0]);
 
+    SharedPref pref = SharedPref();
+    pref.setPrefString(acct, jsonEncode(usrLogin[0]));
+
     //Modal(context, 220, wdg);
     context.go("/OTP");
 
@@ -440,6 +457,8 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
 
     DatabaseHelper dbh = DatabaseHelper(table: usrTbl);
     await dbh.insertData(User.toMap(ussr_));
+    SharedPref pref = SharedPref();
+    pref.setPrefString(acct, jsonEncode(usrLogin[0]));
 
     context.go("/HomeScreen");
 

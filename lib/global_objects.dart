@@ -137,6 +137,7 @@ late liveSession lss;
 late comboNote cmbN;
 late stackStar strr;
 late balance bll;
+late userDtlz usrdtlz;
 late broadcast brdcst;
 
 class UINotifier extends ChangeNotifier {

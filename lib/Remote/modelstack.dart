@@ -42,6 +42,11 @@ class balance {
   balance({required this.bal});
 }
 
+class userDtlz {
+  final String nmm;
+  userDtlz({required this.nmm});
+}
+
 class broadcast {
   final String caption, cta, image;
 
