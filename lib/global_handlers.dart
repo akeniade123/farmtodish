@@ -324,21 +324,65 @@ class LifecycleEventHandler extends WidgetsBindingObserver {
     switch (state) {
       case AppLifecycleState.resumed:
         isAppActive = true;
-        logger("Foreground_Engagement");
+        string = fg;
         await resumeCallBack();
+        runUpdate();
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
         isAppActive = false;
-        logger("Background_Engagement");
-
+        string = bg;
+        backLog(string);
         await suspendingCallBack();
         break;
       case AppLifecycleState.hidden:
-        logger("Hidden_Engagement");
+        string = hd;
+        backLog(string);
         break;
       // TODO: Handle this case.
     }
+    logger("Current State:$string***");
+    await pref.setPrefString(notifyer, string);
+  }
+
+  Future<void> runUpdate() async {
+    SharedPref pref = SharedPref();
+    String? status = await pref.getPrefString(backlog);
+    await updateEntities();
+  }
+
+  Future<Map<String, dynamic>> updateEntities() async {
+    SharedPref pref = SharedPref();
+    Map<String, dynamic> dtt = {};
+    String? status = await pref.getPrefString(backlog);
+    if (status != null) {
+      logger("logged already");
+      Map<String, dynamic> stf = jsonDecode(status!);
+      if (stf[backlog] == true) {
+        if (stf[time] != null) {
+          return {stt: true, time: stf[time]};
+        } else {
+          return {stt: true, time: NA};
+        }
+      } else if (stf[backlog] == false) {
+        return {stt: false, time: stf[time]};
+      } else {
+        return {stt: false, time: NA};
+      }
+    } else {
+      logger("unlogged yet");
+      return {stt: true, time: NA};
+    }
+  }
+
+  Future<void> backLog(String _state) async {
+    SharedPref pref = SharedPref();
+    Map<String, dynamic> state = {
+      backlog: true,
+      stt: _state
+      // time: DateTime.now().toString()
+    };
+    pref.setPrefString(backlog, jsonEncode(state));
   }
 }

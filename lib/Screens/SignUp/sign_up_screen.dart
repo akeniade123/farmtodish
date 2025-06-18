@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
 
+import '../../Remote/requestcore.dart';
 import '../../global_objects.dart';
+import '../../global_string.dart';
 import '../../global_widgets.dart';
 import '../screens.dart';
 
@@ -358,7 +360,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ? ((!checkBool)
                                   ? null
                                   : () async {
-                                      context.go("/HomeScreen");
+                                      // context.go("/HomeScreen");
                                       // identifyDeviceId();
                                       // // tempy
                                       // List<String> map = [
@@ -380,80 +382,109 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       //   }
                                       // }
 
-                                      // // .....
-                                      // String fullName = fullNameRetriever.text;
-                                      // String email = emailRetriever.text;
-                                      // String password = passwordRetriever.text;
-                                      // String confirmPassword =
-                                      //     confirmPasswordRetriever.text;
-                                      // String phoneNumber = phoneNumberRetriever.text;
+                                      // .....
+                                      String fullName = fullNameRetriever.text;
+                                      String email = emailRetriever.text;
+                                      String password = passwordRetriever.text;
+                                      String confirmPassword =
+                                          confirmPasswordRetriever.text;
+                                      String phoneNumber =
+                                          phoneNumberRetriever.text;
 
-                                      // Map<String, String?> body = {
-                                      //   'email': email,
-                                      //   "gender": gender.toString(),
-                                      //   "password": password,
-                                      //   'PhoneNumber': phoneNumber,
-                                      //   'Full_Name': fullName,
-                                      //   "birthday": (dateOfBirth == null)
-                                      //       ? null
-                                      //       : DateUtils.dateOnly(dateOfBirth!)
-                                      //           .toString(),
-                                      //   "firstName": fullName.split(' ')[0],
-                                      //   "lastName": (fullName.split(' ').length > 1)
-                                      //       ? (fullName.split(' ')[1])
-                                      //       : '',
-                                      // };
-                                      // //                               email:str
-                                      // // password:str
-                                      // // firstName: Optional[str] = None
-                                      // // lastName: Optional[str] = None
-                                      // // PhoneNumber: Optional[str] = None
-                                      // // birthday: Optional[str] = None
-                                      // // gender: Optional[str] = None
-                                      // // deviceID: Optional[str] = None
-                                      // List<Function> checkList = [
-                                      //   () {
-                                      //     if (password.isEmpty ||
-                                      //         confirmPassword.isEmpty ||
-                                      //         fullName.isEmpty ||
-                                      //         email.isEmpty) {
-                                      //       showError(' An entry is empty ');
-                                      //     }
-                                      //   },
-                                      //   () {
-                                      //     if (password != confirmPassword) {
-                                      //       showError('passoword unmatched');
-                                      //     }
-                                      //   },
-                                      //   () {
-                                      //     if (gender == null) {
-                                      //       showError('Please, select a gender ');
-                                      //     }
-                                      //   },
-                                      //   () {
-                                      //     if (dateOfBirth == null) {
-                                      //       showError(
-                                      //           'Please, select your date of birth ');
-                                      //     }
-                                      //   }
-                                      // ];
+                                      /*
+                                      regId:kljnjknkjnkjnbjkkjhkhj
+                                      Full_Name:Oluwasheyi Blade22
+                                      Essence:Register
+                                      Phone_Number:08152004070
+                                      Password:random
+                                      Gender:Male
+                                      DEVICE_ID:87687874
+                                      Email_Address:adeyinkaakeni@gmail.com
+                                      Designation:NA
+                                      Manifest:Community
+                                      //Unique_ID:""
+                                      //Tag:""
+                                      */
 
-                                      // for (int i = 0;
-                                      //     hasError == false && checkList.length > i;
-                                      //     i++) {
-                                      //   checkList[i]();
-                                      // }
+                                      //                               email:str
+                                      // password:str
+                                      // firstName: Optional[str] = None
+                                      // lastName: Optional[str] = None
+                                      // PhoneNumber: Optional[str] = None
+                                      // birthday: Optional[str] = None
+                                      // gender: Optional[str] = None
+                                      // deviceID: Optional[str] = None
+                                      List<Function> checkList = [
+                                        () {
+                                          if (password.isEmpty ||
+                                              confirmPassword.isEmpty ||
+                                              fullName.isEmpty ||
+                                              email.isEmpty) {
+                                            showError(' An entry is empty ');
+                                          }
+                                        },
+                                        () {
+                                          if (password != confirmPassword) {
+                                            showError('passoword unmatched');
+                                          }
+                                        },
+                                        () {
+                                          if (gender == null) {
+                                            showError(
+                                                'Please, select a gender ');
+                                          }
+                                        },
+                                        () {
+                                          if (dateOfBirth == null) {
+                                            showError(
+                                                'Please, select your date of birth ');
+                                          }
+                                        }
+                                      ];
 
-                                      // (!hasError)
-                                      //     ? Future.delayed(
-                                      //         Duration.zero,
-                                      //         () {
-                                      //           signUpHandler.signUp(context, body);
-                                      //         },
-                                      //       )
-                                      //     : 1;
+                                      for (int i = 0;
+                                          hasError == false &&
+                                              checkList.length > i;
+                                          i++) {
+                                        checkList[i]();
+                                      }
 
-                                      // hasError = false;
+                                      (!hasError)
+                                          ? Future.delayed(
+                                              Duration.zero,
+                                              () {
+                                                Map<String, String> body = {
+                                                  'regId':
+                                                      'kljnjknkjnkjnbjkkjhkhj',
+                                                  'Essence': 'Register',
+                                                  'Email_Address': email,
+                                                  'Gender': gender.toString(),
+                                                  "Password": password,
+                                                  'Phone_Number': phoneNumber,
+                                                  'DEVICE_ID': '',
+                                                  'Full_Name': fullName,
+                                                  'Designation': 'NA',
+                                                  'Manifest': 'Community',
+                                                  'Unique_ID': "",
+                                                  'Tag': "",
+                                                  // "birthday": (dateOfBirth == null)
+                                                  //     ? null
+                                                  //     : DateUtils.dateOnly(dateOfBirth!)
+                                                  //         .toString(),
+                                                  // "firstName": fullName.split(' ')[0],
+                                                  // "lastName":
+                                                  //     (fullName.split(' ').length > 1)
+                                                  //         ? (fullName.split(' ')[1])
+                                                  //         : '',
+                                                };
+                                                FetchData(context, body, login);
+                                                //
+                                                // signUpHandler.signUp(context, body);
+                                              },
+                                            )
+                                          : 1;
+
+                                      hasError = false;
                                     })
                               : () {
                                   ScaffoldMessenger.of(context).showSnackBar(

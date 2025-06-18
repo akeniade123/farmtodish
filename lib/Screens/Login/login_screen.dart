@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/env.dart';
 import 'package:farm_to_dish/requester.dart';
+import 'package:farm_to_dish/sharedpref.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../Remote/requestcore.dart';
 import '../../Repository/databaseHelper.dart';
 import '../../Remote/endpoints.dart';
 import '../../Remote/requester.dart';
@@ -34,7 +36,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool rememberBool = false;
 
-  Future<Map<String, dynamic>>? FetchData(String essence) async {
+  @override
+  void initState() {
+    checkState();
+  }
+
+  Future<void> checkState() async {
+    SharedPref pref = SharedPref();
+    String? prf = await pref.getPrefString(usrTbl);
+    if (prf != null) {
+      context.go(home);
+    }
+  }
+
+  Future<Map<String, dynamic>>? FetchData_(String essence) async {
     Map<String, dynamic> txt = {}; // Text("Sign in");
     Map<String, String> tag = {};
 
@@ -42,8 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
       case login:
         tag.addEntries({
           "regId": "prelim",
-          "Full_Name": phoneNumberRetriever.text,
-          "Essence": "Profile",
+          "Phone": phoneNumberRetriever.text,
+          "Essence": "Phone_No_Login",
           "Password": passwordRetriever.text
         }.entries);
         break;
@@ -77,9 +92,14 @@ class _LoginScreenState extends State<LoginScreen> {
       Object obj = svp.msg;
       if (svp.status) {
         ServerResponse svr = ServerResponse.fromJson(jsonDecode(dtt));
-        LoginUser(context, obj, svr, essence);
+        // Navigator.pop();
+        try {
+          LoginUser(context, obj, svr, essence);
+        } catch (e) {
+          logger("Login procession error: $e");
+        }
       } else {
-        customSnackBar(context, obj.toString());
+        customSnackBar(context, "***${obj.toString()}***");
       }
     }
 
@@ -88,6 +108,17 @@ class _LoginScreenState extends State<LoginScreen> {
     logger("Done with sign in procession");
     setState(() {});
     return txt;
+  }
+
+  Future<void> LoginProcession() async {
+    Map<String, String> body = {
+      "regId": "prelim",
+      "Phone": phoneNumberRetriever.text,
+      "Essence": "Phone_No_Login",
+      "Password": passwordRetriever.text
+    };
+
+    FetchData(context, body, login);
   }
 
   bool signin = false;
@@ -126,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 27),
+            const SizedBox(height: 20),
             // TextFormField(),
             Squire(
               // height: 38,
@@ -157,10 +188,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: TextField(
                                 style: Theme.of(context).textTheme.bodySmall,
                                 obscureText: true,
-                                obscuringCharacter: '#',
+                                obscuringCharacter: '*',
                                 controller: passwordRetriever,
                                 decoration: InputDecoration(
-                                    hintText: "Password :",
+                                    hintText: "Password",
                                     hintStyle:
                                         Theme.of(context).textTheme.bodySmall,
                                     isCollapsed: true,
@@ -174,28 +205,28 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(width: 4),
-                Squire(
-                    height: 40,
-                    width: 127,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const Text(
-                            'keep me',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                          Checkbox(
-                              value: rememberBool,
-                              onChanged: (e) {
-                                // rememberBool = e;
-                                setState(() {
-                                  rememberBool = !rememberBool;
-                                });
-                              })
-                        ],
-                      ),
-                    )),
+                // Squire(
+                //     height: 40,
+                //     width: 127,
+                //     child: Padding(
+                //       padding: const EdgeInsets.all(8.0),
+                //       child: Row(
+                //         children: [
+                //           const Text(
+                //             'keep me',
+                //             style: TextStyle(fontSize: 10),
+                //           ),
+                //           Checkbox(
+                //               value: rememberBool,
+                //               onChanged: (e) {
+                //                 // rememberBool = e;
+                //                 setState(() {
+                //                   rememberBool = !rememberBool;
+                //                 });
+                //               })
+                //         ],
+                //       ),
+                //     )),
               ],
             ),
             // SizedBox(height: 12),
@@ -284,7 +315,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     if (phoneNumberRetriever.text.isNotEmpty &&
                                         passwordRetriever.text.isNotEmpty)
                                       {
-                                        FetchData(login)
+                                        LoginProcession()
+
+                                        // FetchData_(login)
 
                                         // await LoginHandler().login(
                                         //     context,
@@ -387,13 +420,21 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
     String essence) async {
   logger("User Logger $obj");
   try {
-    Map<String, dynamic> otp_ = obj as Map<String, dynamic>;
+    otp_ = obj as Map<String, dynamic>;
+    otp_["Essence"] = "Login";
 
     customSnackBar(context, otp_['message']!);
 
     List usrLogin = svr.data;
-    User ussr_ = User.fromData(usrLogin[0]);
+    ussr_ = User.fromData(usrLogin[0]);
 
+    SharedPref pref = SharedPref();
+    pref.setPrefString(usrTbl, jsonEncode(usrLogin[0]));
+
+    //Modal(context, 220, wdg);
+    context.go("/OTP");
+
+/*
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) {
@@ -406,7 +447,9 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
         },
       ),
     );
+    */
   } catch (e) {
+    logger("Login Error: $e");
     customSnackBar(context, svr.msg.toString());
 
     List usrLogin = svr.data;
@@ -414,11 +457,17 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
 
     DatabaseHelper dbh = DatabaseHelper(table: usrTbl);
     await dbh.insertData(User.toMap(ussr_));
+    SharedPref pref = SharedPref();
+    pref.setPrefString(usrTbl, jsonEncode(usrLogin[0]));
 
+    context.go("/HomeScreen");
+
+    /*
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const HomeScreen(), // DashboardLayout(),
       ),
     );
+    */
   }
 }

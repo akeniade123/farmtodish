@@ -25,7 +25,11 @@ late DatabaseHelper dbCart;
 late BuildContext? dlg;
 late BuildContext? baseCtx;
 
+late Map<String, dynamic> otp_;
+
 late BuildContext basedlg;
+
+late Widget init;
 
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
@@ -133,6 +137,7 @@ late liveSession lss;
 late comboNote cmbN;
 late stackStar strr;
 late balance bll;
+late userDtlz usrdtlz;
 late broadcast brdcst;
 
 class UINotifier extends ChangeNotifier {

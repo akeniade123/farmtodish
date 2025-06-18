@@ -4,9 +4,13 @@ import 'package:go_router/go_router.dart';
 import "package:flutter/material.dart";
 
 import 'Screens/Chat/chatScreen.dart';
+import 'Screens/OTP/enter_otp.dart';
 import 'Screens/Schedule/schedule_screen.dart';
+import 'Screens/onboarding.dart';
 import 'Screens/screens.dart';
+import 'Screens/splash_screen.dart';
 import 'global_objects.dart';
+import 'global_string.dart';
 // import "screens/screens.dart";
 // import "models/global_objects.dart";
 
@@ -49,6 +53,16 @@ final GoRouter myRouter = GoRouter(
               path: 'otpPage',
               name: 'otpPage',
               builder: (BuildContext context, GoRouterState state) {
+                /*
+                return otp(
+                  value: otp_['code']!.toString(),
+                  recipient: otp_["Email"],
+                  essence: "", // essence,
+                  user: ussr_,
+                );
+
+                */
+
                 return OTPPage(
                     // neededMapStringformat: (state.extra as String),
                     );
@@ -61,6 +75,20 @@ final GoRouter myRouter = GoRouter(
                 return const SignUpScreen(
                     // neededMapStringformat: (state.extra as String),
                     );
+              },
+            ),
+            GoRoute(
+              path: login,
+              name: login,
+              builder: (BuildContext context, GoRouterState state) {
+                return const LoginScreen();
+              },
+            ),
+            GoRoute(
+              path: onboard,
+              name: "onboard",
+              builder: (BuildContext context, GoRouterState state) {
+                return const LoginScreen();
               },
             )
           ]),
@@ -97,7 +125,7 @@ final GoRouter myRouter = GoRouter(
               // each routes with its sub routes if available e.g feed/uuid/details
               routes: <RouteBase>[
                 GoRoute(
-                  path: '/HomeScreen',
+                  path: home,
                   name: 'HomeScreen',
                   builder: (context, state) => const HomeScreen(),
                 )
@@ -121,15 +149,15 @@ final GoRouter myRouter = GoRouter(
               )
             ],
           ),
-          StatefulShellBranch(
-            routes: <RouteBase>[
-              GoRoute(
-                path: '/Schedule',
-                name: 'Schedule',
-                builder: (context, state) => const Schedule(),
-              )
-            ],
-          ),
+          // StatefulShellBranch(
+          //   routes: <RouteBase>[
+          //     GoRoute(
+          //       path: '/Schedule',
+          //       name: 'Schedule',
+          //       builder: (context, state) => const Schedule(),
+          //     )
+          //   ],
+          // ),
         ],
       ),
       // CartScreen
@@ -143,6 +171,24 @@ final GoRouter myRouter = GoRouter(
       GoRoute(
         path: '/PaymentScreen',
         builder: (context, state) => const PaymentScreen(),
+      ),
+
+      GoRoute(
+        path: '/OTP',
+        name: 'otpPaged',
+        builder: (BuildContext context, GoRouterState state) {
+          return otp(
+            value: otp_['code']!.toString(),
+            recipient: otp_["Email"],
+            essence: otp_["Essence"], // essence,
+            user: ussr_,
+          );
+          /*
+                return OTPPage(
+                    // neededMapStringformat: (state.extra as String),
+                    );
+                    */
+        },
       ),
     ]
     //  <RouteBase>[

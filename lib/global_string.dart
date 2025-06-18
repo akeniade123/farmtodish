@@ -1,6 +1,8 @@
 import 'package:farm_to_dish/env.dart';
 
 const notifyer = '/notification';
+const backlog = 'backlog';
+const time = 'time';
 
 const String dev = "development";
 const String prod = "Production";
@@ -48,6 +50,9 @@ const String reg = "Register";
 const String login = "Login";
 const String pswOTP = "PasswordOTP";
 
+const String onboard = "Onboard";
+const String home = "/HomeScreen";
+
 const String ttl = "title";
 
 const String id_ = "id";
@@ -75,9 +80,9 @@ const String rqstElite = "elite";
 const String id = "id";
 const String usrId = "user_id";
 const String lstTrnz = "last_transaction";
-const String nmm = "name";
+const String nmm = "Name";
 const String addr = "address";
-const String phn = "phone";
+const String phn = "Phone";
 const String dob = "dob";
 const String tag = "tag";
 const String core = "core";
@@ -90,6 +95,10 @@ const String dlvAr = "deliveryArea";
 const String dlv = "delivered";
 const String pnd = "pending";
 
+const String fg = "Foreground Engagement";
+const String bg = "Background Engagement";
+const String hd = "Hidden Engagement";
+
 const String stt = "status";
 const String itm = "item";
 const String qnt = "quantity";
@@ -99,7 +108,7 @@ const String crr = "currency";
 const String cdr = "cadre";
 const String avl = "availability";
 const String typ = "type";
-const String crt = "created";
+const String crt = "created_at";
 const String img = "image";
 const String abbrv = "abbrv";
 const String nmm_ = "Name";
@@ -124,7 +133,7 @@ const String instr = "Instruction";
 const String acct = "account";
 const String brdc = "broadcast";
 
-const String ctg = "category";
+const String ctg = "Category";
 const String dept = "department";
 const String hub = "hub";
 const String opr = "operator";
