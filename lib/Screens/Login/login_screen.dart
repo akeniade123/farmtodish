@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> checkState() async {
     SharedPref pref = SharedPref();
-    String? prf = await pref.getPrefString(acct);
+    String? prf = await pref.getPrefString(usrTbl);
     if (prf != null) {
       context.go(home);
     }
@@ -429,7 +429,7 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
     ussr_ = User.fromData(usrLogin[0]);
 
     SharedPref pref = SharedPref();
-    pref.setPrefString(acct, jsonEncode(usrLogin[0]));
+    pref.setPrefString(usrTbl, jsonEncode(usrLogin[0]));
 
     //Modal(context, 220, wdg);
     context.go("/OTP");
@@ -458,7 +458,7 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
     DatabaseHelper dbh = DatabaseHelper(table: usrTbl);
     await dbh.insertData(User.toMap(ussr_));
     SharedPref pref = SharedPref();
-    pref.setPrefString(acct, jsonEncode(usrLogin[0]));
+    pref.setPrefString(usrTbl, jsonEncode(usrLogin[0]));
 
     context.go("/HomeScreen");
 

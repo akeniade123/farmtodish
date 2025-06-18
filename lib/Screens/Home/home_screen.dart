@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<String>? _userDtls() async {
     Map<String, dynamic> pp = {};
     try {
-      String? prf = await pref.getPrefString(acct);
+      String? prf = await pref.getPrefString(usrTbl);
 
       logger("Usernm: $prf");
 
