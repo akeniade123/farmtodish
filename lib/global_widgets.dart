@@ -6,9 +6,14 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 
 import 'Remote/elitebasis.dart';
+import 'Remote/modelstack.dart';
+import 'Remote/server_response.dart';
+import 'Repository/databaseHelper.dart';
 import 'Screens/Home/home_screen.dart';
+import 'global_handlers.dart';
 import 'global_objects.dart';
 import 'global_string.dart';
+import 'sharedpref.dart';
 
 class Squire extends StatefulWidget {
   final num? height;
@@ -105,6 +110,86 @@ SnackBar displaySnackBar(String message) {
 
 void customSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(displaySnackBar(message));
+}
+
+Consumer usrDtl(BuildContext context, String essence, Future<String>? dtl) {
+  return Consumer<UINotifier>(builder: (context, notifier, child) {
+    return dtlCast(context, essence, dtl); // castData(); //07033280489
+  });
+}
+
+FutureBuilder<String> dtlCast(
+    BuildContext context, String essence, Future<String>? plch) {
+  Text wdg = Text("");
+
+  return FutureBuilder(
+      future: plch,
+      builder: ((context, snapshot) {
+        switch (essence) {
+          case acct:
+            wdg = Text(
+              "₦${bll.bal}",
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            );
+            break;
+          case usr:
+            wdg = Text(
+              "Welcome ${usrdtlz.nmm}!",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            );
+            break;
+        }
+
+        return wdg;
+      }));
+}
+
+late DatabaseHelper dba;
+late SharedPref pref;
+late String bal;
+
+Future<String>? _futureAccount(BuildContext context) async {
+  try {
+    dba = DatabaseHelper(table: usrWlt);
+    Map<String, dynamic> cls = {usrId: "909891"};
+    List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
+
+    String? act_ = await pref.getPrefString(acct);
+    if (act_!.isNotEmpty) {
+      bal = act_;
+    } else {
+      Map<String, dynamic>? obj =
+          await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
+
+      ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+      if (svp.status) {
+        ServerResponse rsp = ServerResponse.fromJson(obj);
+        for (final item in rsp.data) {
+          //   String itm = item["item"];
+          //   String typ = item["type"];
+          //1  String img = item["image"];
+          //  cntz.add({"name": typ, "imageURL": item[img]});
+          //  dba.insertData(item);
+          pref.setPrefString(acct, item[amt]);
+          bal = item[amt];
+        }
+      }
+    }
+
+    // bal = "***";
+
+    balance blh = balance(bal: bal);
+    //bll = blh;
+    dshCtx.read<UINotifier>().accountBalance(blh);
+  } catch (e) {
+    logger("Cast Error*** $e");
+  }
+
+  return bal;
 }
 
 void modalPane(

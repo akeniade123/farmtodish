@@ -114,11 +114,11 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Consumer usrDtl(String essence, Future<String>? dtl) {
-    return Consumer<UINotifier>(builder: (context, notifier, child) {
-      return dtlCast(essence, dtl); // castData(); //07033280489
-    });
-  }
+  // Consumer usrDtl(String essence, Future<String>? dtl) {
+  //   return Consumer<UINotifier>(builder: (context, notifier, child) {
+  //     return dtlCast(essence, dtl); // castData(); //07033280489
+  //   });
+  // }
 
   Consumer brdc_() {
     return Consumer<UINotifier>(builder: (context, notifier, child) {
@@ -496,7 +496,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           _iconButtonWithBorder(
                               func: () {},
                               iconData: Icons.person_outline_outlined),
-                          (usrNm == null) ? Text("Hi!") : usrDtl(usr, usrNm),
+                          (usrNm == null)
+                              ? Text("Hi!")
+                              : usrDtl(context, usr, usrNm),
                           _iconButtonWithBorder(
                               func: () {}, iconData: Icons.notifications),
                         ]),
@@ -769,8 +771,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Align(
                     alignment: Alignment.bottomLeft,
-                    child:
-                        (account == null) ? Text("---") : usrDtl(acct, account),
+                    child: (account == null)
+                        ? Text("---")
+                        : usrDtl(context, acct, account),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,

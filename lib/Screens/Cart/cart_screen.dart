@@ -11,8 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
 
+import '../../firebaseHandler.dart';
+import '../../global_handlers.dart';
 import '../../global_objects.dart';
 // import '../screens.dart';
+import '../../global_string.dart';
+import '../../global_widgets.dart';
+import '../../sharedpref.dart';
 import 'cart_item_model.dart';
 
 class CartScreen extends StatefulWidget {
@@ -25,10 +30,22 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   List<CartItemModel> selectedProducts = currentOrder?.items ?? [];
   DeliveryCarModel? selectedDeliveryCar = currentOrder?.vehicle;
+  Future<String>? bal;
+  late SharedPref pref;
+
   @override
   void initState() {
     currentOrder ??= OrderModel(items: []);
     super.initState();
+    bal = acc_bal();
+  }
+
+  Future<String>? acc_bal() async {
+    String? act_ = await pref.getPrefString(acct);
+    if (act_!.isNotEmpty) {
+      // bal = act_;
+    }
+    return act_;
   }
 
   @override
@@ -198,8 +215,30 @@ class _CartScreenState extends State<CartScreen> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(50)),
-                                    onPressed: () {
-                                      context.go("/PaymentScreen");
+                                    onPressed: () async {
+                                      SharedPref pref = SharedPref();
+
+                                      double price =
+                                          currentOrder!.getTotalPrice();
+
+                                      String? act_ =
+                                          await pref.getPrefString(acct);
+                                      if (act_!.isNotEmpty) {
+                                        double bal = double.parse(
+                                            act_.replaceAll("k", ""));
+                                        if (bal < price) {
+                                          logger(
+                                              "$price ** $bal More fund needed");
+                                          customSnackBar(context,
+                                              "Insufficient balance, kindly fund your wallet");
+                                          context.go("/PaymentScreen");
+                                        } else {
+                                          logger("Transaction Procession");
+                                        }
+                                      } else {
+                                        logger("No fund in account");
+                                        context.go("/PaymentScreen");
+                                      }
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -235,9 +274,11 @@ class _CartScreenState extends State<CartScreen> {
     print("\$\$" * 120);
     print(selectedDeliveryCar);
     print("\$\$" * 120);
+
     return (selectedDeliveryCar == null)
         ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text("No Delivery Selected"),
+            //  Text("No Delivery Selected"),
+            usrDtl(context, "", bal),
             MaterialButton(
               color: FarmToDishTheme.faintGreen,
               shape: RoundedRectangleBorder(
