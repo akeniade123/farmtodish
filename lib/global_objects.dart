@@ -140,6 +140,8 @@ late balance bll;
 late userDtlz usrdtlz;
 late broadcast brdcst;
 
+Future<String>? account, usrNm;
+
 class UINotifier extends ChangeNotifier {
   final _randomGenerator = Random();
   int? _generatedNumber;

@@ -48,8 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<Wrap>? product;
   Future<SizedBox>? brdcc;
 
-  Future<String>? account, usrNm;
-
   late List<String> thumb;
   late List<String> owner;
   late List<String> titles;
@@ -59,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Navigate nvg;
   bool loaded = false;
   List<Map<String, dynamic>> cntz = [];
-  late String bal;
+  // late String bal;
   late DatabaseHelper dba, dbh, dbc;
   final TextEditingController _amount = TextEditingController();
 
@@ -79,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // gender = 'Male';
     super.initState();
     product = null;
-    bal = "---";
+    bal = "***";
     account = usrNm = null;
     brdcc = null;
     brdcst = broadcast(
@@ -96,8 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
     usrdtlz = userDtlz(nmm: "---");
     usrNm = _userDtls();
 
-    bll = balance(bal: "---");
-    account = _futureAccount();
+    bll = balance(bal: "###");
+    account = getData(context); //  _futureAccount();
 
     product = futurefetch();
 

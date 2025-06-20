@@ -112,6 +112,61 @@ void customSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(displaySnackBar(message));
 }
 
+Future<String>? getData(BuildContext context) async {
+  try {
+    /*
+    Map<String, dynamic> cls = {usrId: "909891"};
+    List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
+    */
+    pref = SharedPref();
+
+    String? act_ = await pref.getPrefString(acct);
+    if (act_!.isNotEmpty) {
+      bal = act_;
+    } else {
+      /*
+      Map<String, dynamic>? obj =
+          await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
+
+      
+
+      ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+      if (svp.status) {
+        ServerResponse rsp = ServerResponse.fromJson(obj);
+        for (final item in rsp.data) {
+          //   String itm = item["item"];
+          //   String typ = item["type"];
+          //1  String img = item["image"];
+          //  cntz.add({"name": typ, "imageURL": item[img]});
+          //  dba.insertData(item);
+          pref.setPrefString(acct, item[amt]);
+          bal = item[amt];
+        }
+      }
+
+      */
+    }
+
+    // bal = "***";
+
+    bll = balance(bal: bal);
+    //bll = blh;
+    dshCtx.read<UINotifier>().accountBalance(bll);
+  } catch (e) {
+    logger("Cast Error*** $e");
+  }
+
+  return bal;
+}
+
+Future<String>? acc_bal() async {
+  String? act_ = await pref.getPrefString(acct);
+  if (act_!.isNotEmpty) {
+    // bal = act_;
+  }
+  return act_;
+}
+
 Consumer usrDtl(BuildContext context, String essence, Future<String>? dtl) {
   return Consumer<UINotifier>(builder: (context, notifier, child) {
     return dtlCast(context, essence, dtl); // castData(); //07033280489

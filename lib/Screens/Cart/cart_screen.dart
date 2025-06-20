@@ -30,22 +30,17 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   List<CartItemModel> selectedProducts = currentOrder?.items ?? [];
   DeliveryCarModel? selectedDeliveryCar = currentOrder?.vehicle;
-  Future<String>? bal;
+
   late SharedPref pref;
 
   @override
   void initState() {
     currentOrder ??= OrderModel(items: []);
     super.initState();
-    bal = acc_bal();
-  }
 
-  Future<String>? acc_bal() async {
-    String? act_ = await pref.getPrefString(acct);
-    if (act_!.isNotEmpty) {
-      // bal = act_;
-    }
-    return act_;
+    account = usrNm = null;
+
+    account = getData(context);
   }
 
   @override
@@ -278,7 +273,12 @@ class _CartScreenState extends State<CartScreen> {
     return (selectedDeliveryCar == null)
         ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             //  Text("No Delivery Selected"),
-            usrDtl(context, "", bal),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: (account == null)
+                  ? Text("---")
+                  : usrDtl(context, acct, account),
+            ),
             MaterialButton(
               color: FarmToDishTheme.faintGreen,
               shape: RoundedRectangleBorder(
