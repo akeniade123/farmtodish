@@ -40,7 +40,7 @@ class _CartScreenState extends State<CartScreen> {
 
     account = usrNm = null;
 
-    account = getData(context);
+    account = getData(context, acct);
   }
 
   @override
@@ -277,7 +277,8 @@ class _CartScreenState extends State<CartScreen> {
               alignment: Alignment.bottomLeft,
               child: (account == null)
                   ? Text("---")
-                  : usrDtl(context, acct, account),
+                  : usrDtl(
+                      context, acct, account, FarmToDishTheme.faintGreen, 15),
             ),
             MaterialButton(
               color: FarmToDishTheme.faintGreen,

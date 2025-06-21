@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/env.dart';
@@ -112,19 +114,44 @@ void customSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(displaySnackBar(message));
 }
 
-Future<String>? getData(BuildContext context) async {
-  try {
-    /*
+Future<String>? getData(BuildContext context, String essence) async {
+  pref = SharedPref();
+  switch (essence) {
+    case home:
+    case usr:
+      Map<String, dynamic> pp = {};
+      try {
+        String? prf = await pref.getPrefString(usrTbl);
+
+        logger("Usernm: $prf");
+
+        pp = jsonDecode(prf!);
+
+        usrdtlz = userDtlz(nmm: pp[nmm]);
+        dshCtx.read<UINotifier>().userName(usrdtlz);
+        // usrNm = "Done";
+        // pp[nmm];
+        return "Done"; // pp[nmm];
+      } catch (e) {
+        logger("Usernm error $e");
+        return "";
+      }
+      // bal = pp[nmm];
+
+      break;
+
+    case acct:
+      try {
+        /*
     Map<String, dynamic> cls = {usrId: "909891"};
     List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
     */
-    pref = SharedPref();
 
-    String? act_ = await pref.getPrefString(acct);
-    if (act_!.isNotEmpty) {
-      bal = act_;
-    } else {
-      /*
+        String? act_ = await pref.getPrefString(acct);
+        if (act_!.isNotEmpty) {
+          bal = act_;
+        } else {
+          /*
       Map<String, dynamic>? obj =
           await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
 
@@ -145,15 +172,17 @@ Future<String>? getData(BuildContext context) async {
       }
 
       */
-    }
+        }
 
-    // bal = "***";
+        // bal = "***";
 
-    bll = balance(bal: bal);
-    //bll = blh;
-    dshCtx.read<UINotifier>().accountBalance(bll);
-  } catch (e) {
-    logger("Cast Error*** $e");
+        bll = balance(bal: bal);
+        //bll = blh;
+        dshCtx.read<UINotifier>().accountBalance(bll);
+      } catch (e) {
+        logger("Cast Error*** $e");
+      }
+      break;
   }
 
   return bal;
@@ -167,14 +196,16 @@ Future<String>? acc_bal() async {
   return act_;
 }
 
-Consumer usrDtl(BuildContext context, String essence, Future<String>? dtl) {
+Consumer usrDtl(BuildContext context, String essence, Future<String>? dtl,
+    Color color, double fontsize) {
   return Consumer<UINotifier>(builder: (context, notifier, child) {
-    return dtlCast(context, essence, dtl); // castData(); //07033280489
+    return dtlCast(
+        context, essence, dtl, color, fontsize); // castData(); //07033280489
   });
 }
 
-FutureBuilder<String> dtlCast(
-    BuildContext context, String essence, Future<String>? plch) {
+FutureBuilder<String> dtlCast(BuildContext context, String essence,
+    Future<String>? plch, Color color, double fontsize) {
   Text wdg = Text("");
 
   return FutureBuilder(
@@ -184,17 +215,25 @@ FutureBuilder<String> dtlCast(
           case acct:
             wdg = Text(
               "₦${bll.bal}",
-              style: const TextStyle(
-                fontSize: 15,
+              style: TextStyle(
+                fontSize: fontsize,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: color,
               ),
             );
             break;
+
           case usr:
             wdg = Text(
+              usrdtlz.nmm,
+              style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.bold),
+            );
+            break;
+
+          case home:
+            wdg = Text(
               "Welcome ${usrdtlz.nmm}!",
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.bold),
             );
             break;
         }

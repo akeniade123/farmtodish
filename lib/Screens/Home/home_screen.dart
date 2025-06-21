@@ -92,10 +92,10 @@ class _HomeScreenState extends State<HomeScreen> {
     pref = SharedPref();
 
     usrdtlz = userDtlz(nmm: "---");
-    usrNm = _userDtls();
+    usrNm = getData(context, home); // _userDtls();
 
     bll = balance(bal: "###");
-    account = getData(context); //  _futureAccount();
+    account = getData(context, acct); //  _futureAccount();
 
     product = futurefetch();
 
@@ -496,7 +496,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               iconData: Icons.person_outline_outlined),
                           (usrNm == null)
                               ? Text("Hi!")
-                              : usrDtl(context, usr, usrNm),
+                              : usrDtl(context, home, usrNm, Colors.black, 14),
                           _iconButtonWithBorder(
                               func: () {}, iconData: Icons.notifications),
                         ]),
@@ -771,7 +771,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     alignment: Alignment.bottomLeft,
                     child: (account == null)
                         ? Text("---")
-                        : usrDtl(context, acct, account),
+                        : usrDtl(context, acct, account, Colors.white, 15),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,

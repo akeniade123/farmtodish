@@ -34,6 +34,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     dbo = DatabaseHelper(table: order);
+    usrNm = null;
+    usrNm = getData(context, usr); //_userDtls(acct);
     pndOrder = _futureOrderStack(true);
     dlvOrder = _futureOrderStack(false);
   }
@@ -282,10 +284,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // TODO : attach live data
-            Text(
-              "Bisi Olatunji",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+            (usrNm == null)
+                ? Text("Hi!")
+                : usrDtl(context, usr, usrNm, Colors.black, 13),
             IconButton(
                 onPressed: () {},
                 icon: Icon(

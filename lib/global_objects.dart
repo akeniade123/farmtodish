@@ -163,6 +163,11 @@ class UINotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void userName(userDtlz dtlz) {
+    usrdtlz = dtlz;
+    notifyListeners();
+  }
+
   void accountBalance(balance bal_) {
     bll = bal_;
     notifyListeners();
