@@ -40,6 +40,8 @@ bool hasInternetAccess = true;
 
 AndroidDeviceInfo? deviceId;
 
+//2030717028
+
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 String deviceIdInString = '';
 void identifyDeviceId() async {

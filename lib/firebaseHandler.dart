@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:farm_to_dish/global_objects.dart';
@@ -19,6 +20,7 @@ import 'package:googleapis/servicecontrol/v1.dart' as servicecontrol;
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'dart:developer' as devtools show log;
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 //import 'notificationcontroller.dart';
 
@@ -273,8 +275,136 @@ Future<void> sendMessageToFcmTopic() throws Exception {
 
  */
 
+/*
+function createJwtToken($serviceAccountKeyFile) {
+    $keyFile = json_decode(file_get_contents($serviceAccountKeyFile), true);
+    $privateKey = $keyFile['private_key'];
+    $token = [
+        "iss" => $keyFile['client_email'],
+        "sub" => $keyFile['client_email'],
+        "aud" => "https://oauth2.googleapis.com/token",
+        "iat" => time(),
+        "exp" => time() + 3600,
+        "scope" => "https://www.googleapis.com/auth/firebase.messaging",
+    ];
+    return JWT::encode($token, $privateKey, 'RS256');
+}
+*/
+
+Future<String> createJwtToken(final serviceAccountKey) async {
+  Map<String, dynamic> keyFile = serviceAccountKey;
+  //jsonDecode(await rootBundle.loadString('data/auth.json'));
+  String privateKey = keyFile['private_key'];
+
+  final today = DateTime.now();
+  final OneHourFromNow = today.add(const Duration(hours: 1));
+
+  final jwt = JWT({
+    "iss": keyFile['client_email'],
+    "sub": keyFile['client_email'],
+    "aud": "https://oauth2.googleapis.com/token",
+    "iat": DateTime.now,
+    "exp": OneHourFromNow,
+    "scope": "https://www.googleapis.com/auth/firebase.messaging",
+  });
+
+  final pem = serviceAccountKey["private_key"];
+  //  final pem = File('./example/rsa_private.pem').readAsStringSync();
+  final key = RSAPrivateKey(pem!);
+
+  String token = jwt.sign(key, algorithm: JWTAlgorithm.RS256);
+
+  print('Signed token: $token\n');
+
+  return token;
+}
+
+// RSA SHA-256 algorithm
+Future<void> rs256() async {
+  String token;
+
+  final serviceAccountJson = {
+    "type": "service_account",
+    "project_id": "farmtodish-7e3e2",
+    "private_key_id": "3c06c1b70bbb85a7816e62117ced295289f940df",
+    "private_key":
+        "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDQVsDIRfs5tdew\n4/NXvvc+V0as+Z3lveRIIEoDctAjVyh9nDF85AAnbTkUkCYdsscOLoInYAOjtkEN\nVh647U/aBVP9w305KJdjy151e7zKpfq61WCGwMOTyKDmylyyI4/Mh0pyUjLOiZZr\nAmUmbRdSX8wkyVwoAvlkRG/FHdFh+Eu4xZVYCneU+MdhN5/+3ZTnBf+t56FYW58X\nDMy6tb/uonSbmRX+/6gPLSgQ98qyFgB6qDfqMtpG12O1TjCC843UZKufLEpPHrru\nKgf8l7tSZP3SYFP53pJACTHXRlJCY9vqUuJNZjKk4DKRlQ47ePdyOX1AH7MGHYDe\nS6B5SHmbAgMBAAECggEARYGT6p0SXiQRNDYwoscWxIkojp/usk2igf+nwbPFxeyX\nmSSJjCGi/YRehUI8PS8+YrhYett5C17MIC9pq4ec2t9pMKHOPsoQi943AtoH19H9\nLuTuQbbA6SaHq8e6mkHsAS/nwfEzex2C/et8JJBDths4x9MX+E9Ztb5xTaGPj+/E\noLPHqI6err3RGFU9vHTOVjUvIYHUoGoWquMQ5HKVvADHIJkA4HAPXQzyY4rE8Uzk\nYvPN69m85ML6OlRr2sm8JFLgRyoAuQWKGQb3i1jl3STQK8gPeO75KOvbCQbzsLH8\nSFl1qRyLzrylMtsSfb3AL4O4wZK1CJevFKDG41k1EQKBgQD2sgLQJQb6lLT96m3V\nJ4mBXN5UMYnJjZ9YCsHebfiVcAaz9AYmD4jZzWZwl92WGkeGqoY1+qpCpSGdKLtI\nmA6vl7IB/OrApcJZd1q5pATdzdYwTP1l7cXFQePLZmeITjJJOOGNykkhX3ZcC8Mn\nhYZI3/SYvrrY6wuUSGEd3yW5qwKBgQDYMmM/koQz3xs8j/yft2wdwtFhWfGwrsjo\n9v+DZrVmsVLTJMtrU20LC8ppUzA/MDe9G/vl398h9iQyx1fCJj/Eh8u9siEhR7uF\nvHZ3ld5FcpbOx1HtGtOnvlQwD++ZhqEnsnhfZnRiZtd4l2oi+fitcbn65PsYCkKM\nJSRElLCv0QKBgBx+v1hvjnjPSICz3W/rmzR4F6498p53X1p6E56vsTEBuaR7oWIw\nFSyjTxveTtgRvQVPGSWPCK+eB13x4IAoIDokGYmlPzB1dReEc9RRn8ZHCmCV5Acs\nCdYZIEjUUU0rSx+uFE+eeAgE0NUc/rPH9pTgWY5zKX342GOOYLlklyT1AoGAJ6VF\n0fiaSbDWG8sDtn46U1LQdpu52H6U1TPGM2B4T3ahC5spumq4CliFK79Xj57V+dXR\n4ZumHWI3zSAFFdNRykZktEqgDKxM1P90cgWHlxCmWxDuEx7iRVZ/tbiWZX7suozd\nyhDNsuXNCY4qpnNUiOncAwhOi2AGSBDfj7v8kqECgYBBg9X+SZWN8ZZlcuO2KXh7\nc8FXUXBd071uJE9+0vLugCqd+TDEroWuDO329BxSf+RlAlWISsP3RddRE0MLq8G5\nDZytfWusyP/bD1cO0h8XyIkNb/8+vM6xTuorZNn9hP9HGl/MK9/K7w06agKNAFQM\njJTB7WOnRUSHsFVSapiT5g==\n-----END PRIVATE KEY-----\n",
+    "client_email":
+        "firebase-adminsdk-k7w7l@farmtodish-7e3e2.iam.gserviceaccount.com",
+    "client_id": "107957432154927885517",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url":
+        "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-k7w7l%40farmtodish-7e3e2.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  };
+
+  /* Sign */ {
+    // Create a json web token
+    final jwt = JWT(
+      {
+        'id': 123,
+        'server': {
+          'id': '3e4fc296',
+          'loc': 'euw-2',
+        }
+      },
+      issuer: 'https://github.com/jonasroussel/dart_jsonwebtoken',
+    );
+
+    // Sign it
+    // final pem = await rootBundle.loadString('data/auth.json');
+    final pem = serviceAccountJson["private_key"];
+    //  final pem = File('./example/rsa_private.pem').readAsStringSync();
+    final key = RSAPrivateKey(pem!);
+
+    token = jwt.sign(key, algorithm: JWTAlgorithm.RS256);
+
+    print('Signed token: $token\n');
+  }
+
+  /* Verify */ {
+    try {
+      // Verify a token
+
+      final pem = serviceAccountJson[
+          "private_key"]; // await rootBundle.loadString('data/auth.json');
+
+      /// final pem =  File('./example/rsa_public.pem').readAsStringSync();
+      final key = RSAPublicKey(pem!);
+
+      final jwt = JWT.verify(token, key);
+
+      print('Payload: ${jwt.payload}');
+    } on JWTExpiredException {
+      print('jwt expired');
+    } on JWTException catch (ex) {
+      print(ex.message); // ex: invalid signature
+    }
+  }
+}
+
 Future<String> getAccessToken() async {
   final serviceAccountJson = {
+    "type": "service_account",
+    "project_id": "farmtodish-7e3e2",
+    "private_key_id": "3c06c1b70bbb85a7816e62117ced295289f940df",
+    "private_key":
+        "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDQVsDIRfs5tdew\n4/NXvvc+V0as+Z3lveRIIEoDctAjVyh9nDF85AAnbTkUkCYdsscOLoInYAOjtkEN\nVh647U/aBVP9w305KJdjy151e7zKpfq61WCGwMOTyKDmylyyI4/Mh0pyUjLOiZZr\nAmUmbRdSX8wkyVwoAvlkRG/FHdFh+Eu4xZVYCneU+MdhN5/+3ZTnBf+t56FYW58X\nDMy6tb/uonSbmRX+/6gPLSgQ98qyFgB6qDfqMtpG12O1TjCC843UZKufLEpPHrru\nKgf8l7tSZP3SYFP53pJACTHXRlJCY9vqUuJNZjKk4DKRlQ47ePdyOX1AH7MGHYDe\nS6B5SHmbAgMBAAECggEARYGT6p0SXiQRNDYwoscWxIkojp/usk2igf+nwbPFxeyX\nmSSJjCGi/YRehUI8PS8+YrhYett5C17MIC9pq4ec2t9pMKHOPsoQi943AtoH19H9\nLuTuQbbA6SaHq8e6mkHsAS/nwfEzex2C/et8JJBDths4x9MX+E9Ztb5xTaGPj+/E\noLPHqI6err3RGFU9vHTOVjUvIYHUoGoWquMQ5HKVvADHIJkA4HAPXQzyY4rE8Uzk\nYvPN69m85ML6OlRr2sm8JFLgRyoAuQWKGQb3i1jl3STQK8gPeO75KOvbCQbzsLH8\nSFl1qRyLzrylMtsSfb3AL4O4wZK1CJevFKDG41k1EQKBgQD2sgLQJQb6lLT96m3V\nJ4mBXN5UMYnJjZ9YCsHebfiVcAaz9AYmD4jZzWZwl92WGkeGqoY1+qpCpSGdKLtI\nmA6vl7IB/OrApcJZd1q5pATdzdYwTP1l7cXFQePLZmeITjJJOOGNykkhX3ZcC8Mn\nhYZI3/SYvrrY6wuUSGEd3yW5qwKBgQDYMmM/koQz3xs8j/yft2wdwtFhWfGwrsjo\n9v+DZrVmsVLTJMtrU20LC8ppUzA/MDe9G/vl398h9iQyx1fCJj/Eh8u9siEhR7uF\nvHZ3ld5FcpbOx1HtGtOnvlQwD++ZhqEnsnhfZnRiZtd4l2oi+fitcbn65PsYCkKM\nJSRElLCv0QKBgBx+v1hvjnjPSICz3W/rmzR4F6498p53X1p6E56vsTEBuaR7oWIw\nFSyjTxveTtgRvQVPGSWPCK+eB13x4IAoIDokGYmlPzB1dReEc9RRn8ZHCmCV5Acs\nCdYZIEjUUU0rSx+uFE+eeAgE0NUc/rPH9pTgWY5zKX342GOOYLlklyT1AoGAJ6VF\n0fiaSbDWG8sDtn46U1LQdpu52H6U1TPGM2B4T3ahC5spumq4CliFK79Xj57V+dXR\n4ZumHWI3zSAFFdNRykZktEqgDKxM1P90cgWHlxCmWxDuEx7iRVZ/tbiWZX7suozd\nyhDNsuXNCY4qpnNUiOncAwhOi2AGSBDfj7v8kqECgYBBg9X+SZWN8ZZlcuO2KXh7\nc8FXUXBd071uJE9+0vLugCqd+TDEroWuDO329BxSf+RlAlWISsP3RddRE0MLq8G5\nDZytfWusyP/bD1cO0h8XyIkNb/8+vM6xTuorZNn9hP9HGl/MK9/K7w06agKNAFQM\njJTB7WOnRUSHsFVSapiT5g==\n-----END PRIVATE KEY-----\n",
+    "client_email":
+        "firebase-adminsdk-k7w7l@farmtodish-7e3e2.iam.gserviceaccount.com",
+    "client_id": "107957432154927885517",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url":
+        "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-k7w7l%40farmtodish-7e3e2.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  };
+
+  /*
+   {
     "type": "service_account",
     "project_id": "farmtodish-7e3e2",
     "private_key_id": "933c892cc41ccc5c12dc405e7edcd7899696dba1",
@@ -289,12 +419,11 @@ Future<String> getAccessToken() async {
         "https://www.googleapis.com/robot/v1/metadata/x509/farmtodish%40farmtodish-7e3e2.iam.gserviceaccount.com",
     "universe_domain": "googleapis.com"
   };
+  */
 
-  List<String> scopes = [
-    "https://www.googleapis.com/auth/firebase.messaging",
-    "https://www.googleapis.com/auth/firebase.database",
-    "https://www.googleapis.com/auth/userInfo.email"
-  ];
+  List<String> scopes = ["https://www.googleapis.com/auth/firebase.messaging"];
+
+  /*
 
   http.Client client = await auth.clientViaServiceAccount(
       auth.ServiceAccountCredentials.fromJson(serviceAccountJson), scopes);
@@ -307,11 +436,38 @@ Future<String> getAccessToken() async {
 
   client.close();
   return credentials.accessToken.data;
+  */
+
+  final client = await auth.clientViaServiceAccount(
+      auth.ServiceAccountCredentials.fromJson(serviceAccountJson), scopes);
+
+  return client.credentials.accessToken.data;
 }
 
 Future<void> sendNotification(String deviceToken, BuildContext context,
     Map<String, dynamic> notification, Map<String, dynamic> data) async {
-  final String accessToken = await getAccessToken();
+  final kkp = {
+    "type": "service_account",
+    "project_id": "farmtodish-7e3e2",
+    "private_key_id": "3c06c1b70bbb85a7816e62117ced295289f940df",
+    "private_key":
+        "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDQVsDIRfs5tdew\n4/NXvvc+V0as+Z3lveRIIEoDctAjVyh9nDF85AAnbTkUkCYdsscOLoInYAOjtkEN\nVh647U/aBVP9w305KJdjy151e7zKpfq61WCGwMOTyKDmylyyI4/Mh0pyUjLOiZZr\nAmUmbRdSX8wkyVwoAvlkRG/FHdFh+Eu4xZVYCneU+MdhN5/+3ZTnBf+t56FYW58X\nDMy6tb/uonSbmRX+/6gPLSgQ98qyFgB6qDfqMtpG12O1TjCC843UZKufLEpPHrru\nKgf8l7tSZP3SYFP53pJACTHXRlJCY9vqUuJNZjKk4DKRlQ47ePdyOX1AH7MGHYDe\nS6B5SHmbAgMBAAECggEARYGT6p0SXiQRNDYwoscWxIkojp/usk2igf+nwbPFxeyX\nmSSJjCGi/YRehUI8PS8+YrhYett5C17MIC9pq4ec2t9pMKHOPsoQi943AtoH19H9\nLuTuQbbA6SaHq8e6mkHsAS/nwfEzex2C/et8JJBDths4x9MX+E9Ztb5xTaGPj+/E\noLPHqI6err3RGFU9vHTOVjUvIYHUoGoWquMQ5HKVvADHIJkA4HAPXQzyY4rE8Uzk\nYvPN69m85ML6OlRr2sm8JFLgRyoAuQWKGQb3i1jl3STQK8gPeO75KOvbCQbzsLH8\nSFl1qRyLzrylMtsSfb3AL4O4wZK1CJevFKDG41k1EQKBgQD2sgLQJQb6lLT96m3V\nJ4mBXN5UMYnJjZ9YCsHebfiVcAaz9AYmD4jZzWZwl92WGkeGqoY1+qpCpSGdKLtI\nmA6vl7IB/OrApcJZd1q5pATdzdYwTP1l7cXFQePLZmeITjJJOOGNykkhX3ZcC8Mn\nhYZI3/SYvrrY6wuUSGEd3yW5qwKBgQDYMmM/koQz3xs8j/yft2wdwtFhWfGwrsjo\n9v+DZrVmsVLTJMtrU20LC8ppUzA/MDe9G/vl398h9iQyx1fCJj/Eh8u9siEhR7uF\nvHZ3ld5FcpbOx1HtGtOnvlQwD++ZhqEnsnhfZnRiZtd4l2oi+fitcbn65PsYCkKM\nJSRElLCv0QKBgBx+v1hvjnjPSICz3W/rmzR4F6498p53X1p6E56vsTEBuaR7oWIw\nFSyjTxveTtgRvQVPGSWPCK+eB13x4IAoIDokGYmlPzB1dReEc9RRn8ZHCmCV5Acs\nCdYZIEjUUU0rSx+uFE+eeAgE0NUc/rPH9pTgWY5zKX342GOOYLlklyT1AoGAJ6VF\n0fiaSbDWG8sDtn46U1LQdpu52H6U1TPGM2B4T3ahC5spumq4CliFK79Xj57V+dXR\n4ZumHWI3zSAFFdNRykZktEqgDKxM1P90cgWHlxCmWxDuEx7iRVZ/tbiWZX7suozd\nyhDNsuXNCY4qpnNUiOncAwhOi2AGSBDfj7v8kqECgYBBg9X+SZWN8ZZlcuO2KXh7\nc8FXUXBd071uJE9+0vLugCqd+TDEroWuDO329BxSf+RlAlWISsP3RddRE0MLq8G5\nDZytfWusyP/bD1cO0h8XyIkNb/8+vM6xTuorZNn9hP9HGl/MK9/K7w06agKNAFQM\njJTB7WOnRUSHsFVSapiT5g==\n-----END PRIVATE KEY-----\n",
+    "client_email":
+        "firebase-adminsdk-k7w7l@farmtodish-7e3e2.iam.gserviceaccount.com",
+    "client_id": "107957432154927885517",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url":
+        "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-k7w7l%40farmtodish-7e3e2.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  };
+
+  String accessToken = await getAccessToken();
+  logger("Access $accessToken");
+  //   "ya29.a0AW4XtxicE7bZWlHVSeJzeYzwVF9u8jclqhABaVEKO4vkG9IoLmaMytn8rukj4gldDuQ5kLkr6YKfuHoylSo3qDCxRjc49AQUxmAfvl7S89aw6Z-YW7kqVaMngJk2jWPBpmgNHvmJK83ChX27_kVFObMzYNvGLqVnt-XtEZaa4waCgYKAV4SARUSFQHGX2Mii77o8zr77ovN1RdpalC05Q0177";
+  // await createJwtToken(kkp);
+  //await getAccessToken();
 
   const String senderId = 'farmtodish-7e3e2';
   String fcmendpoint =

@@ -242,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //bll = blh;
       dshCtx.read<UINotifier>().accountBalance(blh);
     } catch (e) {
-      logger("Cast Error*** $e");
+      logger("Cast Error*** $e"); // 2030717028  Nurudeen Abiodun
     }
 
     return bal;
@@ -492,7 +492,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _iconButtonWithBorder(
-                              func: () {},
+                              func: () {
+                                logger("Execute this");
+                              },
                               iconData: Icons.person_outline_outlined),
                           (usrNm == null)
                               ? Text("Hi!")
@@ -987,7 +989,32 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 2,
           ),
           borderRadius: BorderRadius.circular(10)),
-      child: IconButton(onPressed: () {}, icon: Icon(iconData)),
+      child: IconButton(
+          onPressed: () async {
+            logger("Testing This");
+
+            //  rs256();
+            try {
+              sendNotification(
+                  "eNomrX2CSI2-Ad6l8ct3UG:APA91bGjKnFOkcYFkNVdWwygdKBqFcoV_jWLeWC2xSuuwBepNktEo4HEVF7Auvcp6g-R5RWdy3vTtS0X1ih9SNjggB-TaGlQNDf-BeCfvqJWYB1SI1V87y8",
+                  context, {
+                "body": "Trade Fair Price Slashed",
+                "title": "FCM Message"
+              }, {
+                "id": "story_1234567890***",
+                "essence": "account",
+                "amount": "120.0k"
+              });
+
+              //  String acc = await getAccessToken();
+              //   logger("Access Token: $acc");
+            } catch (e) {
+              logger("Access Error: $e");
+            }
+
+            // func;
+          },
+          icon: Icon(iconData)),
     );
   }
 }
