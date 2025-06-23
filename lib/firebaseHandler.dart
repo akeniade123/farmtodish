@@ -385,42 +385,7 @@ Future<void> rs256() async {
   }
 }
 
-Future<String> getAccessToken() async {
-  final serviceAccountJson = {
-    "type": "service_account",
-    "project_id": "farmtodish-7e3e2",
-    "private_key_id": "3c06c1b70bbb85a7816e62117ced295289f940df",
-    "private_key":
-        "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDQVsDIRfs5tdew\n4/NXvvc+V0as+Z3lveRIIEoDctAjVyh9nDF85AAnbTkUkCYdsscOLoInYAOjtkEN\nVh647U/aBVP9w305KJdjy151e7zKpfq61WCGwMOTyKDmylyyI4/Mh0pyUjLOiZZr\nAmUmbRdSX8wkyVwoAvlkRG/FHdFh+Eu4xZVYCneU+MdhN5/+3ZTnBf+t56FYW58X\nDMy6tb/uonSbmRX+/6gPLSgQ98qyFgB6qDfqMtpG12O1TjCC843UZKufLEpPHrru\nKgf8l7tSZP3SYFP53pJACTHXRlJCY9vqUuJNZjKk4DKRlQ47ePdyOX1AH7MGHYDe\nS6B5SHmbAgMBAAECggEARYGT6p0SXiQRNDYwoscWxIkojp/usk2igf+nwbPFxeyX\nmSSJjCGi/YRehUI8PS8+YrhYett5C17MIC9pq4ec2t9pMKHOPsoQi943AtoH19H9\nLuTuQbbA6SaHq8e6mkHsAS/nwfEzex2C/et8JJBDths4x9MX+E9Ztb5xTaGPj+/E\noLPHqI6err3RGFU9vHTOVjUvIYHUoGoWquMQ5HKVvADHIJkA4HAPXQzyY4rE8Uzk\nYvPN69m85ML6OlRr2sm8JFLgRyoAuQWKGQb3i1jl3STQK8gPeO75KOvbCQbzsLH8\nSFl1qRyLzrylMtsSfb3AL4O4wZK1CJevFKDG41k1EQKBgQD2sgLQJQb6lLT96m3V\nJ4mBXN5UMYnJjZ9YCsHebfiVcAaz9AYmD4jZzWZwl92WGkeGqoY1+qpCpSGdKLtI\nmA6vl7IB/OrApcJZd1q5pATdzdYwTP1l7cXFQePLZmeITjJJOOGNykkhX3ZcC8Mn\nhYZI3/SYvrrY6wuUSGEd3yW5qwKBgQDYMmM/koQz3xs8j/yft2wdwtFhWfGwrsjo\n9v+DZrVmsVLTJMtrU20LC8ppUzA/MDe9G/vl398h9iQyx1fCJj/Eh8u9siEhR7uF\nvHZ3ld5FcpbOx1HtGtOnvlQwD++ZhqEnsnhfZnRiZtd4l2oi+fitcbn65PsYCkKM\nJSRElLCv0QKBgBx+v1hvjnjPSICz3W/rmzR4F6498p53X1p6E56vsTEBuaR7oWIw\nFSyjTxveTtgRvQVPGSWPCK+eB13x4IAoIDokGYmlPzB1dReEc9RRn8ZHCmCV5Acs\nCdYZIEjUUU0rSx+uFE+eeAgE0NUc/rPH9pTgWY5zKX342GOOYLlklyT1AoGAJ6VF\n0fiaSbDWG8sDtn46U1LQdpu52H6U1TPGM2B4T3ahC5spumq4CliFK79Xj57V+dXR\n4ZumHWI3zSAFFdNRykZktEqgDKxM1P90cgWHlxCmWxDuEx7iRVZ/tbiWZX7suozd\nyhDNsuXNCY4qpnNUiOncAwhOi2AGSBDfj7v8kqECgYBBg9X+SZWN8ZZlcuO2KXh7\nc8FXUXBd071uJE9+0vLugCqd+TDEroWuDO329BxSf+RlAlWISsP3RddRE0MLq8G5\nDZytfWusyP/bD1cO0h8XyIkNb/8+vM6xTuorZNn9hP9HGl/MK9/K7w06agKNAFQM\njJTB7WOnRUSHsFVSapiT5g==\n-----END PRIVATE KEY-----\n",
-    "client_email":
-        "firebase-adminsdk-k7w7l@farmtodish-7e3e2.iam.gserviceaccount.com",
-    "client_id": "107957432154927885517",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url":
-        "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-k7w7l%40farmtodish-7e3e2.iam.gserviceaccount.com",
-    "universe_domain": "googleapis.com"
-  };
-
-  /*
-   {
-    "type": "service_account",
-    "project_id": "farmtodish-7e3e2",
-    "private_key_id": "933c892cc41ccc5c12dc405e7edcd7899696dba1",
-    "private_key":
-        "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDLxhVsO9X/0rGJ\ncXipEAbh2kLVh/M3b9NX6g5zLO8gFfWyXh9PgiNWv5qfmeYsqthh5T+QXpOD41Yj\nQeNk8KIqguOYs7JsbLdct7Nwy2pu/XFIfT1t/+5ExvSjfqd29c5PRKumr+N88nMM\noAql4q8b6P1ijBiX0vB9+5QiGSwQarf3DLQOmJsSYsqx6lA6RCe89ycRmccwNWgQ\n3Uouzio0rq3fSP5AqDr2AAZH3Ap05WNwHz2S6kNOWqWJLaVqgEP208BwHCOenbSW\nAGKrtDVkGCb6RbJ15/+aLqT1FBkCRvi6Z49WLNrEXuEXXz+QanOBS5aaruxX7NCY\nWMka9cX3AgMBAAECggEADg7jDiMtUbI4yqv9ZbcpV7jga4LZkLWHoG+8AiN+ISSN\nXXozhsoKThh3PmjhAaviXxPwcrFTqVcBwPpGtIFgGWFg+k6gvJeI1D4ILyaZd9bG\n/ffwnlTNx15CemppJe0yB932SaWmIsnx41PB6E00miRUzCZbe/3y1tOIa2HOhxig\n2rEUoUidiqJFlgWZne/9IJcQt3z/RPBO6Za7/zpSkkngoNBIo3D5lVXcFdlO59QA\nQkQpONPNwELMacUYcNAjg95e+im5OSACuQ2pEGksModsdxk0XTIlYOe5ruax75La\n/d0+UrikupoaYICXoKinv62iQP13B5jX/Da09SGZQQKBgQDpnFDtL6CIgNmZdsPd\nDS3bP2S+HLBXn6YoHDP0hYycwNg9ErIhVVzsAKe/z3R4fK7WuhgaOTaVX25Vr8sA\nbaTlKxVAUYIlBfa12B7k+4XdX4u81jWiffLkC79Y6pP+gvAKtdUW3bnXZoJgSeta\nxILK6UxvrI0x5O+7nOWdP8V0LwKBgQDfTbboe5+8UkhUnv/RRIzgk65EzS40pTF+\nqMW0v3iPrsXkrlcQWJfzyCfNnvqDowrVbzDW+FUD130lilVO0QmhJ5bHzv3BvOUi\nndmFC3pBnOqwIcdkYspOy4W5Ic5+jKg+E4GzSERjlrLtEHllvq1t/dXSrm5HL22+\nGrP0TUQwuQKBgBY4slH9h820Q/6fF359dHE4lIKpA/Ux0IJcPGz0Dy4SAf+9OYiG\nMDKa1Vofh7q2UYNHbGeCLbkDvOEVub+urlLGSF0346NV7+PYTQgHDPLD1ez+i1eL\nl4EtxOPWXIGHPwIlzcFBEh51N82k+mhF7RMUIhs1VLD8T/mOsSDGIigtAoGBANu+\nMjxdSzebESqUvNFGUAu/yEJUVx/fX/FwS/4uXYmnR35eQbcIN5/iW6jwxT08+LBI\nFxu0jJSXPcPveTtyYbOArdQ6UWSRajrCcweF3+0paZmh5AFZZhRcG1+vcPD/oaBU\nudGfUA1ggvret1f0Z95RaFVG6aaLeccVp/jFAFGhAoGAJOu0d9R7JpR6AHAQoBEK\nAtL16VbT0cHxO2ifeJCgFKZ4m5T0BGpeHviXoSSyYg+yYWSCXUCBlMoEdoTLwt/k\ntjqHpwKCA+qwm/yOoVFAwGNdlIdAeGzQTRfrALjEjc78ldJk78rw3EmGyMDlW5L2\n5BNu4VBEi6nl8o9+FMnDnhs=\n-----END PRIVATE KEY-----\n",
-    "client_email": "farmtodish@farmtodish-7e3e2.iam.gserviceaccount.com",
-    "client_id": "117824464470213004977",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url":
-        "https://www.googleapis.com/robot/v1/metadata/x509/farmtodish%40farmtodish-7e3e2.iam.gserviceaccount.com",
-    "universe_domain": "googleapis.com"
-  };
-  */
-
+Future<String> getAccessToken(Map<String, dynamic> accJson) async {
   List<String> scopes = ["https://www.googleapis.com/auth/firebase.messaging"];
 
   /*
@@ -439,31 +404,18 @@ Future<String> getAccessToken() async {
   */
 
   final client = await auth.clientViaServiceAccount(
-      auth.ServiceAccountCredentials.fromJson(serviceAccountJson), scopes);
+      auth.ServiceAccountCredentials.fromJson(accJson), scopes);
 
   return client.credentials.accessToken.data;
 }
 
-Future<void> sendNotification(String deviceToken, BuildContext context,
-    Map<String, dynamic> notification, Map<String, dynamic> data) async {
-  final kkp = {
-    "type": "service_account",
-    "project_id": "farmtodish-7e3e2",
-    "private_key_id": "3c06c1b70bbb85a7816e62117ced295289f940df",
-    "private_key":
-        "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDQVsDIRfs5tdew\n4/NXvvc+V0as+Z3lveRIIEoDctAjVyh9nDF85AAnbTkUkCYdsscOLoInYAOjtkEN\nVh647U/aBVP9w305KJdjy151e7zKpfq61WCGwMOTyKDmylyyI4/Mh0pyUjLOiZZr\nAmUmbRdSX8wkyVwoAvlkRG/FHdFh+Eu4xZVYCneU+MdhN5/+3ZTnBf+t56FYW58X\nDMy6tb/uonSbmRX+/6gPLSgQ98qyFgB6qDfqMtpG12O1TjCC843UZKufLEpPHrru\nKgf8l7tSZP3SYFP53pJACTHXRlJCY9vqUuJNZjKk4DKRlQ47ePdyOX1AH7MGHYDe\nS6B5SHmbAgMBAAECggEARYGT6p0SXiQRNDYwoscWxIkojp/usk2igf+nwbPFxeyX\nmSSJjCGi/YRehUI8PS8+YrhYett5C17MIC9pq4ec2t9pMKHOPsoQi943AtoH19H9\nLuTuQbbA6SaHq8e6mkHsAS/nwfEzex2C/et8JJBDths4x9MX+E9Ztb5xTaGPj+/E\noLPHqI6err3RGFU9vHTOVjUvIYHUoGoWquMQ5HKVvADHIJkA4HAPXQzyY4rE8Uzk\nYvPN69m85ML6OlRr2sm8JFLgRyoAuQWKGQb3i1jl3STQK8gPeO75KOvbCQbzsLH8\nSFl1qRyLzrylMtsSfb3AL4O4wZK1CJevFKDG41k1EQKBgQD2sgLQJQb6lLT96m3V\nJ4mBXN5UMYnJjZ9YCsHebfiVcAaz9AYmD4jZzWZwl92WGkeGqoY1+qpCpSGdKLtI\nmA6vl7IB/OrApcJZd1q5pATdzdYwTP1l7cXFQePLZmeITjJJOOGNykkhX3ZcC8Mn\nhYZI3/SYvrrY6wuUSGEd3yW5qwKBgQDYMmM/koQz3xs8j/yft2wdwtFhWfGwrsjo\n9v+DZrVmsVLTJMtrU20LC8ppUzA/MDe9G/vl398h9iQyx1fCJj/Eh8u9siEhR7uF\nvHZ3ld5FcpbOx1HtGtOnvlQwD++ZhqEnsnhfZnRiZtd4l2oi+fitcbn65PsYCkKM\nJSRElLCv0QKBgBx+v1hvjnjPSICz3W/rmzR4F6498p53X1p6E56vsTEBuaR7oWIw\nFSyjTxveTtgRvQVPGSWPCK+eB13x4IAoIDokGYmlPzB1dReEc9RRn8ZHCmCV5Acs\nCdYZIEjUUU0rSx+uFE+eeAgE0NUc/rPH9pTgWY5zKX342GOOYLlklyT1AoGAJ6VF\n0fiaSbDWG8sDtn46U1LQdpu52H6U1TPGM2B4T3ahC5spumq4CliFK79Xj57V+dXR\n4ZumHWI3zSAFFdNRykZktEqgDKxM1P90cgWHlxCmWxDuEx7iRVZ/tbiWZX7suozd\nyhDNsuXNCY4qpnNUiOncAwhOi2AGSBDfj7v8kqECgYBBg9X+SZWN8ZZlcuO2KXh7\nc8FXUXBd071uJE9+0vLugCqd+TDEroWuDO329BxSf+RlAlWISsP3RddRE0MLq8G5\nDZytfWusyP/bD1cO0h8XyIkNb/8+vM6xTuorZNn9hP9HGl/MK9/K7w06agKNAFQM\njJTB7WOnRUSHsFVSapiT5g==\n-----END PRIVATE KEY-----\n",
-    "client_email":
-        "firebase-adminsdk-k7w7l@farmtodish-7e3e2.iam.gserviceaccount.com",
-    "client_id": "107957432154927885517",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url":
-        "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-k7w7l%40farmtodish-7e3e2.iam.gserviceaccount.com",
-    "universe_domain": "googleapis.com"
-  };
-
-  String accessToken = await getAccessToken();
+Future<void> sendNotification(
+    String deviceToken,
+    BuildContext context,
+    Map<String, dynamic> notification,
+    Map<String, dynamic> data,
+    Map<String, dynamic> fcmSVToken) async {
+  String accessToken = await getAccessToken(fcmSVToken);
   logger("Access $accessToken");
   //   "ya29.a0AW4XtxicE7bZWlHVSeJzeYzwVF9u8jclqhABaVEKO4vkG9IoLmaMytn8rukj4gldDuQ5kLkr6YKfuHoylSo3qDCxRjc49AQUxmAfvl7S89aw6Z-YW7kqVaMngJk2jWPBpmgNHvmJK83ChX27_kVFObMzYNvGLqVnt-XtEZaa4waCgYKAV4SARUSFQHGX2Mii77o8zr77ovN1RdpalC05Q0177";
   // await createJwtToken(kkp);
