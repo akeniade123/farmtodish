@@ -3,6 +3,9 @@ import 'dart:math';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:farm_to_dish/Screens/Products/product_model.dart';
+import 'package:farm_to_dish/global_handlers.dart';
+import 'package:farm_to_dish/sharedpref.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -10,6 +13,7 @@ import 'Repository/databaseHelper.dart';
 import 'Remote/modelstack.dart';
 import 'Screens/Cart/cart_item_model.dart';
 import 'Screens/Login/user.dart';
+import 'global_string.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 //08030750148    Mr. Segun Emmanuel...
@@ -143,6 +147,28 @@ late userDtlz usrdtlz;
 late broadcast brdcst;
 
 Future<String>? account, usrNm;
+
+Future<void> prvsn() async {
+  SharedPref pref = SharedPref();
+  if (await pref.getPrefBool(token) == false) {
+    try {
+      fbId = (await FirebaseMessaging.instance.getToken())!;
+      pref.setPrefString(tk_id, fbId);
+      pref.setPrefBool(token, true);
+      logger("UserToken Indexed***$fbId");
+    } catch (e) {}
+  }
+  try {
+    fbId = (await pref.getPrefString(tk_id))!;
+    String? apS = await pref.getPrefString(appState);
+    if (apS!.isEmpty) {
+      pref.setPrefString(appState, prelim);
+    }
+    logger("UserToken Retrieved***$fbId");
+  } catch (e) {}
+
+  logger("Chktkn$fbId");
+}
 
 class UINotifier extends ChangeNotifier {
   final _randomGenerator = Random();

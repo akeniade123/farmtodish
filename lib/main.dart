@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -275,6 +276,20 @@ void onStart(ServiceInstance service) async {
 
     SharedPref pref = SharedPref();
 
+    String? app = await pref.getPrefString(appState);
+    if (app!.isNotEmpty) {
+      switch (app) {
+        case prelim:
+          String? prf = await pref.getPrefString(usrTbl);
+          if (prf!.isNotEmpty) {
+            Map<String, dynamic> pp = jsonDecode(prf);
+          }
+          break;
+      }
+    } else {
+      prvsn();
+    }
+
     //Revisit these
 
     /*
@@ -406,20 +421,8 @@ class _MyAppState extends State<MyApp> {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    if (await pref.getPrefBool(token) == false) {
-      try {
-        fbId = (await FirebaseMessaging.instance.getToken())!;
-        pref.setPrefString(tk_id, fbId);
-        pref.setPrefBool(token, true);
-        logger("UserToken Indexed***$fbId");
-      } catch (e) {}
-    }
-    try {
-      fbId = (await pref.getPrefString(tk_id))!;
-      logger("UserToken Retrieved***$fbId");
-    } catch (e) {}
 
-    logger("Chktkn$fbId");
+    prvsn();
 
     if (fbId != community || fbId.isNotEmpty) {
       if (await pref.getPrefBool(prlmtpc) == false) {

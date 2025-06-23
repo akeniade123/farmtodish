@@ -454,8 +454,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               Duration.zero,
                                               () {
                                                 Map<String, String> body = {
-                                                  'regId':
-                                                      'kljnjknkjnkjnbjkkjhkhj',
+                                                  'regId': '',
                                                   'Essence': 'Register',
                                                   'Email_Address': email,
                                                   'Gender': gender.toString(),

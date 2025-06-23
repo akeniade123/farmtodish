@@ -6,6 +6,12 @@ const time = 'time';
 
 const String dev = "development";
 const String prod = "Production";
+const String appState = "AppState";
+const String prelim = "prelim";
+const String prvsnd = "provisioned";
+const String linked = "linked";
+const String dialog = "dialogued";
+const String auth = "authorized";
 
 String fbId = community;
 
