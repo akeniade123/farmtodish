@@ -283,6 +283,29 @@ void onStart(ServiceInstance service) async {
           String? prf = await pref.getPrefString(usrTbl);
           if (prf!.isNotEmpty) {
             Map<String, dynamic> pp = jsonDecode(prf);
+            String? tkn = await pref.getPrefString(tk_id);
+            String unq = pp["Unique_ID"];
+            if (pp["Fb_UID"] == "") {}
+
+            /*
+            "Name": "Oluwasheyi Blade12",
+            "Unique_ID": "1571691",
+            "Phone": "08132547993",
+            "Cipher": "22kfLGuIhkS7TIlYzRQcRxzzjkMzNzAxYjkwZWM3",
+            "Salt": "3701b90ec7",
+            "profile_pix": "",
+            "Gender": "Male",
+            "Device_ID": "87687874",
+            "Category": "1",
+            "Section": "1",
+            "Email": "adeyinkaakeni@gmail.com",
+            "Fb_UID": "kljnjknkjnkjnbjkkjhkhj",
+            "indexed": "",
+            "Phase": "1",
+            "Eligible": "0",
+            "created_at": "2025-06-08 11:31:55",
+            "Updated_at": "0000-00-00 00:00:00"
+            */
           }
           break;
       }
