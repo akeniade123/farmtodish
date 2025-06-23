@@ -426,8 +426,6 @@ Future<void> sendNotification(
   }
 }
 
-//Future<void> sendNotice() {}
-
 Future<bool> sendPushMessage({
   required String recipientToken,
   required String title,
