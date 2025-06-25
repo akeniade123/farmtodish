@@ -78,6 +78,10 @@ Future<Map<String, dynamic>>? FetchData(
           case prelim:
             pref.setPrefString(appState, prvsnd);
             break;
+          case prvsnd:
+            logger("Hello: $data_");
+
+            break;
         }
       } catch (e) {
         logger("Login procession error: $e");

@@ -308,6 +308,9 @@ void onStart(ServiceInstance service) async {
             }
             break;
           case prvsnd:
+            Map<String, dynamic> tag = {"Essence": "setup", "State": rd};
+            await FetchData(tag, app, null);
+
             break;
         }
       } else {
