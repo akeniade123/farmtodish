@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/env.dart';
@@ -6,9 +8,14 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 
 import 'Remote/elitebasis.dart';
+import 'Remote/modelstack.dart';
+import 'Remote/server_response.dart';
+import 'Repository/databaseHelper.dart';
 import 'Screens/Home/home_screen.dart';
+import 'global_handlers.dart';
 import 'global_objects.dart';
 import 'global_string.dart';
+import 'sharedpref.dart';
 
 class Squire extends StatefulWidget {
   final num? height;
@@ -105,6 +112,178 @@ SnackBar displaySnackBar(String message) {
 
 void customSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(displaySnackBar(message));
+}
+
+Future<String>? getData(BuildContext context, String essence) async {
+  pref = SharedPref();
+  switch (essence) {
+    case home:
+    case usr:
+      Map<String, dynamic> pp = {};
+      try {
+        String? prf = await pref.getPrefString(usrTbl);
+
+        logger("Usernm: $prf");
+
+        pp = jsonDecode(prf!);
+
+        usrdtlz = userDtlz(nmm: pp[nmm]);
+        dshCtx.read<UINotifier>().userName(usrdtlz);
+        // usrNm = "Done";
+        // pp[nmm];
+        return "Done"; // pp[nmm];
+      } catch (e) {
+        logger("Usernm error $e");
+        return "";
+      }
+      // bal = pp[nmm];
+
+      break;
+
+    case acct:
+      try {
+        /*
+    Map<String, dynamic> cls = {usrId: "909891"};
+    List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
+    */
+
+        String? act_ = await pref.getPrefString(acct);
+        if (act_!.isNotEmpty) {
+          bal = act_;
+        } else {
+          /*
+      Map<String, dynamic>? obj =
+          await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
+
+      
+
+      ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+      if (svp.status) {
+        ServerResponse rsp = ServerResponse.fromJson(obj);
+        for (final item in rsp.data) {
+          //   String itm = item["item"];
+          //   String typ = item["type"];
+          //1  String img = item["image"];
+          //  cntz.add({"name": typ, "imageURL": item[img]});
+          //  dba.insertData(item);
+          pref.setPrefString(acct, item[amt]);
+          bal = item[amt];
+        }
+      }
+
+      */
+        }
+
+        // bal = "***";
+
+        bll = balance(bal: bal);
+        //bll = blh;
+        dshCtx.read<UINotifier>().accountBalance(bll);
+      } catch (e) {
+        logger("Cast Error*** $e");
+      }
+      break;
+  }
+
+  return bal;
+}
+
+Future<String>? acc_bal() async {
+  String? act_ = await pref.getPrefString(acct);
+  if (act_!.isNotEmpty) {
+    // bal = act_;
+  }
+  return act_;
+}
+
+Consumer usrDtl(BuildContext context, String essence, Future<String>? dtl,
+    Color color, double fontsize) {
+  return Consumer<UINotifier>(builder: (context, notifier, child) {
+    return dtlCast(
+        context, essence, dtl, color, fontsize); // castData(); //07033280489
+  });
+}
+
+FutureBuilder<String> dtlCast(BuildContext context, String essence,
+    Future<String>? plch, Color color, double fontsize) {
+  Text wdg = Text("");
+
+  return FutureBuilder(
+      future: plch,
+      builder: ((context, snapshot) {
+        switch (essence) {
+          case acct:
+            wdg = Text(
+              "₦${bll.bal}",
+              style: TextStyle(
+                fontSize: fontsize,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            );
+            break;
+
+          case usr:
+            wdg = Text(
+              usrdtlz.nmm,
+              style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.bold),
+            );
+            break;
+
+          case home:
+            wdg = Text(
+              "Welcome ${usrdtlz.nmm}!",
+              style: TextStyle(fontSize: fontsize, fontWeight: FontWeight.bold),
+            );
+            break;
+        }
+
+        return wdg;
+      }));
+}
+
+late DatabaseHelper dba;
+late SharedPref pref;
+late String bal;
+
+Future<String>? _futureAccount(BuildContext context) async {
+  try {
+    dba = DatabaseHelper(table: usrWlt);
+    Map<String, dynamic> cls = {usrId: "909891"};
+    List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
+
+    String? act_ = await pref.getPrefString(acct);
+    if (act_!.isNotEmpty) {
+      bal = act_;
+    } else {
+      Map<String, dynamic>? obj =
+          await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
+
+      ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+      if (svp.status) {
+        ServerResponse rsp = ServerResponse.fromJson(obj);
+        for (final item in rsp.data) {
+          //   String itm = item["item"];
+          //   String typ = item["type"];
+          //1  String img = item["image"];
+          //  cntz.add({"name": typ, "imageURL": item[img]});
+          //  dba.insertData(item);
+          pref.setPrefString(acct, item[amt]);
+          bal = item[amt];
+        }
+      }
+    }
+
+    // bal = "***";
+
+    balance blh = balance(bal: bal);
+    //bll = blh;
+    dshCtx.read<UINotifier>().accountBalance(blh);
+  } catch (e) {
+    logger("Cast Error*** $e");
+  }
+
+  return bal;
 }
 
 void modalPane(

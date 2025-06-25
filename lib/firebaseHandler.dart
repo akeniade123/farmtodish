@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:farm_to_dish/global_objects.dart';
@@ -19,6 +20,7 @@ import 'package:googleapis/servicecontrol/v1.dart' as servicecontrol;
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'dart:developer' as devtools show log;
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 //import 'notificationcontroller.dart';
 
@@ -273,28 +275,103 @@ Future<void> sendMessageToFcmTopic() throws Exception {
 
  */
 
-Future<String> getAccessToken() async {
-  final serviceAccountJson = {
-    "type": "service_account",
-    "project_id": "farmtodish-7e3e2",
-    "private_key_id": "933c892cc41ccc5c12dc405e7edcd7899696dba1",
-    "private_key":
-        "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDLxhVsO9X/0rGJ\ncXipEAbh2kLVh/M3b9NX6g5zLO8gFfWyXh9PgiNWv5qfmeYsqthh5T+QXpOD41Yj\nQeNk8KIqguOYs7JsbLdct7Nwy2pu/XFIfT1t/+5ExvSjfqd29c5PRKumr+N88nMM\noAql4q8b6P1ijBiX0vB9+5QiGSwQarf3DLQOmJsSYsqx6lA6RCe89ycRmccwNWgQ\n3Uouzio0rq3fSP5AqDr2AAZH3Ap05WNwHz2S6kNOWqWJLaVqgEP208BwHCOenbSW\nAGKrtDVkGCb6RbJ15/+aLqT1FBkCRvi6Z49WLNrEXuEXXz+QanOBS5aaruxX7NCY\nWMka9cX3AgMBAAECggEADg7jDiMtUbI4yqv9ZbcpV7jga4LZkLWHoG+8AiN+ISSN\nXXozhsoKThh3PmjhAaviXxPwcrFTqVcBwPpGtIFgGWFg+k6gvJeI1D4ILyaZd9bG\n/ffwnlTNx15CemppJe0yB932SaWmIsnx41PB6E00miRUzCZbe/3y1tOIa2HOhxig\n2rEUoUidiqJFlgWZne/9IJcQt3z/RPBO6Za7/zpSkkngoNBIo3D5lVXcFdlO59QA\nQkQpONPNwELMacUYcNAjg95e+im5OSACuQ2pEGksModsdxk0XTIlYOe5ruax75La\n/d0+UrikupoaYICXoKinv62iQP13B5jX/Da09SGZQQKBgQDpnFDtL6CIgNmZdsPd\nDS3bP2S+HLBXn6YoHDP0hYycwNg9ErIhVVzsAKe/z3R4fK7WuhgaOTaVX25Vr8sA\nbaTlKxVAUYIlBfa12B7k+4XdX4u81jWiffLkC79Y6pP+gvAKtdUW3bnXZoJgSeta\nxILK6UxvrI0x5O+7nOWdP8V0LwKBgQDfTbboe5+8UkhUnv/RRIzgk65EzS40pTF+\nqMW0v3iPrsXkrlcQWJfzyCfNnvqDowrVbzDW+FUD130lilVO0QmhJ5bHzv3BvOUi\nndmFC3pBnOqwIcdkYspOy4W5Ic5+jKg+E4GzSERjlrLtEHllvq1t/dXSrm5HL22+\nGrP0TUQwuQKBgBY4slH9h820Q/6fF359dHE4lIKpA/Ux0IJcPGz0Dy4SAf+9OYiG\nMDKa1Vofh7q2UYNHbGeCLbkDvOEVub+urlLGSF0346NV7+PYTQgHDPLD1ez+i1eL\nl4EtxOPWXIGHPwIlzcFBEh51N82k+mhF7RMUIhs1VLD8T/mOsSDGIigtAoGBANu+\nMjxdSzebESqUvNFGUAu/yEJUVx/fX/FwS/4uXYmnR35eQbcIN5/iW6jwxT08+LBI\nFxu0jJSXPcPveTtyYbOArdQ6UWSRajrCcweF3+0paZmh5AFZZhRcG1+vcPD/oaBU\nudGfUA1ggvret1f0Z95RaFVG6aaLeccVp/jFAFGhAoGAJOu0d9R7JpR6AHAQoBEK\nAtL16VbT0cHxO2ifeJCgFKZ4m5T0BGpeHviXoSSyYg+yYWSCXUCBlMoEdoTLwt/k\ntjqHpwKCA+qwm/yOoVFAwGNdlIdAeGzQTRfrALjEjc78ldJk78rw3EmGyMDlW5L2\n5BNu4VBEi6nl8o9+FMnDnhs=\n-----END PRIVATE KEY-----\n",
-    "client_email": "farmtodish@farmtodish-7e3e2.iam.gserviceaccount.com",
-    "client_id": "117824464470213004977",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url":
-        "https://www.googleapis.com/robot/v1/metadata/x509/farmtodish%40farmtodish-7e3e2.iam.gserviceaccount.com",
-    "universe_domain": "googleapis.com"
-  };
+/*
+function createJwtToken($serviceAccountKeyFile) {
+    $keyFile = json_decode(file_get_contents($serviceAccountKeyFile), true);
+    $privateKey = $keyFile['private_key'];
+    $token = [
+        "iss" => $keyFile['client_email'],
+        "sub" => $keyFile['client_email'],
+        "aud" => "https://oauth2.googleapis.com/token",
+        "iat" => time(),
+        "exp" => time() + 3600,
+        "scope" => "https://www.googleapis.com/auth/firebase.messaging",
+    ];
+    return JWT::encode($token, $privateKey, 'RS256');
+}
+*/
 
-  List<String> scopes = [
-    "https://www.googleapis.com/auth/firebase.messaging",
-    "https://www.googleapis.com/auth/firebase.database",
-    "https://www.googleapis.com/auth/userInfo.email"
-  ];
+Future<String> createJwtToken(final serviceAccountKey) async {
+  Map<String, dynamic> keyFile = serviceAccountKey;
+  //jsonDecode(await rootBundle.loadString('data/auth.json'));
+  String privateKey = keyFile['private_key'];
+
+  final today = DateTime.now();
+  final OneHourFromNow = today.add(const Duration(hours: 1));
+
+  final jwt = JWT({
+    "iss": keyFile['client_email'],
+    "sub": keyFile['client_email'],
+    "aud": "https://oauth2.googleapis.com/token",
+    "iat": DateTime.now,
+    "exp": OneHourFromNow,
+    "scope": "https://www.googleapis.com/auth/firebase.messaging",
+  });
+
+  final pem = serviceAccountKey["private_key"];
+  //  final pem = File('./example/rsa_private.pem').readAsStringSync();
+  final key = RSAPrivateKey(pem!);
+
+  String token = jwt.sign(key, algorithm: JWTAlgorithm.RS256);
+
+  print('Signed token: $token\n');
+
+  return token;
+}
+
+// RSA SHA-256 algorithm
+Future<void> rs256(final serviceAccountJson) async {
+  String token;
+
+  /* Sign */ {
+    // Create a json web token
+    final jwt = JWT(
+      {
+        'id': 123,
+        'server': {
+          'id': '3e4fc296',
+          'loc': 'euw-2',
+        }
+      },
+      issuer: 'https://github.com/jonasroussel/dart_jsonwebtoken',
+    );
+
+    // Sign it
+    // final pem = await rootBundle.loadString('data/auth.json');
+    final pem = serviceAccountJson["private_key"];
+    //  final pem = File('./example/rsa_private.pem').readAsStringSync();
+    final key = RSAPrivateKey(pem!);
+
+    token = jwt.sign(key, algorithm: JWTAlgorithm.RS256);
+
+    print('Signed token: $token\n');
+  }
+
+  /* Verify */ {
+    try {
+      // Verify a token
+
+      final pem = serviceAccountJson[
+          "private_key"]; // await rootBundle.loadString('data/auth.json');
+
+      /// final pem =  File('./example/rsa_public.pem').readAsStringSync();
+      final key = RSAPublicKey(pem!);
+
+      final jwt = JWT.verify(token, key);
+
+      print('Payload: ${jwt.payload}');
+    } on JWTExpiredException {
+      print('jwt expired');
+    } on JWTException catch (ex) {
+      print(ex.message); // ex: invalid signature
+    }
+  }
+}
+
+Future<String> getAccessToken(Map<String, dynamic> accJson) async {
+  List<String> scopes = ["https://www.googleapis.com/auth/firebase.messaging"];
+
+  /*
 
   http.Client client = await auth.clientViaServiceAccount(
       auth.ServiceAccountCredentials.fromJson(serviceAccountJson), scopes);
@@ -307,11 +384,22 @@ Future<String> getAccessToken() async {
 
   client.close();
   return credentials.accessToken.data;
+  */
+
+  final client = await auth.clientViaServiceAccount(
+      auth.ServiceAccountCredentials.fromJson(accJson), scopes);
+
+  return client.credentials.accessToken.data;
 }
 
-Future<void> sendNotification(String deviceToken, BuildContext context,
-    Map<String, dynamic> notification, Map<String, dynamic> data) async {
-  final String accessToken = await getAccessToken();
+Future<void> sendNotification(
+    String deviceToken,
+    BuildContext context,
+    Map<String, dynamic> notification,
+    Map<String, dynamic> data,
+    Map<String, dynamic> fcmSVToken) async {
+  String accessToken = await getAccessToken(fcmSVToken);
+  logger("Access $accessToken");
 
   const String senderId = 'farmtodish-7e3e2';
   String fcmendpoint =
@@ -337,8 +425,6 @@ Future<void> sendNotification(String deviceToken, BuildContext context,
     print('Failed to send FCM message: ${response.statusCode}');
   }
 }
-
-//Future<void> sendNotice() {}
 
 Future<bool> sendPushMessage({
   required String recipientToken,

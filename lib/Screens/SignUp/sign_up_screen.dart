@@ -15,6 +15,7 @@ import '../../Remote/requestcore.dart';
 import '../../global_objects.dart';
 import '../../global_string.dart';
 import '../../global_widgets.dart';
+import '../../sharedpref.dart';
 import '../screens.dart';
 
 // import 'common_widget.dart';
@@ -452,10 +453,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       (!hasError)
                                           ? Future.delayed(
                                               Duration.zero,
-                                              () {
+                                              () async {
+                                                pref = SharedPref();
+                                                String fbb = '';
+                                                try {
+                                                  String? tkn = await pref
+                                                      .getPrefString(tk_id);
+                                                  fbb = tkn!;
+                                                } catch (e) {}
                                                 Map<String, String> body = {
-                                                  'regId':
-                                                      'kljnjknkjnkjnbjkkjhkhj',
+                                                  'regId': fbb,
                                                   'Essence': 'Register',
                                                   'Email_Address': email,
                                                   'Gender': gender.toString(),
@@ -463,6 +470,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                   'Phone_Number': phoneNumber,
                                                   'DEVICE_ID': '',
                                                   'Full_Name': fullName,
+
                                                   'Designation': 'NA',
                                                   'Manifest': 'Community',
                                                   'Unique_ID': "",
@@ -477,7 +485,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                   //         ? (fullName.split(' ')[1])
                                                   //         : '',
                                                 };
-                                                FetchData(context, body, login);
+                                                FetchData(body, login, context);
                                                 //
                                                 // signUpHandler.signUp(context, body);
                                               },

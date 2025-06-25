@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../Remote/modelstack.dart';
+import '../../Remote/requestcore.dart';
 import '../../Repository/databaseHelper.dart';
 import '../../Remote/requestmodel.dart';
 import '../../Remote/server_response.dart';
@@ -48,8 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<Wrap>? product;
   Future<SizedBox>? brdcc;
 
-  Future<String>? account, usrNm;
-
   late List<String> thumb;
   late List<String> owner;
   late List<String> titles;
@@ -59,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Navigate nvg;
   bool loaded = false;
   List<Map<String, dynamic>> cntz = [];
-  late String bal;
+  // late String bal;
   late DatabaseHelper dba, dbh, dbc;
   final TextEditingController _amount = TextEditingController();
 
@@ -79,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // gender = 'Male';
     super.initState();
     product = null;
-    bal = "---";
+    bal = "***";
     account = usrNm = null;
     brdcc = null;
     brdcst = broadcast(
@@ -94,10 +93,10 @@ class _HomeScreenState extends State<HomeScreen> {
     pref = SharedPref();
 
     usrdtlz = userDtlz(nmm: "---");
-    usrNm = _userDtls();
+    usrNm = getData(context, home); // _userDtls();
 
-    bll = balance(bal: "---");
-    account = _futureAccount();
+    bll = balance(bal: "###");
+    account = getData(context, acct); //  _futureAccount();
 
     product = futurefetch();
 
@@ -114,11 +113,11 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Consumer usrDtl(String essence, Future<String>? dtl) {
-    return Consumer<UINotifier>(builder: (context, notifier, child) {
-      return dtlCast(essence, dtl); // castData(); //07033280489
-    });
-  }
+  // Consumer usrDtl(String essence, Future<String>? dtl) {
+  //   return Consumer<UINotifier>(builder: (context, notifier, child) {
+  //     return dtlCast(essence, dtl); // castData(); //07033280489
+  //   });
+  // }
 
   Consumer brdc_() {
     return Consumer<UINotifier>(builder: (context, notifier, child) {
@@ -244,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
       //bll = blh;
       dshCtx.read<UINotifier>().accountBalance(blh);
     } catch (e) {
-      logger("Cast Error*** $e");
+      logger("Cast Error*** $e"); // 2030717028  Nurudeen Abiodun
     }
 
     return bal;
@@ -494,9 +493,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _iconButtonWithBorder(
-                              func: () {},
+                              func: () {
+                                logger("Execute this");
+                              },
                               iconData: Icons.person_outline_outlined),
-                          (usrNm == null) ? Text("Hi!") : usrDtl(usr, usrNm),
+                          (usrNm == null)
+                              ? Text("Hi!")
+                              : usrDtl(context, home, usrNm, Colors.black, 14),
                           _iconButtonWithBorder(
                               func: () {}, iconData: Icons.notifications),
                         ]),
@@ -769,8 +772,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Align(
                     alignment: Alignment.bottomLeft,
-                    child:
-                        (account == null) ? Text("---") : usrDtl(acct, account),
+                    child: (account == null)
+                        ? Text("---")
+                        : usrDtl(context, acct, account, Colors.white, 15),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
@@ -986,7 +990,34 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 2,
           ),
           borderRadius: BorderRadius.circular(10)),
-      child: IconButton(onPressed: () {}, icon: Icon(iconData)),
+      child: IconButton(
+          onPressed: () async {
+            logger("Testing This");
+
+            //  rs256();
+            try {
+              logout(context);
+
+              // sendNotification(
+              //     "eNomrX2CSI2-Ad6l8ct3UG:APA91bGjKnFOkcYFkNVdWwygdKBqFcoV_jWLeWC2xSuuwBepNktEo4HEVF7Auvcp6g-R5RWdy3vTtS0X1ih9SNjggB-TaGlQNDf-BeCfvqJWYB1SI1V87y8",
+              //     context, {
+              //   "body": "Trade Fair Price Slashed",
+              //   "title": "FCM Message"
+              // }, {
+              //   "id": "story_1234567890***",
+              //   "essence": "account",
+              //   "amount": "120.0k"
+              // }, {});
+
+              //  String acc = await getAccessToken();
+              //   logger("Access Token: $acc");
+            } catch (e) {
+              logger("Access Error: $e");
+            }
+
+            // func;
+          },
+          icon: Icon(iconData)),
     );
   }
 }

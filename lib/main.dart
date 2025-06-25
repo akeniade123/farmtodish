@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:farm_to_dish/Remote/requestcore.dart';
 import 'package:farm_to_dish/Repository/databaseHelper.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/global_handlers.dart';
@@ -38,6 +40,7 @@ void main() async {
 
   // await NotificationController.initializeLocalNotifications();
   // await NotificationController.initializeIsolateReceivePort();
+  //getContext();
 
   await initializeService();
 
@@ -275,6 +278,61 @@ void onStart(ServiceInstance service) async {
 
     SharedPref pref = SharedPref();
 
+    String? app = await pref.getPrefString(appState);
+    logger("Current app state: $app ***");
+    try {
+      if (app!.isNotEmpty) {
+        switch (app) {
+          case prelim:
+            String? prf = await pref.getPrefString(usrTbl);
+            logger("login dtlz: $prf");
+            if (prf!.isNotEmpty) {
+              logger("login dtl: $prf");
+              Map<String, dynamic> pp = jsonDecode(prf);
+              pref = SharedPref();
+              String? tkn = await pref.getPrefString(tk_id);
+              String unq = pp["Unique_ID"];
+              if (pp["Fb_UID"] == "" || tkn != pp["Fb_UID"]) {
+                pref = SharedPref();
+                bool stt = await pref.getPrefBool(indexed);
+                if (!stt) {
+                  Map<String, dynamic> tag = {
+                    "Essence": "users",
+                    "State": "updatezz",
+                    "Manifest": {"Unique_ID": unq},
+                    "Entries": {"Fb_UID": tkn},
+                    "Constraint": {"Unique_ID": unq}
+                  };
+                  await tagPost(tag, app, null);
+                } else {
+                  pref = SharedPref();
+                  pref.setPrefBool(login, false);
+                }
+              } else if (tkn == pp["Fb_UID"]) {
+                pref.setPrefString(appState, prvsnd);
+              } else {}
+            }
+            break;
+          case prvsnd:
+            Map<String, dynamic> tag = {"Essence": "setup", "State": rd};
+            /*
+            {"Essence":"setup", "State":"read"}
+            */
+
+            await tagPost(tag, app, null);
+
+            break;
+        }
+      } else {
+        logger("$appState empty");
+
+        prvsn();
+      }
+    } catch (e) {
+      logger("$appState error: $e");
+      prvsn();
+    }
+
     //Revisit these
 
     /*
@@ -406,20 +464,8 @@ class _MyAppState extends State<MyApp> {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    if (await pref.getPrefBool(token) == false) {
-      try {
-        fbId = (await FirebaseMessaging.instance.getToken())!;
-        pref.setPrefString(tk_id, fbId);
-        pref.setPrefBool(token, true);
-        logger("UserToken Indexed***$fbId");
-      } catch (e) {}
-    }
-    try {
-      fbId = (await pref.getPrefString(tk_id))!;
-      logger("UserToken Retrieved***$fbId");
-    } catch (e) {}
 
-    logger("Chktkn$fbId");
+    prvsn();
 
     if (fbId != community || fbId.isNotEmpty) {
       if (await pref.getPrefBool(prlmtpc) == false) {
