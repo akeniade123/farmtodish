@@ -21,6 +21,29 @@ Future<void> logout(BuildContext context) async {
   context.go("/");
 }
 
+Future<Map<String, dynamic>>? tagPost(Map<String, dynamic> tag, String essence,
+    [BuildContext? context]) async {
+  /*
+      Essence:access
+Designation:content
+regId:dySI7okZRX-4qGPfcyL72P:APA91bEr9xWX3dHLG78mdRckQ6soKdkeMhM9j1RWweb7ft_81wsiUiAp87OVPiiG0_QCCHkBaruykOPU9kqWXLcBdzuNlumkggBb3snA2sJP-6EHa6h-g7ikkydnoXBY4jzvKbUow6_z
+Full_Name:Akeni Adeyinka
+Unique_ID:334656#/topics/Ojo#New Class arm created#Talconer#Notify
+Password:random
+      */
+  Map<String, dynamic> txt = {};
+  SharedPref pref = SharedPref();
+  String? tkn = await pref.getPrefString(tk_id);
+  Map<String, dynamic> dtt = {
+    "Essence": "access",
+    "Designation": "content",
+    "regId": tkn,
+    "Tag": tag
+  };
+  FetchData(tag, essence, context);
+  return txt;
+}
+
 Future<Map<String, dynamic>>? FetchData(
     Map<String, dynamic> tag, String essence,
     [BuildContext? context]) async {

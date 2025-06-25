@@ -301,7 +301,7 @@ void onStart(ServiceInstance service) async {
                   "Constraint": {"Unique_ID": unq}
                 };
 
-                await FetchData(tag, app, null);
+                await tagPost(tag, app, null);
               } else if (tkn == pp["Fb_UID"]) {
                 pref.setPrefString(appState, prvsnd);
               } else {}
@@ -309,7 +309,11 @@ void onStart(ServiceInstance service) async {
             break;
           case prvsnd:
             Map<String, dynamic> tag = {"Essence": "setup", "State": rd};
-            await FetchData(tag, app, null);
+            /*
+            {"Essence":"setup", "State":"read"}
+            */
+
+            await tagPost(tag, app, null);
 
             break;
         }
