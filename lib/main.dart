@@ -292,16 +292,22 @@ void onStart(ServiceInstance service) async {
               pref = SharedPref();
               String? tkn = await pref.getPrefString(tk_id);
               String unq = pp["Unique_ID"];
-              if (pp["Fb_UID"] == "") {
-                Map<String, dynamic> tag = {
-                  "Essence": "users",
-                  "State": "updatezz",
-                  "Manifest": {"Unique_ID": unq},
-                  "Entries": {"Fb_UID": tkn},
-                  "Constraint": {"Unique_ID": unq}
-                };
-
-                await tagPost(tag, app, null);
+              if (pp["Fb_UID"] == "" || tkn != pp["Fb_UID"]) {
+                pref = SharedPref();
+                bool stt = await pref.getPrefBool(indexed);
+                if (!stt) {
+                  Map<String, dynamic> tag = {
+                    "Essence": "users",
+                    "State": "updatezz",
+                    "Manifest": {"Unique_ID": unq},
+                    "Entries": {"Fb_UID": tkn},
+                    "Constraint": {"Unique_ID": unq}
+                  };
+                  await tagPost(tag, app, null);
+                } else {
+                  pref = SharedPref();
+                  pref.setPrefBool(login, false);
+                }
               } else if (tkn == pp["Fb_UID"]) {
                 pref.setPrefString(appState, prvsnd);
               } else {}

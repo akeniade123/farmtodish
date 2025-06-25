@@ -154,6 +154,7 @@ Future<void> prvsn() async {
     try {
       fbId = (await FirebaseMessaging.instance.getToken())!;
       pref.setPrefString(tk_id, fbId);
+      pref = SharedPref();
       pref.setPrefBool(token, true);
       logger("UserToken Indexed***$fbId");
     } catch (e) {}
