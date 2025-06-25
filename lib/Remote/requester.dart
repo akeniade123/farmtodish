@@ -138,7 +138,7 @@ Future<String> getReqString(String url, String request, BuildContext context,
 
 Future<Map<String, dynamic>?> postReq(
     String url,
-    Map<String, String> data,
+    Map<String, dynamic> data,
     String request,
     String essence,
     String designation,

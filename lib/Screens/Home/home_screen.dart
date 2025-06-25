@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../Remote/modelstack.dart';
+import '../../Remote/requestcore.dart';
 import '../../Repository/databaseHelper.dart';
 import '../../Remote/requestmodel.dart';
 import '../../Remote/server_response.dart';
@@ -995,16 +996,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
             //  rs256();
             try {
-              sendNotification(
-                  "eNomrX2CSI2-Ad6l8ct3UG:APA91bGjKnFOkcYFkNVdWwygdKBqFcoV_jWLeWC2xSuuwBepNktEo4HEVF7Auvcp6g-R5RWdy3vTtS0X1ih9SNjggB-TaGlQNDf-BeCfvqJWYB1SI1V87y8",
-                  context, {
-                "body": "Trade Fair Price Slashed",
-                "title": "FCM Message"
-              }, {
-                "id": "story_1234567890***",
-                "essence": "account",
-                "amount": "120.0k"
-              }, {});
+              logout(context);
+
+              // sendNotification(
+              //     "eNomrX2CSI2-Ad6l8ct3UG:APA91bGjKnFOkcYFkNVdWwygdKBqFcoV_jWLeWC2xSuuwBepNktEo4HEVF7Auvcp6g-R5RWdy3vTtS0X1ih9SNjggB-TaGlQNDf-BeCfvqJWYB1SI1V87y8",
+              //     context, {
+              //   "body": "Trade Fair Price Slashed",
+              //   "title": "FCM Message"
+              // }, {
+              //   "id": "story_1234567890***",
+              //   "essence": "account",
+              //   "amount": "120.0k"
+              // }, {});
 
               //  String acc = await getAccessToken();
               //   logger("Access Token: $acc");

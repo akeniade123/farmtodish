@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:farm_to_dish/Remote/requestcore.dart';
 import 'package:farm_to_dish/Repository/databaseHelper.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/global_handlers.dart';
@@ -39,6 +40,7 @@ void main() async {
 
   // await NotificationController.initializeLocalNotifications();
   // await NotificationController.initializeIsolateReceivePort();
+  //getContext();
 
   await initializeService();
 
@@ -277,39 +279,44 @@ void onStart(ServiceInstance service) async {
     SharedPref pref = SharedPref();
 
     String? app = await pref.getPrefString(appState);
-    if (app!.isNotEmpty) {
-      switch (app) {
-        case prelim:
-          String? prf = await pref.getPrefString(usrTbl);
-          if (prf!.isNotEmpty) {
-            Map<String, dynamic> pp = jsonDecode(prf);
-            String? tkn = await pref.getPrefString(tk_id);
-            String unq = pp["Unique_ID"];
-            if (pp["Fb_UID"] == "") {}
+    logger("Current app state: $app ***");
+    try {
+      if (app!.isNotEmpty) {
+        switch (app) {
+          case prelim:
+            String? prf = await pref.getPrefString(usrTbl);
+            logger("login dtlz: $prf");
+            if (prf!.isNotEmpty) {
+              logger("login dtl: $prf");
+              Map<String, dynamic> pp = jsonDecode(prf);
+              pref = SharedPref();
+              String? tkn = await pref.getPrefString(tk_id);
+              String unq = pp["Unique_ID"];
+              if (pp["Fb_UID"] == "") {
+                Map<String, dynamic> tag = {
+                  "Essence": "users",
+                  "State": "updatezz",
+                  "Manifest": {"Unique_ID": unq},
+                  "Entries": {"Fb_UID": tkn},
+                  "Constraint": {"Unique_ID": unq}
+                };
 
-            /*
-            "Name": "Oluwasheyi Blade12",
-            "Unique_ID": "1571691",
-            "Phone": "08132547993",
-            "Cipher": "22kfLGuIhkS7TIlYzRQcRxzzjkMzNzAxYjkwZWM3",
-            "Salt": "3701b90ec7",
-            "profile_pix": "",
-            "Gender": "Male",
-            "Device_ID": "87687874",
-            "Category": "1",
-            "Section": "1",
-            "Email": "adeyinkaakeni@gmail.com",
-            "Fb_UID": "kljnjknkjnkjnbjkkjhkhj",
-            "indexed": "",
-            "Phase": "1",
-            "Eligible": "0",
-            "created_at": "2025-06-08 11:31:55",
-            "Updated_at": "0000-00-00 00:00:00"
-            */
-          }
-          break;
+                await FetchData(tag, app, null);
+              } else if (tkn == pp["Fb_UID"]) {
+                pref.setPrefString(appState, prvsnd);
+              } else {}
+            }
+            break;
+          case prvsnd:
+            break;
+        }
+      } else {
+        logger("$appState empty");
+
+        prvsn();
       }
-    } else {
+    } catch (e) {
+      logger("$appState error: $e");
       prvsn();
     }
 

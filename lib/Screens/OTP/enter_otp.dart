@@ -16,6 +16,7 @@ import '../../Remote/service_protocols.dart';
 import '../../env.dart';
 import '../../global_string.dart';
 import '../../global_widgets.dart';
+import '../../sharedpref.dart';
 import '../Home/home_screen.dart';
 import '../Login/login_screen.dart';
 import '../Login/user.dart';
@@ -224,6 +225,13 @@ class _otpState extends State<otp> {
                                           DatabaseHelper(table: usrTbl);
                                       await dbh
                                           .insertData(User.toMap(widget.user));
+
+                                      SharedPref pref = SharedPref();
+                                      String? dtt =
+                                          await pref.getPrefString("usrTbl");
+                                      pref.setPrefString(usrTbl, dtt!);
+                                      pref.setPrefString(appState, "");
+                                      pref.setPrefBool(login, true);
 
                                       context.go("/HomeScreen");
 
