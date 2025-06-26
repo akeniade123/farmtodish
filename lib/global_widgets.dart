@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'Remote/elitebasis.dart';
 import 'Remote/modelstack.dart';
+import 'Remote/requestcore.dart';
 import 'Remote/server_response.dart';
 import 'Repository/databaseHelper.dart';
 import 'Screens/Home/home_screen.dart';
@@ -116,42 +117,46 @@ void customSnackBar(BuildContext context, String message) {
 
 Future<String>? getData(BuildContext context, String essence) async {
   pref = SharedPref();
-  switch (essence) {
-    case home:
-    case usr:
-      Map<String, dynamic> pp = {};
-      try {
-        String? prf = await pref.getPrefString(usrTbl);
+  bool? lgn = await pref.getPrefBool(login);
+  if (lgn) {
+    pref = SharedPref();
 
-        logger("Usernm: $prf");
+    switch (essence) {
+      case home:
+      case usr:
+        Map<String, dynamic> pp = {};
+        try {
+          String? prf = await pref.getPrefString(usrTbl);
 
-        pp = jsonDecode(prf!);
+          logger("Usernm: $prf");
 
-        usrdtlz = userDtlz(nmm: pp[nmm]);
-        dshCtx.read<UINotifier>().userName(usrdtlz);
-        // usrNm = "Done";
-        // pp[nmm];
-        return "Done"; // pp[nmm];
-      } catch (e) {
-        logger("Usernm error $e");
-        return "";
-      }
-      // bal = pp[nmm];
+          pp = jsonDecode(prf!);
 
-      break;
+          usrdtlz = userDtlz(nmm: pp[nmm]);
+          dshCtx.read<UINotifier>().userName(usrdtlz);
+          // usrNm = "Done";
+          // pp[nmm];
+          return "Done"; // pp[nmm];
+        } catch (e) {
+          logger("Usernm error $e");
+          return "";
+        }
+        // bal = pp[nmm];
 
-    case acct:
-      try {
-        /*
+        break;
+
+      case acct:
+        try {
+          /*
     Map<String, dynamic> cls = {usrId: "909891"};
     List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
     */
 
-        String? act_ = await pref.getPrefString(acct);
-        if (act_!.isNotEmpty) {
-          bal = act_;
-        } else {
-          /*
+          String? act_ = await pref.getPrefString(acct);
+          if (act_!.isNotEmpty) {
+            bal = act_;
+          } else {
+            /*
       Map<String, dynamic>? obj =
           await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
 
@@ -172,17 +177,20 @@ Future<String>? getData(BuildContext context, String essence) async {
       }
 
       */
+          }
+
+          // bal = "***";
+
+          bll = balance(bal: bal);
+          //bll = blh;
+          dshCtx.read<UINotifier>().accountBalance(bll);
+        } catch (e) {
+          logger("Cast Error*** $e");
         }
-
-        // bal = "***";
-
-        bll = balance(bal: bal);
-        //bll = blh;
-        dshCtx.read<UINotifier>().accountBalance(bll);
-      } catch (e) {
-        logger("Cast Error*** $e");
-      }
-      break;
+        break;
+    }
+  } else {
+    logout(context);
   }
 
   return bal;

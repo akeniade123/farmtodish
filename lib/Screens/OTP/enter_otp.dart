@@ -230,8 +230,13 @@ class _otpState extends State<otp> {
                                       String? dtt =
                                           await pref.getPrefString("usrTbl");
                                       pref.setPrefString(usrTbl, dtt!);
-                                      pref.setPrefString(appState, "");
+
                                       pref.setPrefBool(login, true);
+                                      pref = SharedPref();
+                                      pref.setPrefString(appState, "");
+
+                                      pref = SharedPref();
+                                      pref.setPrefBool(indexed, false);
 
                                       context.go("/HomeScreen");
 

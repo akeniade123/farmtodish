@@ -54,7 +54,7 @@ const String usrTbl = "user";
 
 const String reg = "Register";
 const String login = "Login";
-const String loggedin = "Logged in";
+const String indexed = "Indexed";
 const String pswOTP = "PasswordOTP";
 
 const String onboard = "Onboard";
