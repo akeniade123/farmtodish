@@ -146,6 +146,8 @@ late balance bll;
 late userDtlz usrdtlz;
 late broadcast brdcst;
 
+late Map<String, dynamic> userlog;
+
 Future<String>? account, usrNm;
 
 Future<void> prvsn() async {

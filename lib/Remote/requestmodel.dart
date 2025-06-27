@@ -116,13 +116,21 @@ class Navigate {
   }
 
   Map<String, String> formRequisite() {
+    String rgg = "default";
+    String unq_ = rgg;
+    String nmm_ = rgg;
+    try {
+      rgg = userlog[rg];
+      unq_ = userlog[unq];
+      nmm_ = userlog[nmm];
+    } catch (e) {}
+
     Map<String, String> hsh = {
       "Essence": "access",
       "Designation": "content",
-      "regId":
-          "dySI7okZRX-4qGPfcyL72P:APA91bEr9xWX3dHLG78mdRckQ6soKdkeMhM9j1RWweb7ft_81wsiUiAp87OVPiiG0_QCCHkBaruykOPU9kqWXLcBdzuNlumkggBb3snA2sJP-6EHa6h-g7ikkydnoXBY4jzvKbUow6_z",
-      "Full_Name": "Akeni Adeyinka",
-      "Unique_ID": "334656#/topics/Ojo#New Class arm created#Talconer#Notify",
+      "regId": rgg,
+      "Full_Name": nmm_,
+      "Unique_ID": unq_,
       "Password": "random",
     };
     return hsh;
@@ -136,7 +144,7 @@ class Navigate {
       String designation,
       bool show,
       String phase,
-      BuildContext? context) async {
+      [BuildContext? context]) async {
     Map<String, dynamic>? obj;
 
     Map<String, dynamic> tag = {};

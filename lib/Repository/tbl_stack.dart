@@ -25,6 +25,8 @@ List<String> usrCln = [
 List<String> wltCln = [id, usrId, amt, lstTrnz];
 List<String> cptCln = [cpt];
 
+// List<String> mnfCln = [id,];
+
 /*
 
             // "essence": "order",

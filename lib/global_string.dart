@@ -8,6 +8,7 @@ const String dev = "development";
 const String prod = "Production";
 const String appState = "AppState";
 const String prelim = "prelim";
+const String intrmd = "intermediate";
 const String prvsnd = "provisioned";
 const String linked = "linked";
 const String dialog = "dialogued";
@@ -54,8 +55,11 @@ const String usrTbl = "user";
 
 const String reg = "Register";
 const String login = "Login";
+const String loggedout = "Logged Out";
 const String indexed = "Indexed";
 const String pswOTP = "PasswordOTP";
+
+const String rg = "regId";
 
 const String onboard = "Onboard";
 const String home = "/HomeScreen";

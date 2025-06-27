@@ -221,22 +221,24 @@ class _otpState extends State<otp> {
                                 if (verification == widget.value) {
                                   switch (widget.essence) {
                                     case login:
-                                      DatabaseHelper dbh =
-                                          DatabaseHelper(table: usrTbl);
-                                      await dbh
-                                          .insertData(User.toMap(widget.user));
+
+                                      // DatabaseHelper dbh =
+                                      //     DatabaseHelper(table: usrTbl);
+                                      // await dbh
+                                      //     .insertData(User.toMap(widget.user));
 
                                       SharedPref pref = SharedPref();
                                       String? dtt =
                                           await pref.getPrefString("usrTbl");
                                       pref.setPrefString(usrTbl, dtt!);
 
-                                      pref.setPrefBool(login, true);
+                                      await pref.setPrefBool(login, true);
                                       pref = SharedPref();
-                                      pref.setPrefString(appState, "");
+                                      await pref.setPrefString(
+                                          appState, prelim);
 
                                       pref = SharedPref();
-                                      pref.setPrefBool(indexed, false);
+                                      await pref.setPrefBool(indexed, false);
 
                                       context.go("/HomeScreen");
 
