@@ -221,16 +221,25 @@ class _otpState extends State<otp> {
                                 if (verification == widget.value) {
                                   switch (widget.essence) {
                                     case login:
-
-                                      // DatabaseHelper dbh =
-                                      //     DatabaseHelper(table: usrTbl);
-                                      // await dbh
-                                      //     .insertData(User.toMap(widget.user));
+                                      DatabaseHelper dbh =
+                                          DatabaseHelper(table: usrTbl);
+                                      await dbh
+                                          .insertData(User.toMap(widget.user));
 
                                       SharedPref pref = SharedPref();
                                       String? dtt =
                                           await pref.getPrefString("usrTbl");
                                       pref.setPrefString(usrTbl, dtt!);
+
+                                      Map<String, dynamic> dbb = {
+                                        usrTbl: jsonDecode(dtt),
+                                        login: true,
+                                        appState: prelim,
+                                        indexed: false
+                                      };
+
+                                      dbh = DatabaseHelper(table: mnf);
+                                      await dbh.insertData({cpt: dbb});
 
                                       await pref.setPrefBool(login, true);
                                       pref = SharedPref();

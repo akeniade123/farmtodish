@@ -283,77 +283,97 @@ void onStart(ServiceInstance service) async {
 
     String? app = await pref.getPrefString(appState);
     logger("Current app state: $app ***");
-    try {
-      if (app!.isNotEmpty) {
-        String? prf = await pref.getPrefString(usrTbl);
-        logger("Profile: ${prf}");
-        if (prf!.isNotEmpty) {
-          Map<String, dynamic> pp = jsonDecode(prf);
-          pref = SharedPref();
-          String? tkn = await pref.getPrefString(tk_id);
 
-          String unq_ = pp["Unique_ID"];
+    DatabaseHelper dbm = DatabaseHelper(table: mnf);
 
-          try {
-            userlog[rg] = tkn;
-            userlog[nmm] = pp[nmm];
-            userlog[unq] = unq_;
-          } catch (e) {
-            userlog = {};
-          }
+    int i = await dbm.queryRowCount();
 
-          logger("Current: ${jsonEncode(userlog)}");
-          if (pp["Fb_UID"] == "" || tkn != pp["Fb_UID"]) {
+    if (i > 0) {
+      List<Map<String, dynamic>> dd = await dbm.queryAllRows();
+      logger("The Data: ${jsonEncode(dd)}");
+      Map<String, dynamic> ust = dd[0];
+      Map<String, dynamic> cppt = jsonDecode(ust[cpt]);
+      app = cppt[appState];
+
+      //logger
+      try {
+        if (app!.isNotEmpty) {
+          String? prf = cppt[usrTbl];
+          // await pref.getPrefString(usrTbl);
+          logger("Profile: ${prf}");
+          if (prf!.isNotEmpty) {
+            Map<String, dynamic> pp = jsonDecode(prf);
             pref = SharedPref();
-            switch (app) {
-              case prelim:
-                bool stt = await pref.getPrefBool(indexed);
-                if (!stt) {
-                  svrRqst("users", app);
-                  //  logger("Response: ${jsonEncode(obj)}");
+            String? tkn = await pref.getPrefString(tk_id);
 
-                  // await tagPost(tag, app, null);
-                } else {
+            String unq_ = pp["Unique_ID"];
+
+            try {
+              userlog[rg] = tkn;
+              userlog[nmm] = pp[nmm];
+              userlog[unq] = unq_;
+            } catch (e) {
+              userlog = {};
+            }
+
+            logger("Current: ${jsonEncode(userlog)}");
+            if (pp["Fb_UID"] == "" || tkn != pp["Fb_UID"]) {
+              pref = SharedPref();
+              switch (app) {
+                case prelim:
+                  bool stt = await pref.getPrefBool(indexed);
+                  if (stt == false) {
+                    svrRqst("users", app);
+                    //  logger("Response: ${jsonEncode(obj)}");
+
+                    // await tagPost(tag, app, null);
+                  } else {
+                    pref = SharedPref();
+                    pref.setPrefBool(login, false);
+                  }
+                  break;
+                case intrmd:
+                  svrRqst("users", app);
+                  break;
+                case prvsnd:
                   pref = SharedPref();
                   pref.setPrefBool(login, false);
-                }
-                break;
-              case intrmd:
-                svrRqst("users", app);
-                break;
-              case prvsnd:
-                pref = SharedPref();
-                pref.setPrefBool(login, false);
-                pref = SharedPref();
-                pref.setPrefString(usrTbl, "");
-                pref.setPrefString(appState, prelim);
-                break;
-            }
-          } else if (tkn == pp["Fb_UID"]) {
-            switch (app) {
-              case intrmd:
-                svrRqst("users", app);
-                break;
-              case prelim:
-                pref = SharedPref();
-                //  pref.setPrefString(appState, prvsnd);
-                break;
-              case prvsnd:
-                Map<String, dynamic> tag = {"Essence": "setup", "State": rd};
-                //  await tagPost(tag, app, null);
-                break;
-            }
-          } else {}
-        }
-      } else {
-        logger("$appState empty");
+                  pref = SharedPref();
+                  pref.setPrefString(usrTbl, "");
+                  pref.setPrefString(appState, prelim);
+                  break;
+              }
+            } else if (tkn == pp["Fb_UID"]) {
+              switch (app) {
+                case intrmd:
+                  svrRqst("users", app);
+                  break;
+                case prelim:
+                  pref = SharedPref();
+                  //  pref.setPrefString(appState, prvsnd);
+                  break;
+                case prvsnd:
+                  Map<String, dynamic> tag = {"Essence": "setup", "State": rd};
+                  //  await tagPost(tag, app, null);
+                  break;
+              }
+            } else {}
+          }
+        } else {
+          logger("$appState empty");
 
+          prvsn();
+        }
+      } catch (e) {
+        logger("$appState error: $e");
         prvsn();
       }
-    } catch (e) {
-      logger("$appState error: $e");
-      prvsn();
+    } else {
+      logger("No Data yet");
     }
+
+    String? prf = await pref.getPrefString(usrTbl);
+    logger("Profilezzz: ${prf}");
 
     //Revisit these
 

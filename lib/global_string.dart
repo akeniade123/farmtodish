@@ -83,6 +83,7 @@ const String ind = "indexed";
 const String sbj = "subject";
 
 const String cpt = "caption";
+const String mnf = "manifest";
 const String cta = "cta";
 
 const String rqstAlbum = "album";

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:farm_to_dish/Repository/databaseHelper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,6 +17,10 @@ import 'server_response.dart';
 import 'service_protocols.dart';
 
 Future<void> logout(BuildContext context) async {
+  DatabaseHelper dbm = DatabaseHelper(table: mnf);
+  Map<String, dynamic> mmm = {id: 1};
+  await dbm.delete(mmm);
+
   SharedPref pref = SharedPref();
   await pref.setPrefBool(login, false);
   pref = SharedPref();

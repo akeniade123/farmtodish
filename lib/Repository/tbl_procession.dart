@@ -5,6 +5,8 @@ import 'tbl_stack.dart';
 
 Map<String, String> explicit() {
   Map<String, String> exp = {};
+  exp.addEntries({mnf: mnfCln}.entries);
+//
   return exp;
 }
 

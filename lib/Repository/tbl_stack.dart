@@ -23,7 +23,9 @@ List<String> usrCln = [
 ];
 
 List<String> wltCln = [id, usrId, amt, lstTrnz];
-List<String> cptCln = [cpt];
+List<String> cptCln = [id, cpt];
+
+String mnfCln = "$id_ INTEGER PRIMARY KEY, $cpt TEXT";
 
 // List<String> mnfCln = [id,];
 
