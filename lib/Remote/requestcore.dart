@@ -1,46 +1,99 @@
 import 'dart:convert';
 
+import 'package:farm_to_dish/Repository/databaseHelper.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../Screens/Login/login_screen.dart';
 import '../global_handlers.dart';
+import '../global_objects.dart';
 import '../global_string.dart';
 import '../global_widgets.dart';
 import '../sharedpref.dart';
 import 'endpoints.dart';
 import 'requester.dart';
+import 'requestmodel.dart';
 import 'server_response.dart';
 import 'service_protocols.dart';
 
 Future<void> logout(BuildContext context) async {
+  DatabaseHelper dbm = DatabaseHelper(table: mnf);
+  Map<String, dynamic> mmm = {id: 1};
+  await dbm.delete(mmm);
+
   SharedPref pref = SharedPref();
-  pref.setPrefBool(login, false);
+  await pref.setPrefBool(login, false);
   pref = SharedPref();
-  pref.setPrefString(usrTbl, "");
+  await pref.setPrefString(usrTbl, "");
+  pref = SharedPref();
+  await pref.setPrefString(appState, loggedout);
   context.go("/");
 }
 
-Future<Map<String, dynamic>>? tagPost(Map<String, dynamic> tag, String essence,
+Future<Map<String, dynamic>>? svrRqst(String table, String essence,
     [BuildContext? context]) async {
-  /*
-      Essence:access
-Designation:content
-regId:dySI7okZRX-4qGPfcyL72P:APA91bEr9xWX3dHLG78mdRckQ6soKdkeMhM9j1RWweb7ft_81wsiUiAp87OVPiiG0_QCCHkBaruykOPU9kqWXLcBdzuNlumkggBb3snA2sJP-6EHa6h-g7ikkydnoXBY4jzvKbUow6_z
-Full_Name:Akeni Adeyinka
-Unique_ID:334656#/topics/Ojo#New Class arm created#Talconer#Notify
-Password:random
-      */
-  Map<String, dynamic> txt = {};
-  SharedPref pref = SharedPref();
-  String? tkn = await pref.getPrefString(tk_id);
-  Map<String, dynamic> dtt = {
-    "Essence": "access",
-    "Designation": "content",
-    "regId": tkn,
-    "Tag": tag
-  };
-  FetchData(tag, essence, context);
+  Map<String, dynamic>? txt = {};
+  Navigate nvg = Navigate();
+  pref = SharedPref();
+  Map<String, dynamic>? obj = {};
+
+  switch (essence) {
+    case prelim:
+      Map<String, dynamic> mnf = {unq: userlog[unq]};
+      Map<String, dynamic> ent = {"Fb_UID": userlog[rg]};
+
+      obj = await nvg.entry(table, mnf, ent, mnf, global, "access", "content",
+          false, upd_, context);
+      logger("Response: $obj");
+      await pref.setPrefString(appState, prvsnd);
+      pref = SharedPref();
+      await pref.setPrefBool(indexed, true);
+
+      break;
+    case intrmd:
+      Map<String, dynamic> mnf = {unq: userlog[unq]};
+      obj = await nvg.readData(
+          table, mnf, global, "access", "content", false, rd);
+      logger("Response: $obj");
+
+      break;
+
+    case prvsnd:
+      break;
+  }
+
+  ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+  if (svp.status) {
+    // ServerResponse svr = ServerResponse.fromJson(jsonDecode(obj));
+    // Navigator.pop();
+    try {
+      switch (essence) {
+        case prelim:
+          String? mssg = svp.msg as String?;
+
+          if (mssg!.contains("refresh")) {
+            await pref.setPrefString(appState, intrmd);
+            pref = SharedPref();
+            await pref.setPrefBool(indexed, true);
+            break;
+          }
+        case intrmd:
+          ServerResponse svr = ServerResponse.fromJson(obj);
+
+          break;
+
+        case prvsnd:
+          //  logger("Hello: $data_");
+
+          break;
+      }
+    } catch (e) {
+      logger("Login procession error: $e");
+    }
+  }
+
+  //logger(jsonEncode(dtt));
+  // FetchData(tag, essence, context);
   return txt;
 }
 
@@ -99,7 +152,9 @@ Future<Map<String, dynamic>>? FetchData(
             LoginUser(context!, obj, svr, essence);
             break;
           case prelim:
-            pref.setPrefString(appState, prvsnd);
+            await pref.setPrefString(appState, prvsnd);
+            pref = SharedPref();
+            await pref.setPrefBool(indexed, true);
             break;
           case prvsnd:
             logger("Hello: $data_");
@@ -110,7 +165,14 @@ Future<Map<String, dynamic>>? FetchData(
         logger("Login procession error: $e");
       }
     } else {
-      customSnackBar(context!, "***${obj.toString()}***");
+      switch (essence) {
+        case prvsnd:
+        case prelim:
+          break;
+        default:
+          customSnackBar(context!, "***${obj.toString()}***");
+          break;
+      }
     }
   }
 

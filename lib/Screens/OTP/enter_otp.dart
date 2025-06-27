@@ -230,8 +230,24 @@ class _otpState extends State<otp> {
                                       String? dtt =
                                           await pref.getPrefString("usrTbl");
                                       pref.setPrefString(usrTbl, dtt!);
-                                      pref.setPrefString(appState, "");
-                                      pref.setPrefBool(login, true);
+
+                                      Map<String, dynamic> dbb = {
+                                        usrTbl: jsonDecode(dtt),
+                                        login: true,
+                                        appState: prelim,
+                                        indexed: false
+                                      };
+
+                                      dbh = DatabaseHelper(table: mnf);
+                                      await dbh.insertData({cpt: dbb});
+
+                                      await pref.setPrefBool(login, true);
+                                      pref = SharedPref();
+                                      await pref.setPrefString(
+                                          appState, prelim);
+
+                                      pref = SharedPref();
+                                      await pref.setPrefBool(indexed, false);
 
                                       context.go("/HomeScreen");
 

@@ -5,6 +5,8 @@ import 'tbl_stack.dart';
 
 Map<String, String> explicit() {
   Map<String, String> exp = {};
+  exp.addEntries({mnf: mnfCln}.entries);
+//
   return exp;
 }
 
@@ -29,5 +31,6 @@ Map<String, List<String>> procession() {
   prc.addEntries({vendor: vndCln}.entries);
   prc.addEntries({sch: schCln}.entries);
   prc.addEntries({usrWlt: wltCln}.entries);
+  prc.addEntries({cpt: cptCln}.entries);
   return prc;
 }
