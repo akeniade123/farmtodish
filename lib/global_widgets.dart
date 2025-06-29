@@ -126,17 +126,29 @@ Future<String>? getData(BuildContext context, String essence) async {
       case usr:
         Map<String, dynamic> pp = {};
         try {
-          String? prf = await pref.getPrefString(usrTbl);
+          // String? prf = await pref.getPrefString(usrTbl);
 
-          logger("Usernm: $prf");
+          // logger("Usernm: $prf");
 
-          pp = jsonDecode(prf!);
+          // pp = jsonDecode(prf!);
+          DatabaseHelper dbm = DatabaseHelper(table: mnf);
 
-          usrdtlz = userDtlz(nmm: pp[nmm]);
-          dshCtx.read<UINotifier>().userName(usrdtlz);
+          int i = await dbm.queryRowCount();
+          if (i > 0) {
+            List<Map<String, dynamic>> dd = await dbm.queryAllRows();
+            Map<String, dynamic> ust = dd[0];
+            Map<String, dynamic> cppt = jsonDecode(ust[cpt]);
+            Map<String, dynamic> pp = cppt[usrTbl];
+            usrdtlz = userDtlz(nmm: pp[nmm]);
+            dshCtx.read<UINotifier>().userName(usrdtlz);
+            return "Done";
+          } else {
+            return "";
+          }
+
           // usrNm = "Done";
           // pp[nmm];
-          return "Done"; // pp[nmm];
+          // pp[nmm];
         } catch (e) {
           logger("Usernm error $e");
           return "";

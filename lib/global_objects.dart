@@ -33,6 +33,8 @@ late Map<String, dynamic> otp_;
 
 late BuildContext basedlg;
 
+late Map<String, dynamic> cppt;
+
 late Widget init;
 
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
@@ -147,6 +149,7 @@ late userDtlz usrdtlz;
 late broadcast brdcst;
 
 late Map<String, dynamic> userlog;
+late Map<String, dynamic> usrTmp;
 
 Future<String>? account, usrNm;
 

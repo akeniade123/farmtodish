@@ -18,15 +18,16 @@ import 'service_protocols.dart';
 
 Future<void> logout(BuildContext context) async {
   DatabaseHelper dbm = DatabaseHelper(table: mnf);
-  Map<String, dynamic> mmm = {id: 1};
-  await dbm.delete(mmm);
+  List<Map<String, dynamic>> ddf = await dbm.queryAllRows();
+
+  for (Map<String, dynamic> dd in ddf) {
+    dbm.delete(dd);
+  }
+  userlog = {};
 
   SharedPref pref = SharedPref();
   await pref.setPrefBool(login, false);
-  pref = SharedPref();
-  await pref.setPrefString(usrTbl, "");
-  pref = SharedPref();
-  await pref.setPrefString(appState, loggedout);
+
   context.go("/");
 }
 
@@ -44,10 +45,10 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
 
       obj = await nvg.entry(table, mnf, ent, mnf, global, "access", "content",
           false, upd_, context);
-      logger("Response: $obj");
-      await pref.setPrefString(appState, prvsnd);
-      pref = SharedPref();
-      await pref.setPrefBool(indexed, true);
+      // logger("Response: $obj");
+      // await pref.setPrefString(appState, prvsnd);
+      // pref = SharedPref();
+      // await pref.setPrefBool(indexed, true);
 
       break;
     case intrmd:
@@ -70,13 +71,26 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
       switch (essence) {
         case prelim:
           String? mssg = svp.msg as String?;
-
-          if (mssg!.contains("refresh")) {
-            await pref.setPrefString(appState, intrmd);
-            pref = SharedPref();
-            await pref.setPrefBool(indexed, true);
-            break;
+          logger("The Response: $mssg");
+          Map<String, dynamic> appSet = cppt;
+          appSet[appState] = prvsnd;
+          appSet[indexed] = true;
+          logger("Refactored: $appSet");
+          if (mssg!.contains("successfully implemented")) {
+            appSet[appState] = prvsnd;
+          } else {
+            appSet[appState] = intrmd;
           }
+
+          DatabaseHelper dbm = DatabaseHelper(table: mnf);
+          List<Map<String, dynamic>> ddf = await dbm.queryAllRows();
+
+          for (Map<String, dynamic> dd in ddf) {
+            dbm.delete(dd);
+          }
+
+          await dbm.insertData({cpt: jsonEncode(appSet)});
+
         case intrmd:
           ServerResponse svr = ServerResponse.fromJson(obj);
 
