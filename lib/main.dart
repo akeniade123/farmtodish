@@ -374,6 +374,9 @@ void onStart(ServiceInstance service) async {
                   break;
                 case prvsnd:
                   Map<String, dynamic> tag = {"Essence": "setup", "State": rd};
+
+                  //   svrRqst("setup", app);
+
                   logger("App now provisioned, ready to make a dialog call");
 
                   //  await tagPost(tag, app, null);

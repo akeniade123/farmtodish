@@ -60,6 +60,10 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
       break;
 
     case prvsnd:
+      Map<String, dynamic> mnf = {unq: userlog[unq]};
+      obj = await nvg.readData(
+          table, mnf, global, "access", "content", false, rd);
+      logger("Response: $obj");
       break;
   }
 

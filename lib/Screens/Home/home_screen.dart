@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
     usrdtlz = userDtlz(nmm: "---");
     usrNm = getData(context, home); // _userDtls();
 
-    bll = balance(bal: "###");
+    bll = balance(bal: "");
     account = getData(context, acct); //  _futureAccount();
 
     product = futurefetch();
