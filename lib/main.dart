@@ -356,7 +356,7 @@ void onStart(ServiceInstance service) async {
                   break;
 
                 case setup_:
-                  svrRqst("user_wallet", app);
+                  svrRqst(usrWlt, app);
 
                   logger("App fcm done, ready to make a dialog call");
                   break;
@@ -394,7 +394,7 @@ void onStart(ServiceInstance service) async {
                   //  await tagPost(tag, app, null);
                   break;
                 case setup_:
-                  svrRqst("setup", app);
+                  svrRqst(usrWlt, app);
 
                   logger("App fcm done, ready to make a dialog call");
                   break;

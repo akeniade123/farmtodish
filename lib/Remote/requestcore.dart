@@ -73,7 +73,7 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
 
       obj = await nvg.readData(
           table, mnf, global, "access", "content", false, rd_e);
-      logger("Response: $obj");
+      logger("Responsez: $obj");
 
       break;
   }
@@ -84,6 +84,9 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
     // Navigator.pop();
     try {
       switch (essence) {
+        case setup_:
+          logger("Setup Procession");
+          break;
         case prelim:
           String? mssg = svp.msg as String?;
           logger("The Response: $mssg");
@@ -93,6 +96,14 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
           logger("Refactored: $appSet");
           if (mssg!.contains("successfully implemented")) {
             appSet[appState] = prvsnd;
+            String fb_id = cppt[usr][fb_uid];
+            appSet[refactor] = fb_id;
+
+            pref = SharedPref();
+            String? tkn = await pref.getPrefString(tk_id);
+
+            appSet[usr][fb_uid] = tkn;
+            logger("The Account: $fb_id");
           } else {
             appSet[appState] = intrmd;
           }

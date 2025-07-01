@@ -13,6 +13,7 @@ const String prvsnd = "provisioned";
 const String setup_ = "setup";
 const String linked = "linked";
 const String dialog = "dialogued";
+const String refactor = "refactor";
 const String auth = "authorized";
 
 String fbId = community;
