@@ -21,12 +21,14 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'Remote/modelstack.dart';
 import 'Remote/requestmodel.dart';
 import 'env.dart';
 import 'firebaseHandler.dart';
 import 'firebase_options.dart';
 import 'global_objects.dart';
 import 'global_string.dart';
+import 'global_widgets.dart';
 import 'routing_detail.dart';
 import 'sharedpref.dart';
 
@@ -311,6 +313,16 @@ void onStart(ServiceInstance service) async {
               userlog[rg] = tkn;
               userlog[nmm] = pp[nmm];
               userlog[unq] = unq_;
+              try {
+                if (app == linked) {
+                  userlog[acct] = cppt[acct];
+                  bll = balance(bal: userlog[acct]);
+                  dshCtx.read<UINotifier>().accountBalance(bll);
+                  // account = "200";
+                  account = getData(acct, null);
+                }
+              } catch (e) {}
+
               logger("User Details: $userlog");
             } catch (e) {
               userlog = {};
@@ -360,6 +372,9 @@ void onStart(ServiceInstance service) async {
 
                   logger("App fcm done, ready to make a dialog call");
                   break;
+                case linked:
+                  logger("All is not set");
+                  break;
               }
             } else if (tkn == pp["Fb_UID"] && pp["Fb_UID"] != "") {
               switch (app) {
@@ -395,8 +410,10 @@ void onStart(ServiceInstance service) async {
                   break;
                 case setup_:
                   svrRqst(usrWlt, app);
-
                   logger("App fcm done, ready to make a dialog call");
+                  break;
+                case linked:
+                  logger("All is set");
                   break;
               }
             } else {}

@@ -41,7 +41,10 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
   switch (essence) {
     case prelim:
       Map<String, dynamic> mnf = {unq: userlog[unq]};
-      Map<String, dynamic> ent = {"Fb_UID": userlog[rg]};
+      Map<String, dynamic> ent = {
+        "Fb_UID": userlog[rg],
+        upd: DateTime.now().toString()
+      };
 
       obj = await nvg.entry(table, mnf, ent, mnf, global, "access", "content",
           false, upd_, context);
@@ -80,12 +83,29 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
 
   ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
   if (svp.status) {
-    // ServerResponse svr = ServerResponse.fromJson(jsonDecode(obj));
+    ServerResponse svr = ServerResponse.fromJson(obj);
     // Navigator.pop();
     try {
       switch (essence) {
         case setup_:
           logger("Setup Procession");
+          Map<String, dynamic> appSet = cppt;
+          appSet[appState] = linked;
+          appSet[indexed] = true;
+          appSet[acct] = svr.data[0][amt];
+
+          DatabaseHelper dbm = DatabaseHelper(table: mnf);
+
+          List<Map<String, dynamic>> ddf = await dbm.queryAllRows();
+
+          for (Map<String, dynamic> dd in ddf) {
+            dbm.delete(dd);
+          }
+
+          await dbm.insertData({cpt: jsonEncode(appSet)});
+
+          logger("Refactored: $appSet");
+
           break;
         case prelim:
           String? mssg = svp.msg as String?;
@@ -97,12 +117,14 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
           if (mssg!.contains("successfully implemented")) {
             appSet[appState] = prvsnd;
             String fb_id = cppt[usr][fb_uid];
+
             appSet[refactor] = fb_id;
 
             pref = SharedPref();
             String? tkn = await pref.getPrefString(tk_id);
 
             appSet[usr][fb_uid] = tkn;
+            appSet[usr][upd] = DateTime.now().toString();
             logger("The Account: $fb_id");
           } else {
             appSet[appState] = intrmd;
@@ -149,6 +171,21 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
       }
     } catch (e) {
       logger("Server procession error: $e");
+    }
+  } else {
+    switch (essence) {
+      case setup_:
+        logger("Setup New Entry Procession");
+        Map<String, dynamic> mnf = {"user_id": userlog[unq]};
+        Map<String, dynamic> ent = {
+          "amount": "0",
+          "last_transaction": DateTime.now().toString()
+        };
+
+        obj = await nvg.entry(table, mnf, ent, mnf, global, "access", "content",
+            false, crtt, context);
+
+        break;
     }
   }
 

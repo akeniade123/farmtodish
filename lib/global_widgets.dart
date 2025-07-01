@@ -115,7 +115,7 @@ void customSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(displaySnackBar(message));
 }
 
-Future<String>? getData(BuildContext context, String essence) async {
+Future<String>? getData(String essence, [BuildContext? context]) async {
   pref = SharedPref();
   bool? lgn = await pref.getPrefBool(login);
   if (lgn) {
@@ -164,7 +164,7 @@ Future<String>? getData(BuildContext context, String essence) async {
     List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
     */
 
-          String? act_ = await pref.getPrefString(acct);
+          String act_ = userlog[acct]; // await pref.getPrefString(acct);
           if (act_!.isNotEmpty) {
             bal = act_;
           } else {
@@ -202,7 +202,7 @@ Future<String>? getData(BuildContext context, String essence) async {
         break;
     }
   } else {
-    logout(context);
+    logout(context!);
   }
 
   return bal;
