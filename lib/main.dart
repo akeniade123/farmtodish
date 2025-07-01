@@ -342,11 +342,23 @@ void onStart(ServiceInstance service) async {
                   svrRqst("users", app);
                   break;
                 case prvsnd:
-                  pref = SharedPref();
-                  pref.setPrefBool(login, false);
-                  pref = SharedPref();
-                  pref.setPrefString(usrTbl, "");
-                  pref.setPrefString(appState, prelim);
+                  // pref = SharedPref();
+                  // pref.setPrefBool(login, false);
+                  // pref = SharedPref();
+                  // pref.setPrefString(usrTbl, "");
+                  // pref.setPrefString(appState, prelim);
+
+                  Map<String, dynamic> tag = {"Essence": "setup", "State": rd};
+                  svrRqst("setup", app);
+
+                  logger("App now provisioned, ready to make a dialog call");
+
+                  break;
+
+                case setup_:
+                  svrRqst("user_wallet", app);
+
+                  logger("App fcm done, ready to make a dialog call");
                   break;
               }
             } else if (tkn == pp["Fb_UID"] && pp["Fb_UID"] != "") {
@@ -369,17 +381,22 @@ void onStart(ServiceInstance service) async {
                   }
 
                   await dbm.insertData({cpt: jsonEncode(appSet)});
+                  cppt = appSet;
 
                   //  pref.setPrefString(appState, prvsnd);
                   break;
                 case prvsnd:
                   Map<String, dynamic> tag = {"Essence": "setup", "State": rd};
-
-                  //   svrRqst("setup", app);
+                  svrRqst("setup", app);
 
                   logger("App now provisioned, ready to make a dialog call");
 
                   //  await tagPost(tag, app, null);
+                  break;
+                case setup_:
+                  svrRqst("setup", app);
+
+                  logger("App fcm done, ready to make a dialog call");
                   break;
               }
             } else {}

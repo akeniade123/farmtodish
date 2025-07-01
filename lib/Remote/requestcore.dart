@@ -60,10 +60,21 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
       break;
 
     case prvsnd:
-      Map<String, dynamic> mnf = {unq: userlog[unq]};
+      Map<String, dynamic> mnf = {id: 1};
       obj = await nvg.readData(
-          table, mnf, global, "access", "content", false, rd);
+          table, mnf, global, "access", "content", false, rd_e);
       logger("Response: $obj");
+      break;
+    case setup_:
+      Map<String, dynamic> appSet = cppt;
+      String usr_id = cppt[usr][unq];
+      logger("The Account: $usr_id");
+      Map<String, dynamic> mnf = {"user_id": usr_id};
+
+      obj = await nvg.readData(
+          table, mnf, global, "access", "content", false, rd_e);
+      logger("Response: $obj");
+
       break;
   }
 
@@ -102,11 +113,31 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
 
         case prvsnd:
           //  logger("Hello: $data_");
+          Map<String, dynamic> appSet = cppt;
+          appSet[appState] = setup_;
+          appSet[indexed] = true;
+          ServerResponse svr = ServerResponse.fromJson(obj);
+          logger("Fbzz: ${svr.data}");
+
+          dynamic fcmSVToken = svr.data[0]["name"];
+          appSet[setup_] = fcmSVToken;
+
+          // appSet[fb_uid] =
+          logger("fcmSVToken Setup: $fcmSVToken");
+
+          DatabaseHelper dbm = DatabaseHelper(table: mnf);
+          List<Map<String, dynamic>> ddf = await dbm.queryAllRows();
+
+          for (Map<String, dynamic> dd in ddf) {
+            dbm.delete(dd);
+          }
+
+          await dbm.insertData({cpt: jsonEncode(appSet)});
 
           break;
       }
     } catch (e) {
-      logger("Login procession error: $e");
+      logger("Server procession error: $e");
     }
   }
 
