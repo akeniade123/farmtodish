@@ -159,16 +159,33 @@ Future<String>? getData(String essence, [BuildContext? context]) async {
 
       case acct:
         try {
+          logger("Cast  Account");
+
+          DatabaseHelper dbm = DatabaseHelper(table: mnf);
+
+          int i = await dbm.queryRowCount();
+          if (i > 0) {
+            List<Map<String, dynamic>> dd = await dbm.queryAllRows();
+            Map<String, dynamic> ust = dd[0];
+
+            // logger("Cast::: ${dd[0][cpt]}");
+            Map<String, dynamic> ddd = jsonDecode(ust[cpt]);
+
+            bal = ddd[acct];
+            logger("Cast:: $bal");
+          }
+
           /*
     Map<String, dynamic> cls = {usrId: "909891"};
     List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
     */
-
-          String act_ = userlog[acct]; // await pref.getPrefString(acct);
+/*
+          String act_ =
+              cppt[acct]; // userlog[acct]; // await pref.getPrefString(acct);
           if (act_!.isNotEmpty) {
             bal = act_;
           } else {
-            /*
+            
       Map<String, dynamic>? obj =
           await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
 
@@ -188,16 +205,20 @@ Future<String>? getData(String essence, [BuildContext? context]) async {
         }
       }
 
-      */
+      
           }
 
+          */
+
           // bal = "***";
+
+          logger("Cast  $bal");
 
           bll = balance(bal: bal);
           //bll = blh;
           dshCtx.read<UINotifier>().accountBalance(bll);
         } catch (e) {
-          logger("Cast Error*** $e");
+          logger("Cast Error***#*** $e");
         }
         break;
     }

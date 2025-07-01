@@ -315,11 +315,11 @@ void onStart(ServiceInstance service) async {
               userlog[unq] = unq_;
               try {
                 if (app == linked) {
-                  userlog[acct] = cppt[acct];
-                  bll = balance(bal: userlog[acct]);
-                  dshCtx.read<UINotifier>().accountBalance(bll);
-                  // account = "200";
-                  account = getData(acct, null);
+                  // userlog[acct] = cppt[acct];
+                  // bll = balance(bal: userlog[acct]);
+                  // dshCtx.read<UINotifier>().accountBalance(bll);
+                  // // account = "200";
+                  // account = getData(acct, null);
                 }
               } catch (e) {}
 

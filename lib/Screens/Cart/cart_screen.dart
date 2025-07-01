@@ -5,12 +5,15 @@
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
 // import 'package:Yomcoin/screens/login.dart';
+import 'dart:convert';
+
 import 'package:farm_to_dish/Screens/DeliveryCar/delivery_car_model.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
 
+import '../../Repository/databaseHelper.dart';
 import '../../firebaseHandler.dart';
 import '../../global_handlers.dart';
 import '../../global_objects.dart';
@@ -218,9 +221,20 @@ class _CartScreenState extends State<CartScreen> {
 
                                       String? act_ =
                                           await pref.getPrefString(acct);
-                                      if (act_!.isNotEmpty) {
-                                        double bal = double.parse(
-                                            act_.replaceAll("k", ""));
+
+                                      DatabaseHelper dbm =
+                                          DatabaseHelper(table: mnf);
+
+                                      int i = await dbm.queryRowCount();
+                                      if (i > 0) {
+                                        List<Map<String, dynamic>> dd =
+                                            await dbm.queryAllRows();
+                                        Map<String, dynamic> ust = dd[0];
+                                        Map<String, dynamic> ddd =
+                                            jsonDecode(ust[cpt]);
+
+                                        double bal = ddd[acct]; // double.parse(
+                                        // act_.replaceAll("k", ""));
                                         if (bal < price) {
                                           logger(
                                               "$price ** $bal More fund needed");
