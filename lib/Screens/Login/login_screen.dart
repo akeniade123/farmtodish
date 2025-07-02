@@ -424,13 +424,14 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
     otp_ = obj as Map<String, dynamic>;
     otp_["Essence"] = "Login";
 
-    customSnackBar(context, otp_['message']!);
-
     List usrLogin = svr.data;
     ussr_ = User.fromData(usrLogin[0]);
+    usrTmp = usrLogin[0];
 
-    SharedPref pref = SharedPref();
-    pref.setPrefString("usrTbl", jsonEncode(usrLogin[0]));
+    // SharedPref pref = SharedPref();
+    // await pref.setPrefString("usrTbl", jsonEncode(usrLogin[0]));
+
+    customSnackBar(context, otp_['message']!);
 
     //Modal(context, 220, wdg);
     context.go("/OTP");

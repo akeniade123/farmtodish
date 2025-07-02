@@ -93,10 +93,10 @@ class _HomeScreenState extends State<HomeScreen> {
     pref = SharedPref();
 
     usrdtlz = userDtlz(nmm: "---");
-    usrNm = getData(context, home); // _userDtls();
+    usrNm = getData(home, context); // _userDtls();
 
-    bll = balance(bal: "###");
-    account = getData(context, acct); //  _futureAccount();
+    bll = balance(bal: "---");
+    account = getData(acct, context); //  _futureAccount();
 
     product = futurefetch();
 

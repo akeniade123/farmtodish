@@ -115,7 +115,7 @@ void customSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(displaySnackBar(message));
 }
 
-Future<String>? getData(BuildContext context, String essence) async {
+Future<String>? getData(String essence, [BuildContext? context]) async {
   pref = SharedPref();
   bool? lgn = await pref.getPrefBool(login);
   if (lgn) {
@@ -126,17 +126,29 @@ Future<String>? getData(BuildContext context, String essence) async {
       case usr:
         Map<String, dynamic> pp = {};
         try {
-          String? prf = await pref.getPrefString(usrTbl);
+          // String? prf = await pref.getPrefString(usrTbl);
 
-          logger("Usernm: $prf");
+          // logger("Usernm: $prf");
 
-          pp = jsonDecode(prf!);
+          // pp = jsonDecode(prf!);
+          DatabaseHelper dbm = DatabaseHelper(table: mnf);
 
-          usrdtlz = userDtlz(nmm: pp[nmm]);
-          dshCtx.read<UINotifier>().userName(usrdtlz);
+          int i = await dbm.queryRowCount();
+          if (i > 0) {
+            List<Map<String, dynamic>> dd = await dbm.queryAllRows();
+            Map<String, dynamic> ust = dd[0];
+            Map<String, dynamic> cppt = jsonDecode(ust[cpt]);
+            Map<String, dynamic> pp = cppt[usrTbl];
+            usrdtlz = userDtlz(nmm: pp[nmm]);
+            dshCtx.read<UINotifier>().userName(usrdtlz);
+            return "Done";
+          } else {
+            return "";
+          }
+
           // usrNm = "Done";
           // pp[nmm];
-          return "Done"; // pp[nmm];
+          // pp[nmm];
         } catch (e) {
           logger("Usernm error $e");
           return "";
@@ -147,16 +159,33 @@ Future<String>? getData(BuildContext context, String essence) async {
 
       case acct:
         try {
+          logger("Cast  Account");
+
+          DatabaseHelper dbm = DatabaseHelper(table: mnf);
+
+          int i = await dbm.queryRowCount();
+          if (i > 0) {
+            List<Map<String, dynamic>> dd = await dbm.queryAllRows();
+            Map<String, dynamic> ust = dd[0];
+
+            // logger("Cast::: ${dd[0][cpt]}");
+            Map<String, dynamic> ddd = jsonDecode(ust[cpt]);
+
+            bal = ddd[acct];
+            logger("Cast:: $bal");
+          }
+
           /*
     Map<String, dynamic> cls = {usrId: "909891"};
     List<Map<String, dynamic>> pp = await dba.queryRowsClause(cls);
     */
-
-          String? act_ = await pref.getPrefString(acct);
+/*
+          String act_ =
+              cppt[acct]; // userlog[acct]; // await pref.getPrefString(acct);
           if (act_!.isNotEmpty) {
             bal = act_;
           } else {
-            /*
+            
       Map<String, dynamic>? obj =
           await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
 
@@ -176,21 +205,25 @@ Future<String>? getData(BuildContext context, String essence) async {
         }
       }
 
-      */
+      
           }
 
+          */
+
           // bal = "***";
+
+          logger("Cast  $bal");
 
           bll = balance(bal: bal);
           //bll = blh;
           dshCtx.read<UINotifier>().accountBalance(bll);
         } catch (e) {
-          logger("Cast Error*** $e");
+          logger("Cast Error***#*** $e");
         }
         break;
     }
   } else {
-    logout(context);
+    logout(context!);
   }
 
   return bal;

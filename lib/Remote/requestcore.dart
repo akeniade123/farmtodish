@@ -18,15 +18,16 @@ import 'service_protocols.dart';
 
 Future<void> logout(BuildContext context) async {
   DatabaseHelper dbm = DatabaseHelper(table: mnf);
-  Map<String, dynamic> mmm = {id: 1};
-  await dbm.delete(mmm);
+  List<Map<String, dynamic>> ddf = await dbm.queryAllRows();
+
+  for (Map<String, dynamic> dd in ddf) {
+    dbm.delete(dd);
+  }
+  userlog = {};
 
   SharedPref pref = SharedPref();
   await pref.setPrefBool(login, false);
-  pref = SharedPref();
-  await pref.setPrefString(usrTbl, "");
-  pref = SharedPref();
-  await pref.setPrefString(appState, loggedout);
+
   context.go("/");
 }
 
@@ -40,14 +41,17 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
   switch (essence) {
     case prelim:
       Map<String, dynamic> mnf = {unq: userlog[unq]};
-      Map<String, dynamic> ent = {"Fb_UID": userlog[rg]};
+      Map<String, dynamic> ent = {
+        "Fb_UID": userlog[rg],
+        upd: DateTime.now().toString()
+      };
 
       obj = await nvg.entry(table, mnf, ent, mnf, global, "access", "content",
           false, upd_, context);
-      logger("Response: $obj");
-      await pref.setPrefString(appState, prvsnd);
-      pref = SharedPref();
-      await pref.setPrefBool(indexed, true);
+      // logger("Response: $obj");
+      // await pref.setPrefString(appState, prvsnd);
+      // pref = SharedPref();
+      // await pref.setPrefBool(indexed, true);
 
       break;
     case intrmd:
@@ -59,24 +63,82 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
       break;
 
     case prvsnd:
+      Map<String, dynamic> mnf = {id: 1};
+      obj = await nvg.readData(
+          table, mnf, global, "access", "content", false, rd_e);
+      logger("Response: $obj");
+      break;
+    case setup_:
+      Map<String, dynamic> appSet = cppt;
+      String usr_id = cppt[usr][unq];
+      logger("The Account: $usr_id");
+      Map<String, dynamic> mnf = {"user_id": usr_id};
+
+      obj = await nvg.readData(
+          table, mnf, global, "access", "content", false, rd_e);
+      logger("Responsez: $obj");
+
       break;
   }
 
   ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
   if (svp.status) {
-    // ServerResponse svr = ServerResponse.fromJson(jsonDecode(obj));
+    ServerResponse svr = ServerResponse.fromJson(obj);
     // Navigator.pop();
     try {
       switch (essence) {
+        case setup_:
+          logger("Setup Procession");
+          Map<String, dynamic> appSet = cppt;
+          appSet[appState] = linked;
+          appSet[indexed] = true;
+          appSet[acct] = svr.data[0][amt];
+
+          DatabaseHelper dbm = DatabaseHelper(table: mnf);
+
+          List<Map<String, dynamic>> ddf = await dbm.queryAllRows();
+
+          for (Map<String, dynamic> dd in ddf) {
+            dbm.delete(dd);
+          }
+
+          await dbm.insertData({cpt: jsonEncode(appSet)});
+
+          logger("Refactored: $appSet");
+
+          break;
         case prelim:
           String? mssg = svp.msg as String?;
+          logger("The Response: $mssg");
+          Map<String, dynamic> appSet = cppt;
+          appSet[appState] = prvsnd;
+          appSet[indexed] = true;
+          logger("Refactored: $appSet");
+          if (mssg!.contains("successfully implemented")) {
+            appSet[appState] = prvsnd;
+            String fb_id = cppt[usr][fb_uid];
 
-          if (mssg!.contains("refresh")) {
-            await pref.setPrefString(appState, intrmd);
+            appSet[refactor] = fb_id;
+
             pref = SharedPref();
-            await pref.setPrefBool(indexed, true);
-            break;
+            String? tkn = await pref.getPrefString(tk_id);
+
+            appSet[usr][fb_uid] = tkn;
+            appSet[usr][upd] = DateTime.now().toString();
+            logger("The Account: $fb_id");
+          } else {
+            appSet[appState] = intrmd;
           }
+
+          DatabaseHelper dbm = DatabaseHelper(table: mnf);
+          List<Map<String, dynamic>> ddf = await dbm.queryAllRows();
+
+          for (Map<String, dynamic> dd in ddf) {
+            dbm.delete(dd);
+          }
+
+          await dbm.insertData({cpt: jsonEncode(appSet)});
+
         case intrmd:
           ServerResponse svr = ServerResponse.fromJson(obj);
 
@@ -84,11 +146,46 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
 
         case prvsnd:
           //  logger("Hello: $data_");
+          Map<String, dynamic> appSet = cppt;
+          appSet[appState] = setup_;
+          appSet[indexed] = true;
+          ServerResponse svr = ServerResponse.fromJson(obj);
+          logger("Fbzz: ${svr.data}");
+
+          dynamic fcmSVToken = svr.data[0]["name"];
+          appSet[setup_] = fcmSVToken;
+
+          // appSet[fb_uid] =
+          logger("fcmSVToken Setup: $fcmSVToken");
+
+          DatabaseHelper dbm = DatabaseHelper(table: mnf);
+          List<Map<String, dynamic>> ddf = await dbm.queryAllRows();
+
+          for (Map<String, dynamic> dd in ddf) {
+            dbm.delete(dd);
+          }
+
+          await dbm.insertData({cpt: jsonEncode(appSet)});
 
           break;
       }
     } catch (e) {
-      logger("Login procession error: $e");
+      logger("Server procession error: $e");
+    }
+  } else {
+    switch (essence) {
+      case setup_:
+        logger("Setup New Entry Procession");
+        Map<String, dynamic> mnf = {"user_id": userlog[unq]};
+        Map<String, dynamic> ent = {
+          "amount": "0",
+          "last_transaction": DateTime.now().toString()
+        };
+
+        obj = await nvg.entry(table, mnf, ent, mnf, global, "access", "content",
+            false, crtt, context);
+
+        break;
     }
   }
 

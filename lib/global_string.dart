@@ -10,8 +10,10 @@ const String appState = "AppState";
 const String prelim = "prelim";
 const String intrmd = "intermediate";
 const String prvsnd = "provisioned";
+const String setup_ = "setup";
 const String linked = "linked";
 const String dialog = "dialogued";
+const String refactor = "refactor";
 const String auth = "authorized";
 
 String fbId = community;

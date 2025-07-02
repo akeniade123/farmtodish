@@ -35,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
     dbo = DatabaseHelper(table: order);
     usrNm = null;
-    usrNm = getData(context, usr); //_userDtls(acct);
+    usrNm = getData(usr, context); //_userDtls(acct);
     pndOrder = _futureOrderStack(true);
     dlvOrder = _futureOrderStack(false);
   }

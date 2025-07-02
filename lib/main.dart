@@ -21,12 +21,14 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'Remote/modelstack.dart';
 import 'Remote/requestmodel.dart';
 import 'env.dart';
 import 'firebaseHandler.dart';
 import 'firebase_options.dart';
 import 'global_objects.dart';
 import 'global_string.dart';
+import 'global_widgets.dart';
 import 'routing_detail.dart';
 import 'sharedpref.dart';
 
@@ -281,8 +283,7 @@ void onStart(ServiceInstance service) async {
     SharedPref pref = SharedPref();
     nvg = Navigate();
 
-    String? app = await pref.getPrefString(appState);
-    logger("Current app state: $app ***");
+    String? app;
 
     DatabaseHelper dbm = DatabaseHelper(table: mnf);
 
@@ -290,39 +291,56 @@ void onStart(ServiceInstance service) async {
 
     if (i > 0) {
       List<Map<String, dynamic>> dd = await dbm.queryAllRows();
-      logger("The Data: ${jsonEncode(dd)}");
       Map<String, dynamic> ust = dd[0];
-      Map<String, dynamic> cppt = jsonDecode(ust[cpt]);
-      app = cppt[appState];
+      cppt = jsonDecode(ust[cpt]);
 
-      //logger
+      logger("Data Deserialization: $cppt");
+
       try {
+        logger("App State: ${cppt[appState]}");
+        app = cppt[appState];
         if (app!.isNotEmpty) {
-          String? prf = cppt[usrTbl];
-          // await pref.getPrefString(usrTbl);
-          logger("Profile: ${prf}");
+          Map<String, dynamic> prf = cppt[usrTbl];
           if (prf!.isNotEmpty) {
-            Map<String, dynamic> pp = jsonDecode(prf);
+            Map<String, dynamic> pp = prf;
+            // jsonDecode(prf);
             pref = SharedPref();
             String? tkn = await pref.getPrefString(tk_id);
 
-            String unq_ = pp["Unique_ID"];
+            String unq_ = pp[unq];
 
             try {
               userlog[rg] = tkn;
               userlog[nmm] = pp[nmm];
               userlog[unq] = unq_;
+              try {
+                if (app == linked) {
+                  // userlog[acct] = cppt[acct];
+                  // bll = balance(bal: userlog[acct]);
+                  // dshCtx.read<UINotifier>().accountBalance(bll);
+                  // // account = "200";
+                  // account = getData(acct, null);
+                }
+              } catch (e) {}
+
+              logger("User Details: $userlog");
             } catch (e) {
               userlog = {};
             }
 
-            logger("Current: ${jsonEncode(userlog)}");
+            logger("Server: ${pp["Fb_UID"]}");
             if (pp["Fb_UID"] == "" || tkn != pp["Fb_UID"]) {
+              if (pp["Fb_UID"] != "") {
+                //logout the prior user by sending
+                //a logout logic instruction after
+                //dialog phase must have been established
+              }
               pref = SharedPref();
               switch (app) {
                 case prelim:
-                  bool stt = await pref.getPrefBool(indexed);
+                  bool stt = cppt[indexed]; // await pref.getPrefBool(indexed);
                   if (stt == false) {
+                    logger("App sync in progress");
                     svrRqst("users", app);
                     //  logger("Response: ${jsonEncode(obj)}");
 
@@ -336,25 +354,66 @@ void onStart(ServiceInstance service) async {
                   svrRqst("users", app);
                   break;
                 case prvsnd:
-                  pref = SharedPref();
-                  pref.setPrefBool(login, false);
-                  pref = SharedPref();
-                  pref.setPrefString(usrTbl, "");
-                  pref.setPrefString(appState, prelim);
+                  // pref = SharedPref();
+                  // pref.setPrefBool(login, false);
+                  // pref = SharedPref();
+                  // pref.setPrefString(usrTbl, "");
+                  // pref.setPrefString(appState, prelim);
+
+                  Map<String, dynamic> tag = {"Essence": "setup", "State": rd};
+                  svrRqst("setup", app);
+
+                  logger("App now provisioned, ready to make a dialog call");
+
+                  break;
+
+                case setup_:
+                  svrRqst(usrWlt, app);
+
+                  logger("App fcm done, ready to make a dialog call");
+                  break;
+                case linked:
+                  logger("All is not set");
                   break;
               }
-            } else if (tkn == pp["Fb_UID"]) {
+            } else if (tkn == pp["Fb_UID"] && pp["Fb_UID"] != "") {
               switch (app) {
                 case intrmd:
                   svrRqst("users", app);
                   break;
                 case prelim:
                   pref = SharedPref();
+                  Map<String, dynamic> appSet = cppt;
+                  appSet[appState] = prvsnd;
+                  appSet[indexed] = true;
+                  logger("Refactored: $appSet");
+
+                  DatabaseHelper dbm = DatabaseHelper(table: mnf);
+                  List<Map<String, dynamic>> ddf = await dbm.queryAllRows();
+
+                  for (Map<String, dynamic> dd in ddf) {
+                    dbm.delete(dd);
+                  }
+
+                  await dbm.insertData({cpt: jsonEncode(appSet)});
+                  cppt = appSet;
+
                   //  pref.setPrefString(appState, prvsnd);
                   break;
                 case prvsnd:
                   Map<String, dynamic> tag = {"Essence": "setup", "State": rd};
+                  svrRqst("setup", app);
+
+                  logger("App now provisioned, ready to make a dialog call");
+
                   //  await tagPost(tag, app, null);
+                  break;
+                case setup_:
+                  svrRqst(usrWlt, app);
+                  logger("App fcm done, ready to make a dialog call");
+                  break;
+                case linked:
+                  logger("All is set");
                   break;
               }
             } else {}
@@ -371,9 +430,6 @@ void onStart(ServiceInstance service) async {
     } else {
       logger("No Data yet");
     }
-
-    String? prf = await pref.getPrefString(usrTbl);
-    logger("Profilezzz: ${prf}");
 
     //Revisit these
 
