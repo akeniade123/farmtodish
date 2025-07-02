@@ -31,6 +31,7 @@ const vww = "View";
 const String crtt = "create";
 const String upd_ = "updatezz";
 const String rd = "read";
+const String spk = "specific_tsk";
 const String rd_e = "read_expl";
 const String chg = "Charge";
 

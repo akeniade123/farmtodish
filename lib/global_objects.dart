@@ -30,6 +30,7 @@ late BuildContext? dlg;
 late BuildContext? baseCtx;
 
 late Map<String, dynamic> otp_;
+late Map<String, dynamic> pay_;
 
 late BuildContext basedlg;
 

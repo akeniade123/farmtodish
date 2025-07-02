@@ -819,6 +819,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onPressed: () async {
                                     if (_amount.text.isNotEmpty) {
                                       amount = int.parse(_amount.text);
+                                      pay_ = {amt: amount};
                                       context.go("/PaymentScreen");
                                     } else {
                                       ScaffoldMessenger.of(context)

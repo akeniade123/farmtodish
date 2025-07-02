@@ -240,12 +240,18 @@ class _CartScreenState extends State<CartScreen> {
                                               "$price ** $bal More fund needed");
                                           customSnackBar(context,
                                               "Insufficient balance, kindly fund your wallet");
+                                          double def = price - bal;
+                                          pay_ = {amt: def};
                                           context.go("/PaymentScreen");
                                         } else {
                                           logger("Transaction Procession");
                                         }
                                       } else {
                                         logger("No fund in account");
+                                        pay_ = {
+                                          amt: currentOrder?.getTotalPrice() ??
+                                              amount
+                                        };
                                         context.go("/PaymentScreen");
                                       }
                                     },

@@ -496,7 +496,7 @@ class _ProductScreenState extends State<ProductScreen> {
           rslt.add(ProductModel(
               name: itmm[itm],
               imageURL: itmm[img], // "${assets}goat_meat.png",
-              price: 4700,
+              price: 2500,
               quantity: 12,
               unit: "kilo"));
 
@@ -521,10 +521,42 @@ class _ProductScreenState extends State<ProductScreen> {
       }
     } else {
       nvg = Navigate();
-      Map<String, dynamic> mnf = {};
+      Map<String, String> mnf = {
+        "Essence": "access",
+        "State": "specific_tsk",
+        "Specific": "Router",
+        "Table": "produce",
+        "Joint":
+            " p INNER JOIN price_index x on p.item =x.produce INNER JOIN unit u on x.unit = u.abbrv WHERE x.cadre = 11 ",
+        "Rep":
+            " p.id, p.item, p.type, p.created AS created_at, p.image, x.amount AS price, u.tag as unit, u.abbrv,  p.nutritional_value"
+      };
 
-      Map<String, dynamic>? obj =
-          await nvg.readData(produce, mnf, global, rd, "", false, rd, context);
+      /*
+      {
+   "Essence":"access",
+   "State":"specific_tsk",
+   "Specific":"Router",
+   "Table":"produce",
+   "Joint":" p INNER JOIN price_index x on p.item =x.produce INNER JOIN unit u on x.unit = u.abbrv WHERE x.cadre = 11 ",
+   "Rep":" p.id, p.item, p.type, p.created AS created_at, p.image, x.amount AS price, u.tag as unit, u.abbrv,  p.nutritional_value"
+}
+      */
+
+      Map<String, dynamic>? obj = await nvg.specificPOST(
+          produce,
+          "specific_tsk",
+          global,
+          spk,
+          "designation",
+          {},
+          mnf,
+          "Router",
+          "",
+          false,
+          context);
+
+      // nvg.readData(produce, mnf, global, rd, "", false, rd, context);
 
       ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
       if (svp.status) {

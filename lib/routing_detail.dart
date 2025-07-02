@@ -170,7 +170,7 @@ final GoRouter myRouter = GoRouter(
       ),
       GoRoute(
         path: '/PaymentScreen',
-        builder: (context, state) => const PaymentScreen(),
+        builder: (context, state) => PaymentScreen(amount: pay_[amt]),
       ),
 
       GoRoute(

@@ -17,7 +17,8 @@ import '../../global_string.dart';
 // import 'cart_model.dart';
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({super.key});
+  final double amount;
+  const PaymentScreen({super.key, required this.amount});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -141,7 +142,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 5),
                           child: Text(
-                            "Pay $currency${currentOrder?.getTotalPrice() ?? amount}",
+                            //"Pay $currency${currentOrder?.getTotalPrice() ?? amount}",
+                            "Pay $currency${widget.amount}",
                             style: TextStyle(
                               color: FarmToDishTheme.scaffoldBackgroundColor,
                               // fontSize: 14,

@@ -115,7 +115,7 @@ class Navigate {
     return obj;
   }
 
-  Map<String, String> formRequisite() {
+  Map<String, String> formRequisite([String? essence]) {
     String rgg = "default";
     String unq_ = rgg;
     String nmm_ = rgg;
@@ -125,14 +125,23 @@ class Navigate {
       nmm_ = userlog[nmm];
     } catch (e) {}
 
-    Map<String, String> hsh = {
-      "Essence": "access",
-      "Designation": "content",
-      "regId": rgg,
-      "Full_Name": nmm_,
-      "Unique_ID": unq_,
-      "Password": "random",
-    };
+    Map<String, String> hsh = {};
+
+    if (essence != null) {
+      switch (essence) {
+        //case sp
+      }
+    } else {
+      hsh = {
+        "Essence": "access",
+        "Designation": "content",
+        "regId": rgg,
+        "Full_Name": nmm_,
+        "Unique_ID": unq_,
+        "Password": "random",
+      };
+    }
+
     return hsh;
   }
 
