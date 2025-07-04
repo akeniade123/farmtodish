@@ -256,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
       logger("Albert Indexed: $qq");
       List<Map<String, dynamic>> pp = await dbh.queryAllRows();
       for (Map<String, dynamic> itm in pp) {
-        cntz.add({"name": itm[typ], "imageURL": itm[img]});
+        cntz.add({id: itm[id], "name": itm[typ], "imageURL": itm[img]});
       }
     } else {
       logger("Albert: $qq");
@@ -275,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
           String typ = item["type"];
           //1  String img = item["image"];
 
-          cntz.add({"name": typ, "imageURL": item[img]});
+          cntz.add({id: item[id], "name": typ, "imageURL": item[img]});
           dbh.insertData(item);
         }
       }
@@ -686,7 +686,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildCategorySlab(Map e) {
     return InkWell(
       onTap: () {
-        context.pushNamed("ProductScreen", extra: e["name"]);
+        logger("Entity: $e");
+        Map<String, dynamic> ths = {nmm: e["name"], id: e[id]};
+        context.pushNamed("ProductScreen", extra: jsonEncode(ths));
       },
       child: Container(
         margin: EdgeInsets.all(10),

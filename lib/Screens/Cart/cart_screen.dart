@@ -233,7 +233,8 @@ class _CartScreenState extends State<CartScreen> {
                                         Map<String, dynamic> ddd =
                                             jsonDecode(ust[cpt]);
 
-                                        double bal = ddd[acct]; // double.parse(
+                                        double bal = double.parse(
+                                            ddd[acct]); // double.parse(
                                         // act_.replaceAll("k", ""));
                                         if (bal < price) {
                                           logger(

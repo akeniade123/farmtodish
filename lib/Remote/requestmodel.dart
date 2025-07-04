@@ -167,7 +167,20 @@ class Navigate {
       case rd:
         tag = {"Essence": table, "State": phase};
         break;
+      case rt:
+        tag = {
+          "Essence": "access",
+          "State": "specific_tsk",
+          "Specific": "Router",
+          "Table": table
+        };
+
+        tag.addEntries(manifest.entries);
+
+        break;
     }
+
+    logger("The Tag: $tag");
 
     hsh.addEntries({"Tag": jsonEncode(tag)}.entries);
 

@@ -2,6 +2,7 @@
 
 // import 'dart:js_interop';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class _ProductScreenState extends State<ProductScreen> {
     // selectedProducts = currentOrder?.items ?? [];
     currentOrder ??= OrderModel(items: []);
     selectedTabName = widget.initialySelectedTab ?? "";
-    logger("State: $selectedTabName");
+    logger("Entity    : $selectedTabName");
 
     super.initState();
     // prSect = produceSect();
@@ -496,7 +497,7 @@ class _ProductScreenState extends State<ProductScreen> {
           rslt.add(ProductModel(
               name: itmm[itm],
               imageURL: itmm[img], // "${assets}goat_meat.png",
-              price: 2500,
+              price: itmm[prz],
               quantity: 12,
               unit: "kilo"));
 
@@ -521,16 +522,51 @@ class _ProductScreenState extends State<ProductScreen> {
       }
     } else {
       nvg = Navigate();
-      Map<String, String> mnf = {
-        "Essence": "access",
-        "State": "specific_tsk",
-        "Specific": "Router",
-        "Table": "produce",
-        "Joint":
-            " p INNER JOIN price_index x on p.item =x.produce INNER JOIN unit u on x.unit = u.abbrv WHERE x.cadre = 11 ",
-        "Rep":
-            " p.id, p.item, p.type, p.created AS created_at, p.image, x.amount AS price, u.tag as unit, u.abbrv,  p.nutritional_value"
-      };
+      if (selectedTabName != "") {
+        Map<String, dynamic> identity = jsonDecode(selectedTabName);
+        Map<String, String> mnf = {
+          "Essence": "access",
+          "State": "specific_tsk",
+          "Specific": "Router",
+          "Table": "produce",
+          "Joint":
+              " p INNER JOIN price_index x on p.item =x.produce INNER JOIN unit u on x.unit = u.abbrv WHERE x.cadre = 11 AND p.type = ${identity[id]} ",
+          "Rep":
+              " p.id, p.item, p.type, p.created AS created_at, p.image, x.amount AS price, u.tag as unit, u.abbrv,  p.nutritional_value"
+        };
+        mnf = {
+          "Joint":
+              " p INNER JOIN price_index x on p.item =x.produce INNER JOIN unit u on x.unit = u.abbrv WHERE x.cadre = 11 ",
+          "Rep":
+              " p.id, p.item, p.type, p.created AS created_at, p.image, x.amount AS price, u.tag as unit, u.abbrv,  p.nutritional_value"
+        };
+
+        Map<String, dynamic>? obj = await nvg.readData(
+            produce, mnf, global, rt, "", false, rt, context);
+
+        //
+        // nvg.readData(produce, mnf, global, rd, "", false, rd, context);
+
+        ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+
+        if (svp.status) {
+          ServerResponse rsp = ServerResponse.fromJson(obj);
+          for (final item in rsp.data) {
+            String typ = item["type"];
+            //1  String img = item["image"];
+
+            rslt.add(ProductModel(
+                name: item[itm],
+                imageURL: item[img], // "${assets}goat_meat.png",
+                price: double.parse(item["price"]),
+                quantity: 12,
+                unit: item["abbrv"]));
+
+            //  cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
+            dbp.insertData(item);
+          }
+        }
+      }
 
       /*
       {
@@ -542,41 +578,6 @@ class _ProductScreenState extends State<ProductScreen> {
    "Rep":" p.id, p.item, p.type, p.created AS created_at, p.image, x.amount AS price, u.tag as unit, u.abbrv,  p.nutritional_value"
 }
       */
-
-      Map<String, dynamic>? obj = await nvg.specificPOST(
-          produce,
-          "specific_tsk",
-          global,
-          spk,
-          "designation",
-          {},
-          mnf,
-          "Router",
-          "",
-          false,
-          context);
-
-      // nvg.readData(produce, mnf, global, rd, "", false, rd, context);
-
-      ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
-      if (svp.status) {
-        ServerResponse rsp = ServerResponse.fromJson(obj);
-        for (final item in rsp.data) {
-          //   String itm = item["item"];
-          String typ = item["type"];
-          //1  String img = item["image"];
-
-          rslt.add(ProductModel(
-              name: item[itm],
-              imageURL: item[img], // "${assets}goat_meat.png",
-              price: 4700,
-              quantity: 12,
-              unit: "kilo"));
-
-          //  cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
-          dbp.insertData(item);
-        }
-      }
     }
     return rslt;
   }

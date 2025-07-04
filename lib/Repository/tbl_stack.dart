@@ -44,7 +44,22 @@ List<String> untCln = [id, tag, abbrv];
 List<String> defaultCln = [id, nmm];
 List<String> defaultCln_ = [id, tag];
 List<String> prtypCln = [id, typ, img];
-List<String> prdCln = [id, itm, typ, crt, img];
+List<String> prdCln = [id, itm, typ, crt, img, prz, unt, abbrv];
+
+/*
+
+"id": "3",
+            "item": "Sweet Corn",
+            "type": "6",
+            "created_at": "2024-06-10 10:04:55",
+            "image": "https://www.farmtodish.com/app/farm%20produce/Sweet_Corn.webp",
+            "price": "13000",
+            "unit": "Kilogram",
+            "abbrv": "kg"
+
+
+*/
+
 List<String> prcIdxCln = [id, cdr, produce, unit, amt, crr, avl, qnt];
 List<String> ordItmCln = [id, itm, qnt, rate, amt, crr, order];
 List<String> ordCln = [id, usr, prDtl, dlvAr, stt];
@@ -52,7 +67,6 @@ List<String> lgaCln = [id, stId, nmm];
 List<String> hubCln = [id, nmm, latlong, lga, ctt];
 List<String> dptCln = [id, core];
 List<String> schCln = [id, div, tsk, dtme, dur];
-
 
 /*
 static void raiseCalendarTapCallback(
