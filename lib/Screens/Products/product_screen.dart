@@ -525,18 +525,8 @@ class _ProductScreenState extends State<ProductScreen> {
       if (selectedTabName != "") {
         Map<String, dynamic> identity = jsonDecode(selectedTabName);
         Map<String, String> mnf = {
-          "Essence": "access",
-          "State": "specific_tsk",
-          "Specific": "Router",
-          "Table": "produce",
           "Joint":
               " p INNER JOIN price_index x on p.item =x.produce INNER JOIN unit u on x.unit = u.abbrv WHERE x.cadre = 11 AND p.type = ${identity[id]} ",
-          "Rep":
-              " p.id, p.item, p.type, p.created AS created_at, p.image, x.amount AS price, u.tag as unit, u.abbrv,  p.nutritional_value"
-        };
-        mnf = {
-          "Joint":
-              " p INNER JOIN price_index x on p.item =x.produce INNER JOIN unit u on x.unit = u.abbrv WHERE x.cadre = 11 ",
           "Rep":
               " p.id, p.item, p.type, p.created AS created_at, p.image, x.amount AS price, u.tag as unit, u.abbrv,  p.nutritional_value"
         };
