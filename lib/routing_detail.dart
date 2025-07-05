@@ -148,7 +148,7 @@ final GoRouter myRouter = GoRouter(
                 builder: (context, state) => const DeliveryCarScreen(),
               )
             ],
-          ),
+          )
           // StatefulShellBranch(
           //   routes: <RouteBase>[
           //     GoRoute(

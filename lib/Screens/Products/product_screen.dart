@@ -523,37 +523,52 @@ class _ProductScreenState extends State<ProductScreen> {
     } else {
       nvg = Navigate();
       if (selectedTabName != "") {
-        Map<String, dynamic> identity = jsonDecode(selectedTabName);
-        Map<String, String> mnf = {
-          "Joint":
-              " p INNER JOIN price_index x on p.item =x.produce INNER JOIN unit u on x.unit = u.abbrv WHERE x.cadre = 11 AND p.type = ${identity[id]} ",
-          "Rep":
-              " p.id, p.item, p.type, p.created AS created_at, p.image, x.amount AS price, u.tag as unit, u.abbrv,  p.nutritional_value"
-        };
+        DatabaseHelper dbm = DatabaseHelper(table: mnf);
 
-        Map<String, dynamic>? obj = await nvg.readData(
-            produce, mnf, global, rt, "", false, rt, context);
+        int i = await dbm.queryRowCount();
+        if (i > 0) {
+          List<Map<String, dynamic>> dd = await dbm.queryAllRows();
+          Map<String, dynamic> ust = dd[0];
 
-        //
-        // nvg.readData(produce, mnf, global, rd, "", false, rd, context);
+          // logger("Cast::: ${dd[0][cpt]}");
+          Map<String, dynamic> ddd = jsonDecode(ust[cpt]);
 
-        ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+          String ctg_ = ddd[usr][ctg];
+          logger("Desig: $ctg_");
 
-        if (svp.status) {
-          ServerResponse rsp = ServerResponse.fromJson(obj);
-          for (final item in rsp.data) {
-            String typ = item["type"];
-            //1  String img = item["image"];
+          Map<String, dynamic> identity = jsonDecode(selectedTabName);
+          Map<String, String> mnff = {
+            "Joint":
+                " p INNER JOIN price_index x on p.item =x.produce INNER JOIN unit u on x.unit = u.abbrv WHERE x.cadre = $ctg_ AND p.type = ${identity[id]} ",
+            "Rep":
+                " p.id, p.item, p.type, p.created AS created_at, p.image, x.amount AS price, u.tag as unit, u.abbrv,  p.nutritional_value"
+          };
 
-            rslt.add(ProductModel(
-                name: item[itm],
-                imageURL: item[img], // "${assets}goat_meat.png",
-                price: double.parse(item["price"]),
-                quantity: 12,
-                unit: item["abbrv"]));
+          Map<String, dynamic>? obj = await nvg.readData(
+              produce, mnff, global, rt, "", false, rt, context);
 
-            //  cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
-            dbp.insertData(item);
+          //
+          // nvg.readData(produce, mnf, global, rd, "", false, rd, context);
+
+          ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+
+          if (svp.status) {
+            ServerResponse rsp = ServerResponse.fromJson(obj);
+            for (final item in rsp.data) {
+              String typ = item["type"];
+              //1  String img = item["image"];
+
+              rslt.add(ProductModel(
+                  name: item[itm],
+                  imageURL: item[img], // "${assets}goat_meat.png",
+                  price: double.parse(item["price"]),
+                  quantity: 12,
+                  abbrv: item["abbrv"],
+                  unit: item["unit"]));
+
+              //  cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
+              dbp.insertData(item);
+            }
           }
         }
       }

@@ -61,12 +61,12 @@ class _MainPageState extends State<MainPage> {
           icon: Icons.local_shipping
           // title: 'Shop',
           ),
-      TabItem(
+      // TabItem(
 
-          // icon: ImageIcon(Image.asset("coffee.png").image),
-          icon: Icons.schedule_send_sharp
-          // title: 'Shop',
-          ),
+      //     // icon: ImageIcon(Image.asset("coffee.png").image),
+      //     icon: Icons.schedule_send_sharp
+      //     // title: 'Shop',
+      //     ),
     ];
 
     void onTap(index) {

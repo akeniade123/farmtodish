@@ -6,7 +6,7 @@ import '../../global_objects.dart';
 class ProductModel {
   String? productID = "bdbasd";
   final String name;
-  final String? unit;
+  final String? unit, abbrv;
 
   final double? price;
   final int? quantity;
@@ -21,6 +21,7 @@ class ProductModel {
       this.priceStatement,
       this.imageURL,
       this.unit,
+      this.abbrv,
       this.quantity,
       this.quantityStatement,
       this.productID = "asbdksad"}) {
@@ -30,7 +31,7 @@ class ProductModel {
   }
 
   String getPriceStatment() {
-    return "$currency$price per $unit";
+    return "$currency$price per $abbrv";
   }
 
   String getQuantityStatement() {
