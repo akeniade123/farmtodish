@@ -13,6 +13,7 @@ import '../../Repository/databaseHelper.dart';
 import '../../global_objects.dart';
 import '../../global_string.dart';
 import '../../global_widgets.dart';
+import '../Products/product_screen.dart';
 
 // import 'common_widget.dart';
 // import 'screen_data_handler/signup_handler.dart';
@@ -67,7 +68,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // divider
             // Divider(color: ,)
             _buildDivider(),
-            SizedBox(height: 25),
+            SizedBox(height: 15),
+            Text(
+              "Account Summary",
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: FarmToDishTheme.deepGreen,
+              ),
+            ),
+            _account(avl_bl),
+            _account(csh_bk),
+            _account(lvl),
+
+            _buildSelectorTab(),
+
             TitleMoreAndBodyWidget(
               body: (pndOrder == null)
                   ? (Text("No pending transaction"))
@@ -76,6 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               isSeeAll: true,
             ),
             SizedBox(height: 20),
+
             TitleMoreAndBodyWidget(
               body: Column(children: [
                 _buildItem(
@@ -268,6 +284,95 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Colors.transparent
       ])),
     );
+  }
+
+  Row _account(String essence) {
+    String _acct = "";
+    Future<String>? dtl;
+    switch (essence) {
+      case avl_bl:
+        _acct = acct;
+        dtl = account;
+        break;
+      case csh_bk:
+        _acct = acct;
+        dtl = account;
+        break;
+
+      case lvl:
+        _acct = lvl;
+        dtl = account;
+        break;
+
+      default:
+        break;
+    }
+    return Row(
+      children: [
+        Align(alignment: Alignment.bottomLeft, child: Text("$essence:")),
+        const Expanded(child: SizedBox()),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: (account == null)
+              ? Text("---")
+              : usrDtl(context, _acct, dtl, FarmToDishTheme.deepGreen, 15),
+        ),
+      ],
+    );
+  }
+
+  String selectedTabName = "";
+
+  TitleMoreAndBodyWidget _buildSelectorTab() {
+    return TitleMoreAndBodyWidget(
+        body: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            SelectionChip(
+              name: "Fund Wallet",
+              imageURL: "${assets}fruitVeggie.png",
+              isSelected: selectedTabName == "fruits And Vegie",
+              onClickFunction: (p0) {
+                selectedTabName = "fruits And Vegie";
+                setState(() {});
+              },
+              essence: '',
+            ),
+            SizedBox(width: 10),
+            SelectionChip(
+              name: "Earn Cashback",
+              imageURL: "${assets}grains.png",
+              isSelected: selectedTabName == "Grains and legumes",
+              onClickFunction: (p0) {
+                selectedTabName = "Grains and legumes";
+
+                setState(() {});
+              },
+              essence: '',
+            ),
+            SizedBox(width: 10),
+            SelectionChip(
+              name: "Upgrade Level",
+              imageURL: "${assets}tubbers.png",
+              isSelected: selectedTabName == "Tubers",
+              onClickFunction: (p0) {
+                selectedTabName = "Tubers";
+                setState(() {});
+              },
+              essence: '',
+            ),
+            SizedBox(width: 10)
+          ]),
+        ),
+        titleWidget: Text(
+          "Transactions",
+          style: TextStyle(
+              // color:
+              // FarmToDishTheme.scaffoldBackgroundColor,
+              fontSize: 12,
+              fontWeight: FontWeight.bold),
+        ));
   }
 
   Column _buildSecondBlock() {

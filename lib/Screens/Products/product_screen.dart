@@ -665,6 +665,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 selectedTabName = "fruits And Vegie";
                 setState(() {});
               },
+              essence: '',
             ),
           );
           plc.add(
@@ -786,6 +787,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 selectedTabName = "fruits And Vegie";
                 setState(() {});
               },
+              essence: '',
             ),
             SizedBox(width: 10),
             SelectionChip(
@@ -797,6 +799,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
                 setState(() {});
               },
+              essence: '',
             ),
             SizedBox(width: 10),
             SelectionChip(
@@ -807,6 +810,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 selectedTabName = "Tubers";
                 setState(() {});
               },
+              essence: '',
             ),
             SizedBox(width: 10),
             SelectionChip(
@@ -817,6 +821,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 selectedTabName = "Spices";
                 setState(() {});
               },
+              essence: '',
             ),
           ]),
         ),
@@ -1031,11 +1036,13 @@ class SelectionChip extends StatefulWidget {
   // Function() stateSetterFunction;
 
   String name;
+  String essence;
   SelectionChip({
     super.key,
     this.imageURL,
     this.isSelected = false,
     required this.name,
+    required this.essence,
     this.onClickFunction,
   });
 
@@ -1054,12 +1061,14 @@ class _SelectionChipState extends State<SelectionChip> {
         // widget.isSelected = !widget.isSelected;
         another = !another;
         widget.isSelected = another;
+        logger("This pressed: ${widget.essence}");
+
         // print(widget.isSelected);
         widget.onClickFunction?.call(widget.isSelected);
         setState(() {});
       },
       child: Container(
-        width: 125,
+        width: 120,
         // height: 44,
         constraints: BoxConstraints(maxHeight: 50),
         decoration: BoxDecoration(

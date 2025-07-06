@@ -180,6 +180,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             onClickFunction: (p0) {
               setState(() {});
             },
+            essence: '',
           ),
           SelectionChip(
             name: "fruits And Vegie",
@@ -187,6 +188,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             onClickFunction: (p0) {
               setState(() {});
             },
+            essence: '',
           ),
           SelectionChip(
             name: "fruits And Vegie",
@@ -194,6 +196,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             onClickFunction: (p0) {
               setState(() {});
             },
+            essence: '',
           ),
         ]),
         titleWidget: Text(

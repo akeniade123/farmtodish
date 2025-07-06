@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 // import 'package:sqflite/sqflite.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import '../../Dialogs/dialog_stack.dart';
 import '../../Remote/modelstack.dart';
 import '../../Remote/requestcore.dart';
 import '../../Repository/databaseHelper.dart';
@@ -784,7 +785,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 20,
                       minWidth: 100,
                       onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => FundWallet());
                         //  context.go("/ProductScreen");
+
+                        /*
                         Widget wdg = Column(
                           children: [
                             const Center(
@@ -843,6 +849,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         );
                         Modal(context, 220, wdg);
+                        */
                       },
                       color: FarmToDishTheme.faintGreen,
                       shape: RoundedRectangleBorder(

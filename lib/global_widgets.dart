@@ -263,6 +263,16 @@ FutureBuilder<String> dtlCast(BuildContext context, String essence,
               ),
             );
             break;
+          case lvl:
+            wdg = Text(
+              "Level 1/5",
+              style: TextStyle(
+                fontSize: fontsize,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            );
+            break;
 
           case usr:
             wdg = Text(

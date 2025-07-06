@@ -150,6 +150,10 @@ const String upd = "Updated_at";
 const String instr = "Instruction";
 const String acct = "account";
 const String brdc = "broadcast";
+const String lvl = "Level";
+
+const String avl_bl = "Available Balance";
+const String csh_bk = "Cashback Bonus";
 
 const String ctg = "Category";
 const String dept = "department";
