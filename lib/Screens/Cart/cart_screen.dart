@@ -233,19 +233,26 @@ class _CartScreenState extends State<CartScreen> {
                                         Map<String, dynamic> ddd =
                                             jsonDecode(ust[cpt]);
 
-                                        double bal = ddd[acct]; // double.parse(
+                                        double bal = double.parse(
+                                            ddd[acct]); // double.parse(
                                         // act_.replaceAll("k", ""));
                                         if (bal < price) {
                                           logger(
                                               "$price ** $bal More fund needed");
                                           customSnackBar(context,
                                               "Insufficient balance, kindly fund your wallet");
+                                          double def = price - bal;
+                                          pay_ = {amt: def};
                                           context.go("/PaymentScreen");
                                         } else {
                                           logger("Transaction Procession");
                                         }
                                       } else {
                                         logger("No fund in account");
+                                        pay_ = {
+                                          amt: currentOrder?.getTotalPrice() ??
+                                              amount
+                                        };
                                         context.go("/PaymentScreen");
                                       }
                                     },

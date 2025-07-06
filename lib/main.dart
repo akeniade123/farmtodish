@@ -294,7 +294,7 @@ void onStart(ServiceInstance service) async {
       Map<String, dynamic> ust = dd[0];
       cppt = jsonDecode(ust[cpt]);
 
-      logger("Data Deserialization: $cppt");
+      //logger("Data Deserialization: $cppt");
 
       try {
         logger("App State: ${cppt[appState]}");
@@ -323,12 +323,12 @@ void onStart(ServiceInstance service) async {
                 }
               } catch (e) {}
 
-              logger("User Details: $userlog");
+              // logger("User Details: $userlog");
             } catch (e) {
               userlog = {};
             }
 
-            logger("Server: ${pp["Fb_UID"]}");
+            // logger("Server: ${pp["Fb_UID"]}");
             if (pp["Fb_UID"] == "" || tkn != pp["Fb_UID"]) {
               if (pp["Fb_UID"] != "") {
                 //logout the prior user by sending

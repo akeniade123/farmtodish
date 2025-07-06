@@ -2,6 +2,7 @@
 
 // import 'dart:js_interop';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class _ProductScreenState extends State<ProductScreen> {
     // selectedProducts = currentOrder?.items ?? [];
     currentOrder ??= OrderModel(items: []);
     selectedTabName = widget.initialySelectedTab ?? "";
-    logger("State: $selectedTabName");
+    logger("Entity    : $selectedTabName");
 
     super.initState();
     // prSect = produceSect();
@@ -496,7 +497,7 @@ class _ProductScreenState extends State<ProductScreen> {
           rslt.add(ProductModel(
               name: itmm[itm],
               imageURL: itmm[img], // "${assets}goat_meat.png",
-              price: 4700,
+              price: itmm[prz],
               quantity: 12,
               unit: "kilo"));
 
@@ -521,30 +522,67 @@ class _ProductScreenState extends State<ProductScreen> {
       }
     } else {
       nvg = Navigate();
-      Map<String, dynamic> mnf = {};
+      if (selectedTabName != "") {
+        DatabaseHelper dbm = DatabaseHelper(table: mnf);
 
-      Map<String, dynamic>? obj =
-          await nvg.readData(produce, mnf, global, rd, "", false, rd, context);
+        int i = await dbm.queryRowCount();
+        if (i > 0) {
+          List<Map<String, dynamic>> dd = await dbm.queryAllRows();
+          Map<String, dynamic> ust = dd[0];
 
-      ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
-      if (svp.status) {
-        ServerResponse rsp = ServerResponse.fromJson(obj);
-        for (final item in rsp.data) {
-          //   String itm = item["item"];
-          String typ = item["type"];
-          //1  String img = item["image"];
+          // logger("Cast::: ${dd[0][cpt]}");
+          Map<String, dynamic> ddd = jsonDecode(ust[cpt]);
 
-          rslt.add(ProductModel(
-              name: item[itm],
-              imageURL: item[img], // "${assets}goat_meat.png",
-              price: 4700,
-              quantity: 12,
-              unit: "kilo"));
+          String ctg_ = ddd[usr][ctg];
+          logger("Desig: $ctg_");
 
-          //  cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
-          dbp.insertData(item);
+          Map<String, dynamic> identity = jsonDecode(selectedTabName);
+          Map<String, String> mnff = {
+            "Joint":
+                " p INNER JOIN price_index x on p.item =x.produce INNER JOIN unit u on x.unit = u.abbrv WHERE x.cadre = $ctg_ AND p.type = ${identity[id]} ",
+            "Rep":
+                " p.id, p.item, p.type, p.created AS created_at, p.image, x.amount AS price, u.tag as unit, u.abbrv,  p.nutritional_value"
+          };
+
+          Map<String, dynamic>? obj = await nvg.readData(
+              produce, mnff, global, rt, "", false, rt, context);
+
+          //
+          // nvg.readData(produce, mnf, global, rd, "", false, rd, context);
+
+          ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+
+          if (svp.status) {
+            ServerResponse rsp = ServerResponse.fromJson(obj);
+            for (final item in rsp.data) {
+              String typ = item["type"];
+              //1  String img = item["image"];
+
+              rslt.add(ProductModel(
+                  name: item[itm],
+                  imageURL: item[img], // "${assets}goat_meat.png",
+                  price: double.parse(item["price"]),
+                  quantity: 12,
+                  abbrv: item["abbrv"],
+                  unit: item["unit"]));
+
+              //  cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
+              dbp.insertData(item);
+            }
+          }
         }
       }
+
+      /*
+      {
+   "Essence":"access",
+   "State":"specific_tsk",
+   "Specific":"Router",
+   "Table":"produce",
+   "Joint":" p INNER JOIN price_index x on p.item =x.produce INNER JOIN unit u on x.unit = u.abbrv WHERE x.cadre = 11 ",
+   "Rep":" p.id, p.item, p.type, p.created AS created_at, p.image, x.amount AS price, u.tag as unit, u.abbrv,  p.nutritional_value"
+}
+      */
     }
     return rslt;
   }
@@ -627,6 +665,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 selectedTabName = "fruits And Vegie";
                 setState(() {});
               },
+              essence: '',
             ),
           );
           plc.add(
@@ -748,6 +787,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 selectedTabName = "fruits And Vegie";
                 setState(() {});
               },
+              essence: '',
             ),
             SizedBox(width: 10),
             SelectionChip(
@@ -759,6 +799,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
                 setState(() {});
               },
+              essence: '',
             ),
             SizedBox(width: 10),
             SelectionChip(
@@ -769,6 +810,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 selectedTabName = "Tubers";
                 setState(() {});
               },
+              essence: '',
             ),
             SizedBox(width: 10),
             SelectionChip(
@@ -779,6 +821,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 selectedTabName = "Spices";
                 setState(() {});
               },
+              essence: '',
             ),
           ]),
         ),
@@ -993,11 +1036,13 @@ class SelectionChip extends StatefulWidget {
   // Function() stateSetterFunction;
 
   String name;
+  String essence;
   SelectionChip({
     super.key,
     this.imageURL,
     this.isSelected = false,
     required this.name,
+    required this.essence,
     this.onClickFunction,
   });
 
@@ -1016,12 +1061,14 @@ class _SelectionChipState extends State<SelectionChip> {
         // widget.isSelected = !widget.isSelected;
         another = !another;
         widget.isSelected = another;
+        logger("This pressed: ${widget.essence}");
+
         // print(widget.isSelected);
         widget.onClickFunction?.call(widget.isSelected);
         setState(() {});
       },
       child: Container(
-        width: 125,
+        width: 120,
         // height: 44,
         constraints: BoxConstraints(maxHeight: 50),
         decoration: BoxDecoration(

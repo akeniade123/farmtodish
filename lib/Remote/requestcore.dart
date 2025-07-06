@@ -25,6 +25,13 @@ Future<void> logout(BuildContext context) async {
   }
   userlog = {};
 
+  dbm = DatabaseHelper(table: produce);
+  ddf = await dbm.queryAllRows();
+
+  for (Map<String, dynamic> dd in ddf) {
+    dbm.delete(dd);
+  }
+
   SharedPref pref = SharedPref();
   await pref.setPrefBool(login, false);
 

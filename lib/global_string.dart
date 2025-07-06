@@ -31,6 +31,8 @@ const vww = "View";
 const String crtt = "create";
 const String upd_ = "updatezz";
 const String rd = "read";
+const String rt = "Router";
+const String spk = "specific_tsk";
 const String rd_e = "read_expl";
 const String chg = "Charge";
 
@@ -125,6 +127,8 @@ const String typ = "type";
 const String crt = "created_at";
 const String img = "image";
 const String abbrv = "abbrv";
+const String unt = "unit";
+const String prz = "price";
 const String nmm_ = "Name";
 const String unq = "Unique_ID";
 const String phn_ = "Phone";
@@ -146,6 +150,10 @@ const String upd = "Updated_at";
 const String instr = "Instruction";
 const String acct = "account";
 const String brdc = "broadcast";
+const String lvl = "Level";
+
+const String avl_bl = "Available Balance";
+const String csh_bk = "Cashback Bonus";
 
 const String ctg = "Category";
 const String dept = "department";

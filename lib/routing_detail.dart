@@ -148,7 +148,7 @@ final GoRouter myRouter = GoRouter(
                 builder: (context, state) => const DeliveryCarScreen(),
               )
             ],
-          ),
+          )
           // StatefulShellBranch(
           //   routes: <RouteBase>[
           //     GoRoute(
@@ -170,7 +170,7 @@ final GoRouter myRouter = GoRouter(
       ),
       GoRoute(
         path: '/PaymentScreen',
-        builder: (context, state) => const PaymentScreen(),
+        builder: (context, state) => PaymentScreen(amount: pay_[amt]),
       ),
 
       GoRoute(

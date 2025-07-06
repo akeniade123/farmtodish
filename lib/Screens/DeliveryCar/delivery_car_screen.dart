@@ -194,6 +194,7 @@ class _DeliveryCarScreenState extends State<DeliveryCarScreen> {
             onClickFunction: (p0) {
               setState(() {});
             },
+            essence: '',
           ),
           SelectionChip(
             name: "fruits And Vegie",
@@ -201,6 +202,7 @@ class _DeliveryCarScreenState extends State<DeliveryCarScreen> {
             onClickFunction: (p0) {
               setState(() {});
             },
+            essence: '',
           ),
           SelectionChip(
             name: "fruits And Vegie",
@@ -208,6 +210,7 @@ class _DeliveryCarScreenState extends State<DeliveryCarScreen> {
             onClickFunction: (p0) {
               setState(() {});
             },
+            essence: '',
           ),
         ]),
         titleWidget: Text(

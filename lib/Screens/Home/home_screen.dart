@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 // import 'package:sqflite/sqflite.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import '../../Dialogs/dialog_stack.dart';
 import '../../Remote/modelstack.dart';
 import '../../Remote/requestcore.dart';
 import '../../Repository/databaseHelper.dart';
@@ -256,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
       logger("Albert Indexed: $qq");
       List<Map<String, dynamic>> pp = await dbh.queryAllRows();
       for (Map<String, dynamic> itm in pp) {
-        cntz.add({"name": itm[typ], "imageURL": itm[img]});
+        cntz.add({id: itm[id], "name": itm[typ], "imageURL": itm[img]});
       }
     } else {
       logger("Albert: $qq");
@@ -275,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
           String typ = item["type"];
           //1  String img = item["image"];
 
-          cntz.add({"name": typ, "imageURL": item[img]});
+          cntz.add({id: item[id], "name": typ, "imageURL": item[img]});
           dbh.insertData(item);
         }
       }
@@ -686,7 +687,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildCategorySlab(Map e) {
     return InkWell(
       onTap: () {
-        context.pushNamed("ProductScreen", extra: e["name"]);
+        logger("Entity: $e");
+        Map<String, dynamic> ths = {nmm: e["name"], id: e[id]};
+        context.pushNamed("ProductScreen", extra: jsonEncode(ths));
       },
       child: Container(
         margin: EdgeInsets.all(10),
@@ -782,7 +785,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 20,
                       minWidth: 100,
                       onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => FundWallet());
                         //  context.go("/ProductScreen");
+
+                        /*
                         Widget wdg = Column(
                           children: [
                             const Center(
@@ -819,6 +827,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onPressed: () async {
                                     if (_amount.text.isNotEmpty) {
                                       amount = int.parse(_amount.text);
+                                      pay_ = {amt: amount};
                                       context.go("/PaymentScreen");
                                     } else {
                                       ScaffoldMessenger.of(context)
@@ -840,6 +849,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         );
                         Modal(context, 220, wdg);
+                        */
                       },
                       color: FarmToDishTheme.faintGreen,
                       shape: RoundedRectangleBorder(
