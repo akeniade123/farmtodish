@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 
+import 'Dialogs/dialog_stack.dart';
 import 'Remote/elitebasis.dart';
 import 'Remote/modelstack.dart';
 import 'Remote/requestcore.dart';
@@ -53,6 +54,70 @@ class _SquireState extends State<Squire> {
       ),
     );
   }
+}
+
+SizedBox ess(String item, String essence, BuildContext context) {
+  return SizedBox(
+      width: double.infinity,
+      height: 40,
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: MaterialButton(
+          height: 20,
+          minWidth: 100,
+          onPressed: () async {
+            switch (essence) {
+              case psw_0:
+                showDialog(
+                    context: context, builder: (context) => FundWallet());
+
+                break;
+            }
+          },
+          color: FarmToDishTheme.faintGreen,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+          child: Text(
+            item,
+            style: const TextStyle(
+                fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+        ),
+      ));
+}
+
+InkWell nav(String item, String essence, BuildContext context) {
+  return InkWell(
+    onTap: () {
+      switch (essence) {
+        case psw_:
+          showDialog(
+              context: context,
+              builder: (context) => Navs(
+                    essence: essence,
+                    caption: item,
+                  ));
+
+          break;
+        case dlv_:
+          break;
+      }
+    },
+    child: Row(
+      children: [
+        Align(
+            alignment: Alignment.bottomLeft,
+            child:
+                Padding(padding: const EdgeInsets.all(8.0), child: Text(item))),
+        const Expanded(child: SizedBox()),
+        Align(
+            alignment: Alignment.bottomRight,
+            child: Icon(
+              Icons.chevron_right,
+              color: FarmToDishTheme.deepGreen,
+            )),
+      ],
+    ),
+  );
 }
 
 class NoInternet extends StatelessWidget {
@@ -103,6 +168,19 @@ class NoInternet extends StatelessWidget {
       ),
     );
   }
+}
+
+Container buildDivider() {
+  return Container(
+    height: 3,
+    width: double.infinity,
+    decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [
+      Colors.transparent,
+      FarmToDishTheme.deepGreen,
+      Colors.transparent
+    ])),
+  );
 }
 
 SnackBar displaySnackBar(String message) {

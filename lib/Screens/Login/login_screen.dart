@@ -125,6 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool signin = false;
   bool otp = false;
 
+  bool obscurePasswordText = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,7 +169,48 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: phoneNumberRetriever,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
+            Squire(
+              height: 40,
+              child: Stack(
+                children: [
+                  TextField(
+                    decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.only(bottom: 10, right: 10, left: 10),
+                      border: InputBorder.none,
+                      hintStyle: FarmToDishTheme.iStyle,
+                      hintText: "Password",
+                      // label: Text("Password" ' :'),
+                    ),
+                    obscureText: obscurePasswordText,
+                    // label: "Password" ' :',
+                    controller: passwordRetriever,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscurePasswordText = !obscurePasswordText;
+                            });
+                          },
+                          icon: Icon(
+                            size: 20,
+                            color: Theme.of(context).primaryColorLight,
+                            (obscurePasswordText)
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                          )),
+                    ),
+                  )
+                ],
+              ),
+            ),
+
+/*
             Row(
               children: <Widget>[
                 Expanded(
@@ -231,6 +274,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
             // SizedBox(height: 12),
+
+            */
             Align(
               alignment: Alignment.centerLeft,
               child: TextButton(
@@ -430,8 +475,9 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
 
     // SharedPref pref = SharedPref();
     // await pref.setPrefString("usrTbl", jsonEncode(usrLogin[0]));
-
-    customSnackBar(context, otp_['message']!);
+    try {
+      customSnackBar(context, otp_['message']!);
+    } catch (e) {}
 
     //Modal(context, 220, wdg);
     context.go("/OTP");

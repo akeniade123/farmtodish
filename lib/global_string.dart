@@ -152,6 +152,20 @@ const String acct = "account";
 const String brdc = "broadcast";
 const String lvl = "Level";
 
+const String psw_ = "Password & Security";
+
+const String psw_0 = "Change Password";
+const String psw_1 = "Biometrics Login";
+const String psw_2 = "Create/Change Payment Pin";
+const String psw_3 = "Forgot Payment Pin?";
+const String psw_4 = "Add Nickname";
+
+const String dlv_ = "Update Delivery Address";
+const String ref_ = "Refer & Earn";
+const String shr_ = "Share App";
+const String tms_ = "Terms of Service";
+const String cnt_ = "Contact Us";
+
 const String avl_bl = "Available Balance";
 const String csh_bk = "Cashback Bonus";
 

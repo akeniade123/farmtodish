@@ -7,6 +7,7 @@ import 'package:farm_to_dish/global_handlers.dart';
 import 'package:farm_to_dish/sharedpref.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'Repository/databaseHelper.dart';
@@ -20,7 +21,7 @@ final rootNavigatorKey = GlobalKey<NavigatorState>();
 bool isLoggedIn = false;
 
 late User ussr_;
-late int amount;
+late double amount;
 
 late BuildContext drwdlg, dshCtx, crrctx, bbCtx, cbtCtx;
 
@@ -66,6 +67,28 @@ List<String> productTypes = [
   "Grains and legumes",
   "Spices"
 ];
+
+Future<Position> _getCurrentLocation() async {
+  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    return Future.error("Location services are disabled");
+  }
+
+  LocationPermission permission = await Geolocator.checkPermission();
+
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      return Future.error("Location permissions are denied");
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    return Future.error(
+        "Location permissions are permanently denied, we cannot request permission again");
+  }
+  return await Geolocator.getCurrentPosition();
+}
 
 /*
 Map<int, List<String>> sectionSlabs = {
