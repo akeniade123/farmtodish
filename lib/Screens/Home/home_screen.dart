@@ -1010,6 +1010,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
             //  rs256();
             try {
+              getCurrentLocation().then((value) {
+                lat = "${value.latitude}";
+                lng = "${value.longitude}";
+
+                String lct = "My Location: $lat -- $lng";
+
+                logger("My Location: $lat -- $lng");
+
+                customSnackBar(context, lct);
+              });
               // logout(context);
 
               // sendNotification(

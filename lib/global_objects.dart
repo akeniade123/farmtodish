@@ -68,7 +68,9 @@ List<String> productTypes = [
   "Spices"
 ];
 
-Future<Position> _getCurrentLocation() async {
+late String lat, lng;
+
+Future<Position> getCurrentLocation() async {
   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
     return Future.error("Location services are disabled");
@@ -89,6 +91,26 @@ Future<Position> _getCurrentLocation() async {
   }
   return await Geolocator.getCurrentPosition();
 }
+
+void getLivelocation() {
+  LocationSettings locationSettings = const LocationSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 100,
+  );
+  Geolocator.getPositionStream(locationSettings: locationSettings)
+      .listen((Position position) {
+    lat = position.latitude.toString();
+    lng = position.longitude.toString();
+  });
+}
+
+// Future<void> openMap(String lat, String long) async {
+//   String googleUrl =
+//       'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+//   await canLaunchUrlString(googleUrl)
+//       ? await launchUrlString(googleUrl)
+//       : throw 'Could not launch $googleUrl';
+// }
 
 /*
 Map<int, List<String>> sectionSlabs = {
