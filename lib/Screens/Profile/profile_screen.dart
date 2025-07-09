@@ -5,10 +5,14 @@
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
 // import 'package:Yomcoin/screens/login.dart';
+import 'package:farm_to_dish/Screens/Chat/models/profile.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
 // import 'package:sqflite/sqflite.dart';
 
+import '../../Dialogs/dialog_stack.dart';
+import '../../Models/model_stack.dart';
+import '../../Remote/requestcore.dart';
 import '../../Repository/databaseHelper.dart';
 import '../../global_objects.dart';
 import '../../global_string.dart';
@@ -57,18 +61,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: FarmToDishTheme.scaffoldBackgroundColor,
+      appBar: PreferredSize(
+          preferredSize: const Size(double.infinity, 200),
+          child: AppBar(
+              toolbarHeight: 350,
+              centerTitle: true,
+              backgroundColor: FarmToDishTheme.scaffoldBackgroundColor,
+              title: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 40),
+                    _buildTopComponent(),
+                    _buildSecondBlock(),
+                    // divider
+                    // Divider(color: ,)
+                    buildDivider(),
+                    SizedBox(height: 20),
+                  ]))),
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 33.0, vertical: 20),
         child: Column(
           children: [
-            SizedBox(height: 40),
-            _buildTopComponent(),
-            _buildSecondBlock(),
-            // divider
-            // Divider(color: ,)
-            _buildDivider(),
-            SizedBox(height: 15),
+            SizedBox(height: 5),
             Text(
               "Account Summary",
               style: TextStyle(
@@ -80,9 +96,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _account(avl_bl),
             _account(csh_bk),
             _account(lvl),
-
             _buildSelectorTab(),
-
+            SizedBox(height: 20),
+            _settings(),
+            SizedBox(height: 20),
             TitleMoreAndBodyWidget(
               body: (pndOrder == null)
                   ? (Text("No pending transaction"))
@@ -91,7 +108,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               isSeeAll: true,
             ),
             SizedBox(height: 20),
-
             TitleMoreAndBodyWidget(
               body: Column(children: [
                 _buildItem(
@@ -117,7 +133,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ]),
               titleWidget: _buildTitleForLists("History"),
               isSeeAll: true,
-            )
+            ),
+            SizedBox(height: 20),
+            SizedBox(
+                width: double.infinity,
+                height: 40,
+                child: MaterialButton(
+                  height: 20,
+                  minWidth: 100,
+                  onPressed: () async {
+                    logout(context);
+                  },
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  child: const Text(
+                    "Log Out",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red),
+                  ),
+                )),
+            SizedBox(height: 70),
           ],
         ),
       )),
@@ -273,19 +311,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Container _buildDivider() {
-    return Container(
-      height: 3,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-        Colors.transparent,
-        FarmToDishTheme.deepGreen,
-        Colors.transparent
-      ])),
-    );
-  }
-
   Row _account(String essence) {
     String _acct = "";
     Future<String>? dtl;
@@ -323,6 +348,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   String selectedTabName = "";
 
+  Container _settings() {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: FarmToDishTheme.accentLightColor,
+      ),
+      child: _set(),
+    );
+  }
+
+  Column _set() {
+    //  List<String> set_ = [psw_, dlv_, ref_, shr_, tms_, cnt_];
+    List<ProfileLog> fld = [
+      ProfileLog(name: psw_, essence: psw_),
+      ProfileLog(name: dlv_, essence: dlv_),
+      ProfileLog(name: ref_, essence: ref_),
+      ProfileLog(name: shr_, essence: shr_),
+      ProfileLog(name: tms_, essence: tms_),
+      ProfileLog(name: cnt_, essence: cnt_)
+    ];
+    /*
+
+Version 1.0
+    */
+    return Column(
+        children: fld.map((e) => nav(e.name, e.essence, context)).toList());
+  }
+
   TitleMoreAndBodyWidget _buildSelectorTab() {
     return TitleMoreAndBodyWidget(
         body: SingleChildScrollView(
@@ -336,6 +390,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onClickFunction: (p0) {
                 selectedTabName = "fruits And Vegie";
                 setState(() {});
+
+                showDialog(
+                    context: context, builder: (context) => FundWallet());
               },
               essence: '',
             ),

@@ -9,6 +9,7 @@ import 'package:farm_to_dish/Screens/DeliveryCar/delivery_car_model.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:sqflite/sqflite.dart';
 
 import '../../global_objects.dart';
@@ -47,11 +48,32 @@ class _DeliveryCarScreenState extends State<DeliveryCarScreen> {
         isAvailable: true,
         name: 'Lake View, Lekki'),
   ];
+
+  static const LatLng _pGooglePlex = LatLng(6.8126793, 3.4674229);
+
+  static const LatLng _pApplePark = LatLng(6.8176793, 3.4634229);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: FarmToDishTheme.scaffoldBackgroundColor,
-      body: SafeArea(
+        backgroundColor: FarmToDishTheme.scaffoldBackgroundColor,
+        body: GoogleMap(
+          initialCameraPosition:
+              CameraPosition(target: _pGooglePlex, zoom: 100),
+          markers: {
+            Marker(
+                markerId: MarkerId("location one"),
+                icon: BitmapDescriptor.defaultMarker,
+                position: _pGooglePlex),
+            Marker(
+                markerId: MarkerId("location two"),
+                icon: BitmapDescriptor.defaultMarker,
+                position: _pApplePark),
+          },
+        )
+
+        /*
+      SafeArea(
         child: Stack(
           children: [
             Container(
@@ -113,7 +135,9 @@ class _DeliveryCarScreenState extends State<DeliveryCarScreen> {
           ],
         ),
       ),
-    );
+      */
+
+        );
   }
 
   Widget _buildDeliveryPoolCard(DeliveryCarModel e) {

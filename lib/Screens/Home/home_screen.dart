@@ -568,6 +568,8 @@ class _HomeScreenState extends State<HomeScreen> {
               //     .map((e) => _buildCategorySlab(e))
               //     .toList()),
               SizedBox(height: 30),
+
+              /*
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -597,6 +599,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
+
+              */
               SizedBox(
                 height: 80,
               )
@@ -791,7 +795,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         //  context.go("/ProductScreen");
 
                         /*
-                        Widget wdg = Column(
+                          Widget wdg = Column(
                           children: [
                             const Center(
                               child: Text("Enter an Amount"),
@@ -848,7 +852,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 )),
                           ],
                         );
-                        Modal(context, 220, wdg);
+                          Modal(context, 220, wdg);
                         */
                       },
                       color: FarmToDishTheme.faintGreen,
@@ -1006,7 +1010,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
             //  rs256();
             try {
-              logout(context);
+              getCurrentLocation().then((value) {
+                lat = "${value.latitude}";
+                lng = "${value.longitude}";
+
+                String lct = "My Location: $lat -- $lng";
+
+                logger("My Location: $lat -- $lng");
+
+                customSnackBar(context, lct);
+              });
+              // logout(context);
 
               // sendNotification(
               //     "eNomrX2CSI2-Ad6l8ct3UG:APA91bGjKnFOkcYFkNVdWwygdKBqFcoV_jWLeWC2xSuuwBepNktEo4HEVF7Auvcp6g-R5RWdy3vTtS0X1ih9SNjggB-TaGlQNDf-BeCfvqJWYB1SI1V87y8",
