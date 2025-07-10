@@ -1008,8 +1008,11 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () async {
             logger("Testing This");
 
+            showDialog(context: context, builder: (context) => LocateMe());
+
             //  rs256();
             try {
+              /*
               getCurrentLocation().then((value) {
                 lat = "${value.latitude}";
                 lng = "${value.longitude}";
@@ -1020,6 +1023,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 customSnackBar(context, lct);
               });
+              */
+
               // logout(context);
 
               // sendNotification(

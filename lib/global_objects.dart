@@ -193,6 +193,7 @@ late stackStar strr;
 late balance bll;
 late userDtlz usrdtlz;
 late broadcast brdcst;
+late dropDownlst drpz;
 
 late Map<String, dynamic> userlog;
 late Map<String, dynamic> usrTmp;
@@ -255,6 +256,11 @@ class UINotifier extends ChangeNotifier {
 
   void broadCast(broadcast brdc) {
     brdcst = brdc;
+    notifyListeners();
+  }
+
+  void dropDown(dropDownlst lst) {
+    drpz = lst;
     notifyListeners();
   }
 

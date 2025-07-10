@@ -1,8 +1,17 @@
+//import 'package:dropdown_search/dropdown_search.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../Models/model_stack.dart';
+import '../Remote/modelstack.dart';
+import '../Remote/requestmodel.dart';
+import '../Remote/server_response.dart';
 import '../app_theme_file.dart';
+import '../global_handlers.dart';
 import '../global_objects.dart';
 import '../global_string.dart';
 import '../global_widgets.dart';
@@ -65,6 +74,172 @@ Version 1.0
     */
     return Column(
         children: fld.map((e) => ess(e.name, e.essence, context)).toList());
+  }
+}
+
+class LocateMe extends StatefulWidget {
+  const LocateMe({super.key});
+
+  @override
+  State<LocateMe> createState() => _LocateMeState();
+}
+
+class _LocateMeState extends State<LocateMe> {
+  Future<Position>? pos;
+  List<String> itemz = [];
+  String location = "";
+
+  @override
+  void initState() {
+    pos = null;
+    drpz = dropDownlst(id: "id", array: []);
+    pos = locator();
+  }
+
+  // final dropDownKey = GlobalKey<DropdownSearchState>();
+
+  Future<Position>? locator() async {
+    rd_e;
+    Navigate nvg = Navigate();
+    List<String> nmm = [];
+
+    Map<String, dynamic>? obj = await nvg.readData("market_segment",
+        {"lat": ""}, global, "access", "content", false, rd_e);
+    logger("Response: $obj");
+
+    ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+    if (svp.status) {
+      ServerResponse svr = ServerResponse.fromJson(obj);
+      for (dynamic d in svr.data) {
+        setState(() {
+          //  gender = value ?? '';
+          itemz.add(d["name"]);
+        });
+      }
+    }
+
+    logger("Total: ${nmm.length}");
+    // itemz = nmm;
+    logger('The Names: ${jsonEncode(itemz)}');
+    dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
+    dshCtx.read<UINotifier>().dropDown(drp_);
+
+    //  {"Essence":"market_segment", "State":"read_expl", "Manifest":{"lat":""}}
+
+    return await getCurrentLocation();
+
+    /*
+
+    getCurrentLocation().then((value) {
+      lat = "${value.latitude}";
+      lng = "${value.longitude}";
+    });
+    */
+
+    //  pos = Position(longitude: lng, latitude: latitude, timestamp: timestamp, accuracy: accuracy, altitude: altitude, altitudeAccuracy: altitudeAccuracy, heading: heading, headingAccuracy: headingAccuracy, speed: speed, speedAccuracy: speedAccuracy)
+  }
+
+  Consumer lct_() {
+    return Consumer<UINotifier>(builder: (context, notifier, child) {
+      return Locator("Select Location", itemz); //07033280489
+    });
+  }
+
+  Widget Locator(String desc, List<String> items_) {
+    logger('The Names: ${jsonEncode(items_)}');
+
+    return Center(
+      child: Column(
+        children: [
+          DropdownButtonFormField(
+            hint: Text(
+              desc,
+              style: FarmToDishTheme.iStyle,
+            ),
+            isExpanded: false,
+            icon: Expanded(
+              child: Center(
+                child: Container(
+                  alignment: Alignment.topCenter,
+                  child: Icon(Icons.keyboard_arrow_down, size: 20),
+                ),
+              ),
+            ),
+            alignment: Alignment.center,
+            decoration: InputDecoration(border: InputBorder.none),
+            items: drpz.array.map((String value) {
+              return DropdownMenuItem(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+
+            // [
+            //   DropdownMenuItem<String>(
+            //     child: Text('Male', style: FarmToDishTheme.iStyle),
+            //     value: 'Male',
+            //   ),
+            //   DropdownMenuItem<String>(
+            //     child: Text('Female', style: FarmToDishTheme.iStyle),
+            //     value: 'Female',
+            //   )
+            // ],
+            onChanged: (value) {
+              setState(() {
+                int loc = drpz.array.indexOf(value!);
+                location = drpz.array[loc];
+                logger("The Current: $location");
+              });
+            },
+          ),
+          MaterialButton(
+            height: 20,
+            minWidth: 100,
+            onPressed: () async {
+              getCurrentLocation().then((value) {
+                lat = "${value.latitude}";
+                lng = "${value.longitude}";
+              });
+              logger("The exact location: $location -- $lat -- $lng");
+            },
+            color: FarmToDishTheme.faintGreen,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            child: const Text(
+              "Tag Location",
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Wrap(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            width: 290,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: FarmToDishTheme.scaffoldBackgroundColor),
+            child: Column(
+              children: [
+                (pos == null)
+                    ? const Text("Searching for your location")
+                    : lct_()
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
