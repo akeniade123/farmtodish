@@ -1,7 +1,9 @@
 //import 'package:dropdown_search/dropdown_search.dart';
 import 'dart:convert';
+//import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -45,29 +47,46 @@ class _NavsState extends State<Navs> {
   Container _fields(String essence, String caption) {
     switch (essence) {
       case psw_:
+      case dlv_:
         return Container(
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             // color: FarmToDishTheme.accentLightColor,
           ),
-          child: _pswSec(),
+          child: _pswSec(essence),
         );
+
+      //return
 
       default:
         return Container();
     }
   }
 
-  Column _pswSec() {
+  Column _pswSec(String essence) {
     //  List<String> set_ = [psw_, dlv_, ref_, shr_, tms_, cnt_];
-    List<ProfileLog> fld = [
-      ProfileLog(name: psw_0, essence: psw_0),
-      ProfileLog(name: psw_1, essence: psw_1),
-      ProfileLog(name: psw_2, essence: psw_2),
-      ProfileLog(name: psw_3, essence: psw_3),
-      ProfileLog(name: psw_4, essence: psw_4),
-    ];
+
+    List<ProfileLog> fld = [];
+    switch (essence) {
+      case psw_:
+        fld = [
+          ProfileLog(name: psw_0, essence: psw_0),
+          ProfileLog(name: psw_1, essence: psw_1),
+          ProfileLog(name: psw_2, essence: psw_2),
+          ProfileLog(name: psw_3, essence: psw_3),
+          ProfileLog(name: psw_4, essence: psw_4),
+          ProfileLog(name: psw_5, essence: psw_5),
+        ];
+        break;
+      case dlv_:
+        fld = [
+          ProfileLog(name: dlv_0, essence: dlv_0),
+          ProfileLog(name: dlv_1, essence: dlv_1),
+        ];
+        break;
+    }
+
     /*
 
 Version 1.0
@@ -78,7 +97,9 @@ Version 1.0
 }
 
 class LocateMe extends StatefulWidget {
-  const LocateMe({super.key});
+  final String essence;
+
+  const LocateMe({super.key, required this.essence});
 
   @override
   State<LocateMe> createState() => _LocateMeState();
@@ -88,6 +109,7 @@ class _LocateMeState extends State<LocateMe> {
   Future<Position>? pos;
   List<String> itemz = [];
   String location = "";
+  String addr = "";
 
   @override
   void initState() {
@@ -100,34 +122,51 @@ class _LocateMeState extends State<LocateMe> {
   // final dropDownKey = GlobalKey<DropdownSearchState>();
 
   Future<Position>? locator() async {
-    rd_e;
-    Navigate nvg = Navigate();
-    List<String> nmm = [];
+    switch (widget.essence) {
+      case mkt:
+        Navigate nvg = Navigate();
+        List<String> nmm = [];
 
-    Map<String, dynamic>? obj = await nvg.readData(
-        mkt, {"lat": ""}, global, "access", "content", false, rd_e);
-    logger("Response: $obj");
+        Map<String, dynamic>? obj = await nvg.readData(
+            mkt, {"lat": ""}, global, "access", "content", false, rd_e);
+        logger("Response: $obj");
 
-    ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
-    if (svp.status) {
-      ServerResponse svr = ServerResponse.fromJson(obj);
-      for (dynamic d in svr.data) {
-        setState(() {
-          //  gender = value ?? '';
-          itemz.add(d["name"]);
-        });
-      }
+        ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+        if (svp.status) {
+          ServerResponse svr = ServerResponse.fromJson(obj);
+          for (dynamic d in svr.data) {
+            setState(() {
+              //  gender = value ?? '';
+              itemz.add(d["name"]);
+            });
+          }
+        }
+
+        logger("Total: ${nmm.length}");
+        // itemz = nmm;
+        logger('The Names: ${jsonEncode(itemz)}');
+        break;
     }
 
-    logger("Total: ${nmm.length}");
-    // itemz = nmm;
-    logger('The Names: ${jsonEncode(itemz)}');
-    dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
-    dshCtx.read<UINotifier>().dropDown(drp_);
+    await getCurrentLocation();
 
     //  {"Essence":"market_segment", "State":"read_expl", "Manifest":{"lat":""}}
 
-    return await getCurrentLocation();
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    debugPrint('location: ${position.latitude}');
+
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    logger("Hello: ${placemarks} -- ${placemarks.first}");
+
+    addr =
+        "${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}";
+
+    dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
+    dshCtx.read<UINotifier>().dropDown(drp_);
+
+    return position;
 
     /*
 
@@ -149,84 +188,154 @@ class _LocateMeState extends State<LocateMe> {
   Widget Locator(String desc, List<String> items_) {
     logger('The Names: ${jsonEncode(items_)}');
 
-    return Center(
-      child: Column(
-        children: [
-          DropdownButtonFormField(
-            hint: Text(
-              desc,
-              style: FarmToDishTheme.iStyle,
-            ),
-            isExpanded: false,
-            icon: Expanded(
-              child: Center(
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  child: Icon(Icons.keyboard_arrow_down, size: 20),
+    Widget wdg = const Text("No View");
+
+    switch (widget.essence) {
+      case psw_5:
+      case dlv_0:
+        wdg = Center(
+          child: Column(
+            children: [
+              Text(addr),
+              (widget.essence == psw_5) ? const Text("") : Text(""),
+              (addr.isEmpty)
+                  ? const Text("")
+                  : MaterialButton(
+                      height: 30,
+                      minWidth: 100,
+                      color: FarmToDishTheme.faintGreen,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      child: (widget.essence == dlv_0)
+                          ? const Text(
+                              "Update",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )
+                          : const Text(
+                              "Share my location",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                      onPressed: () async {})
+            ],
+          ),
+        );
+        break;
+      case mkt:
+        wdg = Center(
+          child: Column(
+            children: [
+              DropdownButtonFormField(
+                hint: Text(
+                  desc,
+                  style: FarmToDishTheme.iStyle,
+                ),
+                isExpanded: false,
+                icon: Expanded(
+                  child: Center(
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      child: Icon(Icons.keyboard_arrow_down, size: 20),
+                    ),
+                  ),
+                ),
+                alignment: Alignment.center,
+                decoration: InputDecoration(border: InputBorder.none),
+                items: drpz.array.map((String value) {
+                  return DropdownMenuItem(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+
+                // [
+                //   DropdownMenuItem<String>(
+                //     child: Text('Male', style: FarmToDishTheme.iStyle),
+                //     value: 'Male',
+                //   ),
+                //   DropdownMenuItem<String>(
+                //     child: Text('Female', style: FarmToDishTheme.iStyle),
+                //     value: 'Female',
+                //   )
+                // ],
+                onChanged: (value) {
+                  setState(() {
+                    int loc = drpz.array.indexOf(value!);
+                    location = drpz.array[loc];
+                    logger("The Current: $location");
+                  });
+                },
+              ),
+              MaterialButton(
+                height: 30,
+                minWidth: 100,
+                onPressed: () async {
+                  lat = lng = "";
+                  pos = await getCurrentLocation().then((value) {
+                    lat = "${value.latitude}";
+                    lng = "${value.longitude}";
+                  });
+
+                  Position position = await Geolocator.getCurrentPosition(
+                      desiredAccuracy: LocationAccuracy.high);
+                  debugPrint('location: ${position.latitude}');
+
+                  List<Placemark> placemarks = await placemarkFromCoordinates(
+                      position.latitude, position.longitude);
+                  logger("Hello: ${placemarks} -- ${placemarks.first}");
+
+                  /*
+              final coordinates =
+                  Coordinates(position.latitude, position.longitude);
+              var addresses = await Geocoder.local
+                  .findAddressesFromCoordinates(coordinates);
+              var first = addresses.first;
+              print("${first.featureName} : ${first.addressLine}");
+
+              */
+
+                  logger("The exact location: $location -- $lat -- $lng");
+                  if (lat != "") {
+                    Navigate nvg = Navigate();
+
+                    Map<String, dynamic> mnf = {"name": location};
+                    Map<String, dynamic> ent = {
+                      "lat": lat,
+                      "lng": lng,
+                      "location": jsonEncode(placemarks.first)
+                    };
+
+                    Map<String, dynamic>? obj = await nvg.entry(mkt, mnf, ent,
+                        mnf, global, "access", "content", false, upd_, context);
+
+                    try {
+                      ServerPrelim svr = ServerPrelim.fromJson(obj!);
+                      customSnackBar(context, svr.msg.toString());
+                    } catch (e) {}
+                  }
+                },
+                color: FarmToDishTheme.faintGreen,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                child: const Text(
+                  "Tag Location",
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
               ),
-            ),
-            alignment: Alignment.center,
-            decoration: InputDecoration(border: InputBorder.none),
-            items: drpz.array.map((String value) {
-              return DropdownMenuItem(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-
-            // [
-            //   DropdownMenuItem<String>(
-            //     child: Text('Male', style: FarmToDishTheme.iStyle),
-            //     value: 'Male',
-            //   ),
-            //   DropdownMenuItem<String>(
-            //     child: Text('Female', style: FarmToDishTheme.iStyle),
-            //     value: 'Female',
-            //   )
-            // ],
-            onChanged: (value) {
-              setState(() {
-                int loc = drpz.array.indexOf(value!);
-                location = drpz.array[loc];
-                logger("The Current: $location");
-              });
-            },
+            ],
           ),
-          MaterialButton(
-            height: 20,
-            minWidth: 100,
-            onPressed: () async {
-              lat = lng = "";
-              await getCurrentLocation().then((value) {
-                lat = "${value.latitude}";
-                lng = "${value.longitude}";
-              });
-              logger("The exact location: $location -- $lat -- $lng");
-              if (lat != "") {
-                Navigate nvg = Navigate();
+        );
+    }
 
-                Map<String, dynamic> mnf = {"name": location};
-                Map<String, dynamic> ent = {"lat": lat, "lng": lng};
-
-                Map<String, dynamic>? obj = await nvg.entry(mkt, mnf, ent, mnf,
-                    global, "access", "content", false, upd_, context);
-              }
-            },
-            color: FarmToDishTheme.faintGreen,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            child: const Text(
-              "Tag Location",
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    );
+    return wdg;
   }
 
   @override

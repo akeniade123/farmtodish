@@ -161,8 +161,11 @@ const String psw_1 = "Biometrics Login";
 const String psw_2 = "Create/Change Payment Pin";
 const String psw_3 = "Forgot Payment Pin?";
 const String psw_4 = "Add Nickname";
+const String psw_5 = "Share My Location";
 
 const String dlv_ = "Update Delivery Address";
+const String dlv_0 = "Set my current location";
+const String dlv_1 = "Obtain from a friend";
 const String ref_ = "Refer & Earn";
 const String shr_ = "Share App";
 const String tms_ = "Terms of Service";

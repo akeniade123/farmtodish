@@ -1008,7 +1008,8 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () async {
             logger("Testing This");
 
-            showDialog(context: context, builder: (context) => LocateMe());
+            showDialog(
+                context: context, builder: (context) => LocateMe(essence: mkt));
 
             //  rs256();
             try {

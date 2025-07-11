@@ -227,6 +227,8 @@ class _CartScreenState extends State<CartScreen> {
 
                                       int i = await dbm.queryRowCount();
                                       if (i > 0) {
+                                        logger(
+                                            "All Item: ${jsonEncode(selectedProducts)}");
                                         List<Map<String, dynamic>> dd =
                                             await dbm.queryAllRows();
                                         Map<String, dynamic> ust = dd[0];
