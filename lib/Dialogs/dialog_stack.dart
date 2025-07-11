@@ -93,6 +93,7 @@ class _LocateMeState extends State<LocateMe> {
   void initState() {
     pos = null;
     drpz = dropDownlst(id: "id", array: []);
+    lat = lng = "";
     pos = locator();
   }
 
@@ -103,8 +104,8 @@ class _LocateMeState extends State<LocateMe> {
     Navigate nvg = Navigate();
     List<String> nmm = [];
 
-    Map<String, dynamic>? obj = await nvg.readData("market_segment",
-        {"lat": ""}, global, "access", "content", false, rd_e);
+    Map<String, dynamic>? obj = await nvg.readData(
+        mkt, {"lat": ""}, global, "access", "content", false, rd_e);
     logger("Response: $obj");
 
     ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
@@ -196,11 +197,21 @@ class _LocateMeState extends State<LocateMe> {
             height: 20,
             minWidth: 100,
             onPressed: () async {
-              getCurrentLocation().then((value) {
+              lat = lng = "";
+              await getCurrentLocation().then((value) {
                 lat = "${value.latitude}";
                 lng = "${value.longitude}";
               });
               logger("The exact location: $location -- $lat -- $lng");
+              if (lat != "") {
+                Navigate nvg = Navigate();
+
+                Map<String, dynamic> mnf = {"name": location};
+                Map<String, dynamic> ent = {"lat": lat, "lng": lng};
+
+                Map<String, dynamic>? obj = await nvg.entry(mkt, mnf, ent, mnf,
+                    global, "access", "content", false, upd_, context);
+              }
             },
             color: FarmToDishTheme.faintGreen,
             shape:

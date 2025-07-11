@@ -111,6 +111,8 @@ const String dlvAr = "deliveryArea";
 const String dlv = "delivered";
 const String pnd = "pending";
 
+const String mkt = "market_segment";
+
 const String fg = "Foreground Engagement";
 const String bg = "Background Engagement";
 const String hd = "Hidden Engagement";

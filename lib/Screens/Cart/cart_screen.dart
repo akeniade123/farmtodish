@@ -245,6 +245,9 @@ class _CartScreenState extends State<CartScreen> {
                                           pay_ = {amt: def};
                                           context.go("/PaymentScreen");
                                         } else {
+                                          selectedProducts;
+                                          logger(
+                                              "All Item: ${jsonEncode(selectedProducts)}");
                                           logger("Transaction Procession");
                                         }
                                       } else {
