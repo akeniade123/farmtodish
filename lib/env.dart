@@ -19,6 +19,7 @@ int splashTime = 5000;
 var appStatus = prod;
 var caller = "1";
 int version = 1;
+const int timesout = 120;
 
 //check
 

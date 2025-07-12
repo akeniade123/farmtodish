@@ -161,7 +161,7 @@ class _LocateMeState extends State<LocateMe> {
     logger("Hello: ${placemarks} -- ${placemarks.first}");
 
     addr =
-        "${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country}";
+        "${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} --- lat: ${position.latitude} --- long: ${position.longitude}";
 
     dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
     dshCtx.read<UINotifier>().dropDown(drp_);
