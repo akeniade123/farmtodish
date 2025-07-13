@@ -7,6 +7,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_dart_scan/qr_code_dart_scan.dart';
+import 'package:camera_android_camerax/camera_android_camerax.dart';
 
 import '../Models/model_stack.dart';
 import '../Remote/modelstack.dart';
@@ -20,6 +22,67 @@ import '../global_widgets.dart';
 
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
+class ScanQrCode extends StatefulWidget {
+  const ScanQrCode({super.key});
+
+  @override
+  State<ScanQrCode> createState() => _ScanQrCodeState();
+}
+
+class _ScanQrCodeState extends State<ScanQrCode> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: QRCodeDartScanView(
+        // onCameraError: (String error) {
+        //   debugPrint('Error: $error');
+        // },
+
+        // cropRect: CropRect(left: 0, top: 0, width: 100, height: 100), // You can crop the image to improve accuracy by specifying a rectangle region. ( default = null)
+        // imageDecodeOrientation: ImageDecodeOrientation.original, // you can force how the image orientation will be decoded (default = original)
+        typeScan: TypeScan
+            .live, // if TypeScan.takePicture will try decode when click to take a picture(default TypeScan.live)
+        // intervalScan: const Duration(seconds:1)
+        // onResultInterceptor: (old,new){
+        //  do any rule to controll onCapture.
+        // }
+        // takePictureButtonBuilder: (context,controller,isLoading){ // if typeScan == TypeScan.takePicture you can customize the button.
+        //    if(loading) return CircularProgressIndicator();
+        //    return ElevatedButton(
+        //       onPressed:controller.takePictureAndDecode,
+        //       child:Text('Take a picture'),
+        //    );
+        // }
+        // resolutionPreset: = QrCodeDartScanResolutionPreset.high,
+        // formats: [ // You can restrict specific formats.
+        //  BarcodeFormat.qrCode,
+        //  BarcodeFormat.aztec,
+        //  BarcodeFormat.dataMatrix,
+        //  BarcodeFormat.pdf417,
+        //  BarcodeFormat.code39,
+        //  BarcodeFormat.code93,
+        //  BarcodeFormat.code128,
+        //  BarcodeFormat.ean8,
+        //  BarcodeFormat.ean13,
+        // ],
+        // croppingStrategy: CroppingStrategy.cropCenterSquare(
+        //   squareSizeFactor: 0.7,
+        // ),
+        onCapture: (Result result) {
+          // do anything with result
+          // result.text
+          // result.rawBytes
+          // result.resultPoints
+          // result.format
+          // result.numBits
+          // result.resultMetadata
+          // result.time
+        },
+      ),
+    );
+  }
+}
 
 class QRImage extends StatelessWidget {
   const QRImage({super.key, required this.content});
