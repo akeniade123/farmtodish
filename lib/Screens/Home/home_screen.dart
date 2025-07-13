@@ -1027,23 +1027,17 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () async {
             logger("Testing This");
 
-            showDialog(
-                context: context, builder: (context) => LocateMe(essence: mkt));
-
             //  rs256();
             try {
-              /*
-              getCurrentLocation().then((value) {
-                lat = "${value.latitude}";
-                lng = "${value.longitude}";
+              showDialog(
+                  context: context,
+                  builder: (context) => QRImage(
+                        content: 'Awesome',
+                      ));
 
-                String lct = "My Location: $lat -- $lng";
-
-                logger("My Location: $lat -- $lng");
-
-                customSnackBar(context, lct);
-              });
-              */
+              // showDialog(
+              //     context: context,
+              //     builder: (context) => LocateMe(essence: mkt));
 
               // logout(context);
 

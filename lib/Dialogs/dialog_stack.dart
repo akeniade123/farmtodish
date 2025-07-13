@@ -22,9 +22,9 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRImage extends StatelessWidget {
-  const QRImage(this.controller, {super.key});
+  const QRImage({super.key, required this.content});
 
-  final TextEditingController controller;
+  final String content;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class QRImage extends StatelessWidget {
                 color: FarmToDishTheme.scaffoldBackgroundColor),
             child: Center(
               child: QrImageView(
-                data: controller.text,
+                data: content,
                 size: 280,
                 // You can include embeddedImageStyle Property if you
                 //wanna embed an image from your Asset folder

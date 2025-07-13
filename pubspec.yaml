@@ -95,6 +95,8 @@ dependencies:
   geocoding: ^3.0.0
   cached_network_image: ^3.4.0
   qr_flutter: ^4.1.0
+  qr_code_dart_scan: ^0.9.4
+  camera_android_camerax: ^0.6.5+2
   # path: ./packages_list/liquid_progress_indicator-master 
 
 dev_dependencies:
