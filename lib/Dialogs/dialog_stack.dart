@@ -135,10 +135,14 @@ class _LocateMeState extends State<LocateMe> {
         if (svp.status) {
           ServerResponse svr = ServerResponse.fromJson(obj);
           for (dynamic d in svr.data) {
-            setState(() {
-              //  gender = value ?? '';
-              itemz.add(d["name"]);
-            });
+            try {
+              setState(() {
+                //  gender = value ?? '';
+                itemz.add(d["name"]);
+              });
+            } catch (e) {
+              logger("Data Fetch error: $e");
+            }
           }
         }
 

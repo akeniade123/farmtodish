@@ -137,8 +137,8 @@ final GoRouter myRouter = GoRouter(
                 path: '/ProductScreen',
                 name: 'ProductScreen',
                 builder: (context, state) =>
-                    //ProductScreen(initialySelectedTab: state.extra?.toString()),
-                    RequestRoute(),
+                    ProductScreen(initialySelectedTab: state.extra?.toString()),
+                // RequestRoute(),
               )
             ],
           ),

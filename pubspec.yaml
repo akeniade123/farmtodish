@@ -93,6 +93,7 @@ dependencies:
   dio: ^5.8.0+1
   #geocoding: ^4.0.0
   geocoding: ^3.0.0
+  cached_network_image: ^3.4.0
   # path: ./packages_list/liquid_progress_indicator-master 
 
 dev_dependencies:

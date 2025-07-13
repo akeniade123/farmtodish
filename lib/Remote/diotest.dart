@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:farm_to_dish/Remote/http.dart';
 import 'package:flutter/material.dart';
 
+import '../global_handlers.dart';
+
 class RequestRoute extends StatefulWidget {
   @override
   State<RequestRoute> createState() => _RequestRouteState();
@@ -62,22 +64,26 @@ class _RequestRouteState extends State<RequestRoute> {
                   'file': MultipartFile.fromString('x' * 1024 * 1024),
                 });
 
-                elite
-                    .post(
-                  'https://www.farmtodish.com/base/user/entry',
-                  data: formData,
-                  options: Options(
-                    sendTimeout: const Duration(seconds: 30),
-                    receiveTimeout: const Duration(seconds: 0),
-                  ),
-                  onSendProgress: (a, b) => print('send ${a / b}'),
-                  onReceiveProgress: (a, b) => print('received ${a / b}'),
-                )
-                    .then((r) {
-                  setState(() {
-                    _text = r.headers.toString();
+                try {
+                  elite
+                      .post(
+                    'https://www.farmtodish.com/base/user/entry',
+                    data: formData,
+                    options: Options(
+                      sendTimeout: const Duration(seconds: 30),
+                      receiveTimeout: const Duration(seconds: 0),
+                    ),
+                    onSendProgress: (a, b) => print('send ${a / b}'),
+                    onReceiveProgress: (a, b) => print('received ${a / b}'),
+                  )
+                      .then((r) {
+                    setState(() {
+                      _text = r.headers.toString();
+                    });
                   });
-                });
+                } catch (e) {
+                  logger("The Dio Error:$e");
+                }
               },
             ),
             Expanded(
