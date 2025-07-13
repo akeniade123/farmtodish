@@ -18,6 +18,46 @@ import '../global_objects.dart';
 import '../global_string.dart';
 import '../global_widgets.dart';
 
+import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+class QRImage extends StatelessWidget {
+  const QRImage(this.controller, {super.key});
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Wrap(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            width: 290,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: FarmToDishTheme.scaffoldBackgroundColor),
+            child: Center(
+              child: QrImageView(
+                data: controller.text,
+                size: 280,
+                // You can include embeddedImageStyle Property if you
+                //wanna embed an image from your Asset folder
+                embeddedImageStyle: const QrEmbeddedImageStyle(
+                  size: Size(
+                    100,
+                    100,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class Navs extends StatefulWidget {
   final String essence;
 
