@@ -70,6 +70,12 @@ List<String> productTypes = [
 
 late String lat, lng;
 
+const String plz = "places";
+
+const String lat_ = "latitude";
+const String lng_ = "longitude";
+const String loc_ = "location";
+
 Future<Position> getCurrentLocation() async {
   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {

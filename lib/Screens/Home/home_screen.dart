@@ -708,7 +708,7 @@ class _HomeScreenState extends State<HomeScreen> {
             boxShadow: List.filled(4, FarmToDishTheme.genericBoxShadow)),
 
         // height: 110,
-        width: 95, height: 140,
+        width: 100, height: 155,
         // MediaQuery.of(context).size.width * .25 - 30,
 
         child: AspectRatio(
@@ -1029,15 +1029,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
             //  rs256();/
             try {
-              showDialog(
-                  context: context,
-                  builder: (context) => QRImage(
-                        content: 'Awesome',
-                      ));
+              // showDialog(context: context, builder: (context) => ScanQrCode());
 
               // showDialog(
               //     context: context,
-              //     builder: (context) => LocateMe(essence: mkt));
+              //     builder: (context) => QRImage(
+              //           content: 'Awesome',
+              //         ));
+
+              showDialog(
+                  context: context,
+                  builder: (context) => LocateMe(essence: mkt));
 
               // logout(context);
 

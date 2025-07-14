@@ -33,52 +33,66 @@ class ScanQrCode extends StatefulWidget {
 class _ScanQrCodeState extends State<ScanQrCode> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: QRCodeDartScanView(
-        // onCameraError: (String error) {
-        //   debugPrint('Error: $error');
-        // },
+    return Dialog(
+      child: Wrap(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            width: 290,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: FarmToDishTheme.scaffoldBackgroundColor),
+            child: Center(
+              child: QRCodeDartScanView(
+                // onCameraError: (String error) {
+                //   debugPrint('Error: $error');
+                // },
 
-        // cropRect: CropRect(left: 0, top: 0, width: 100, height: 100), // You can crop the image to improve accuracy by specifying a rectangle region. ( default = null)
-        // imageDecodeOrientation: ImageDecodeOrientation.original, // you can force how the image orientation will be decoded (default = original)
-        typeScan: TypeScan
-            .live, // if TypeScan.takePicture will try decode when click to take a picture(default TypeScan.live)
-        // intervalScan: const Duration(seconds:1)
-        // onResultInterceptor: (old,new){
-        //  do any rule to controll onCapture.
-        // }
-        // takePictureButtonBuilder: (context,controller,isLoading){ // if typeScan == TypeScan.takePicture you can customize the button.
-        //    if(loading) return CircularProgressIndicator();
-        //    return ElevatedButton(
-        //       onPressed:controller.takePictureAndDecode,
-        //       child:Text('Take a picture'),
-        //    );
-        // }
-        // resolutionPreset: = QrCodeDartScanResolutionPreset.high,
-        // formats: [ // You can restrict specific formats.
-        //  BarcodeFormat.qrCode,
-        //  BarcodeFormat.aztec,
-        //  BarcodeFormat.dataMatrix,
-        //  BarcodeFormat.pdf417,
-        //  BarcodeFormat.code39,
-        //  BarcodeFormat.code93,
-        //  BarcodeFormat.code128,
-        //  BarcodeFormat.ean8,
-        //  BarcodeFormat.ean13,
-        // ],
-        // croppingStrategy: CroppingStrategy.cropCenterSquare(
-        //   squareSizeFactor: 0.7,
-        // ),
-        onCapture: (Result result) {
-          // do anything with result
-          // result.text
-          // result.rawBytes
-          // result.resultPoints
-          // result.format
-          // result.numBits
-          // result.resultMetadata
-          // result.time
-        },
+                // cropRect: CropRect(left: 0, top: 0, width: 100, height: 100), // You can crop the image to improve accuracy by specifying a rectangle region. ( default = null)
+                // imageDecodeOrientation: ImageDecodeOrientation.original, // you can force how the image orientation will be decoded (default = original)
+                typeScan: TypeScan
+                    .live, // if TypeScan.takePicture will try decode when click to take a picture(default TypeScan.live)
+                // intervalScan: const Duration(seconds:1)
+                // onResultInterceptor: (old,new){
+                //  do any rule to controll onCapture.
+                // }
+                // takePictureButtonBuilder: (context,controller,isLoading){ // if typeScan == TypeScan.takePicture you can customize the button.
+                //    if(loading) return CircularProgressIndicator();
+                //    return ElevatedButton(
+                //       onPressed:controller.takePictureAndDecode,
+                //       child:Text('Take a picture'),
+                //    );
+                // }
+                // resolutionPreset: = QrCodeDartScanResolutionPreset.high,
+                // formats: [ // You can restrict specific formats.
+                //  BarcodeFormat.qrCode,
+                //  BarcodeFormat.aztec,
+                //  BarcodeFormat.dataMatrix,
+                //  BarcodeFormat.pdf417,
+                //  BarcodeFormat.code39,
+                //  BarcodeFormat.code93,
+                //  BarcodeFormat.code128,
+                //  BarcodeFormat.ean8,
+                //  BarcodeFormat.ean13,
+                // ],
+                // croppingStrategy: CroppingStrategy.cropCenterSquare(
+                //   squareSizeFactor: 0.7,
+                // ),
+                onCapture: (Result result) {
+                  logger("Captured: ${result.text}");
+                  // do anything with result
+                  // result.text
+                  // result.rawBytes
+                  // result.resultPoints
+                  // result.format
+                  // result.numBits
+                  // result.resultMetadata
+                  // result.time
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -267,8 +281,19 @@ class _LocateMeState extends State<LocateMe> {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     logger("Hello: ${placemarks} -- ${placemarks.first}");
 
-    addr =
-        "${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} --- lat: ${position.latitude} --- long: ${position.longitude}";
+    switch (widget.essence) {
+      case psw_5:
+      case dlv_0:
+        addr =
+            "Your Current Location depicts: ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} based on the coordinates of lat: ${position.latitude} & long: ${position.longitude}, further information will assists for efficient order deliveries, do well to ensure you're around the exact vicinity you expect your delivery before setting location ";
+
+        break;
+      default:
+        addr =
+            "Your Current Location depicts: ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} based on the coordinates of lat: ${position.latitude} & long: ${position.longitude} ";
+        break;
+    }
+    //  "Your Current Location depicts ${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} based on the coordinates of lat: ${position.latitude} & long: ${position.longitude}, further information  assists with ";
 
     dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
     dshCtx.read<UINotifier>().dropDown(drp_);
@@ -303,8 +328,26 @@ class _LocateMeState extends State<LocateMe> {
         wdg = Center(
           child: Column(
             children: [
-              Text(addr),
-              (widget.essence == psw_5) ? const Text("") : Text(""),
+              Text(" $addr"),
+              Squire(
+                height: 40,
+                child: TextField(
+                  decoration: InputDecoration(
+                      contentPadding:
+                          EdgeInsets.only(bottom: 10, right: 10, left: 10),
+                      border: InputBorder.none,
+                      hintText: 'Email' ' :',
+                      hintStyle: FarmToDishTheme.iStyle
+                      // label: Text('Email' ' :'),
+
+                      ),
+                  // label: 'Email' ' :',
+                  // controller: ,
+                  controller: _address,
+                ),
+              ),
+              //  (widget.essence == psw_5) ? const Text("") : Text(""),
+
               (addr.isEmpty)
                   ? const Text("")
                   : MaterialButton(
@@ -328,7 +371,9 @@ class _LocateMeState extends State<LocateMe> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                             ),
-                      onPressed: () async {})
+                      onPressed: () async {
+                        switch (widget.essence) {}
+                      })
             ],
           ),
         );
@@ -444,6 +489,8 @@ class _LocateMeState extends State<LocateMe> {
 
     return wdg;
   }
+
+  final TextEditingController _address = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

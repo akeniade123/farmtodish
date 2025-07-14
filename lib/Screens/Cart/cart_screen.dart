@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
 
+import '../../Dialogs/dialog_stack.dart';
 import '../../Repository/databaseHelper.dart';
 import '../../firebaseHandler.dart';
 import '../../global_handlers.dart';
@@ -227,8 +228,46 @@ class _CartScreenState extends State<CartScreen> {
 
                                       int i = await dbm.queryRowCount();
                                       if (i > 0) {
+                                        List<dynamic> itmz = [];
                                         logger(
-                                            "All Item: ${jsonEncode(selectedProducts)}");
+                                            "Itmz: ${selectedProducts.length}");
+                                        // selectedProducts.map((e) =>
+                                        //     itmz.add({e.priceStatement}));
+
+                                        for (CartItemModel m
+                                            in selectedProducts) {
+                                          itmz.add({
+                                            nmm: m.name,
+                                            prz: m.getPriceStatment(),
+                                            qnt: m.getQuantityStatement(),
+                                            "unit total":
+                                                m.getTotalPriceStatment()
+                                          });
+                                          //logger("The item: ${m.name}");
+                                        }
+
+                                        Map<String, dynamic> order = {
+                                          "items": itmz,
+                                          "total":
+                                              "$currency${currentOrder?.getTotalPrice()}"
+                                        };
+
+                                        DatabaseHelper dbz =
+                                            DatabaseHelper(table: plz);
+
+                                        customSnackBar(context,
+                                            "Recipient location is not set yet");
+
+                                        if (await dbz.queryRowCount() < 1) {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  LocateMe(essence: dlv_0));
+                                        }
+
+                                        logger(
+                                            "Your Order: ${jsonEncode(order)}");
+
                                         List<Map<String, dynamic>> dd =
                                             await dbm.queryAllRows();
                                         Map<String, dynamic> ust = dd[0];
@@ -247,9 +286,14 @@ class _CartScreenState extends State<CartScreen> {
                                           pay_ = {amt: def};
                                           context.go("/PaymentScreen");
                                         } else {
-                                          selectedProducts;
+                                          List<dynamic> itmz = [];
+                                          selectedProducts.map((e) => itmz.add({
+                                                nmm: e.name,
+                                                qnt: e.quantity,
+                                                prz: e.priceStatement
+                                              }));
                                           logger(
-                                              "All Item: ${jsonEncode(selectedProducts)}");
+                                              "All Item: ${jsonEncode(itmz)}");
                                           logger("Transaction Procession");
                                         }
                                       } else {

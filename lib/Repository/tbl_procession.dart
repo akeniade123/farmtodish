@@ -32,5 +32,6 @@ Map<String, List<String>> procession() {
   prc.addEntries({sch: schCln}.entries);
   prc.addEntries({usrWlt: wltCln}.entries);
   prc.addEntries({cpt: cptCln}.entries);
+  prc.addEntries({plz: plcCln}.entries);
   return prc;
 }
