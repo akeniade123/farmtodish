@@ -294,7 +294,7 @@ void onStart(ServiceInstance service) async {
       Map<String, dynamic> ust = dd[0];
       cppt = jsonDecode(ust[cpt]);
 
-      //logger("Data Deserialization: $cppt");
+      // logger("Data Deserialization: $cppt");
 
       try {
         logger("App State: ${cppt[appState]}");
