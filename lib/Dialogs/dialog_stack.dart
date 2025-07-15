@@ -2,6 +2,8 @@
 import 'dart:convert';
 //import 'dart:html';
 
+import 'package:farm_to_dish/Repository/databaseHelper.dart';
+import 'package:farm_to_dish/Repository/tbl_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -295,8 +297,12 @@ class _LocateMeState extends State<LocateMe> {
     }
     //  "Your Current Location depicts ${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} based on the coordinates of lat: ${position.latitude} & long: ${position.longitude}, further information  assists with ";
 
-    dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
-    dshCtx.read<UINotifier>().dropDown(drp_);
+    switch (widget.essence) {
+      case mkt:
+        dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
+        dshCtx.read<UINotifier>().dropDown(drp_);
+        break;
+    }
 
     return position;
 
@@ -333,10 +339,10 @@ class _LocateMeState extends State<LocateMe> {
                 height: 40,
                 child: TextField(
                   decoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.only(bottom: 10, right: 10, left: 10),
+                      contentPadding: const EdgeInsets.only(
+                          bottom: 10, right: 10, left: 10),
                       border: InputBorder.none,
-                      hintText: 'Email' ' :',
+                      hintText: 'Address ' ' :',
                       hintStyle: FarmToDishTheme.iStyle
                       // label: Text('Email' ' :'),
 
@@ -372,7 +378,23 @@ class _LocateMeState extends State<LocateMe> {
                                   color: Colors.white),
                             ),
                       onPressed: () async {
-                        switch (widget.essence) {}
+                        if (lat != "") {
+                          switch (widget.essence) {
+                            case dlv_0:
+                              DatabaseHelper dhl = DatabaseHelper(table: plz);
+                              //  plcCln
+                              Map<String, dynamic> dd = {
+                                lat_: lat,
+                                lng_: lng,
+                                loc_: _address.text
+                              };
+                              await dhl.insertData(dd);
+                              break;
+                          }
+                        } else {
+                          customSnackBar(context,
+                              "yet to obtain your co-ordinate, please wait...");
+                        }
                       })
             ],
           ),
