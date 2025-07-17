@@ -1,0 +1,89 @@
+{
+    "status": true,
+    "data": [
+        {
+            "id": "1",
+            "name": "House of Favour",
+            "hub": "1",
+            "lat": "6.8188183",
+            "lng": "3.4568567",
+            "location": ""
+        },
+        {
+            "id": "3",
+            "name": "King is coming",
+            "hub": "1",
+            "lat": "6.8126789",
+            "lng": "3.4674169",
+            "location": "{\"name\":\"Diligence Road\",\"street\":\"Diligence Rd\",\"isoCountryCode\":\"NG\",\"country\":\"Nigeria\",\"postalCode\":\"110113\",\"administrativeArea\":\"Ogun State\",\"subAdministrativeArea\":\"Obafemi Owode\",\"locality\":\"Omu\",\"subLocality\":\"\",\"thoroughfare\":\"Diligence Road\",\"subThoroughfare\":\"\"}"
+        },
+        {
+            "id": "4",
+            "name": "living stone",
+            "hub": "1",
+            "lat": "6.8221233",
+            "lng": "3.4614583",
+            "location": ""
+        },
+        {
+            "id": "6",
+            "name": "Messaiahs Praise Sanctuary",
+            "hub": "1",
+            "lat": "6.8140983",
+            "lng": "3.46853",
+            "location": ""
+        },
+        {
+            "id": "11",
+            "name": "Healing Wings",
+            "hub": "1",
+            "lat": "6.8181459",
+            "lng": "3.4637494",
+            "location": ""
+        },
+        {
+            "id": "13",
+            "name": "Amazing Grace",
+            "hub": "1",
+            "lat": "6.8192713",
+            "lng": "3.4566189",
+            "location": ""
+        },
+        {
+            "id": "15",
+            "name": "Ambassadors Assembly",
+            "hub": "1",
+            "lat": "6.8185668",
+            "lng": "3.4573277",
+            "location": ""
+        },
+        {
+            "id": "16",
+            "name": "Shepherd hill",
+            "hub": "1",
+            "lat": "6.8186008",
+            "lng": "3.4625412",
+            "location": ""
+        },
+        {
+            "id": "25",
+            "name": "Jesus Embassy",
+            "hub": "1",
+            "lat": "6.8170922",
+            "lng": "3.4574181",
+            "location": ""
+        },
+        {
+            "id": "27",
+            "name": "Breakthrough Parish",
+            "hub": "1",
+            "lat": "6.816726",
+            "lng": "3.4628219",
+            "location": ""
+        }
+    ],
+    "message": {
+        "Name": "market_segment",
+        "message": "market_segment successfully fetched..."
+    }
+}

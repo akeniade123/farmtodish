@@ -69,7 +69,14 @@ SizedBox ess(String item, String essence, BuildContext context) {
             switch (essence) {
               case psw_0:
                 showDialog(
-                    context: context, builder: (context) => FundWallet());
+                    context: context, builder: (context) => const FundWallet());
+
+                break;
+              case dlv_0:
+              case psw_5:
+                showDialog(
+                    context: context,
+                    builder: (context) => LocateMe(essence: essence));
 
                 break;
             }
@@ -99,6 +106,12 @@ InkWell nav(String item, String essence, BuildContext context) {
 
           break;
         case dlv_:
+          showDialog(
+              context: context,
+              builder: (context) => Navs(
+                    essence: essence,
+                    caption: item,
+                  ));
           break;
       }
     },

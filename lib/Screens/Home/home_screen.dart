@@ -7,10 +7,12 @@ import 'dart:math';
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
 // import 'package:Yomcoin/screens/login.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farm_to_dish/Screens/DeliveryCar/delivery_car_model.dart';
 // import 'package:farm_to_dish/Screens/Payment/cart_model.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 // import 'package:sqflite/sqflite.dart';
@@ -44,6 +46,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // late SignUpHandler signUpHandler;
+
+  static final customCacheManager = CacheManager(Config('customCacheKey',
+      stalePeriod: const Duration(days: 15), maxNrOfCacheObjects: 100));
 
   late QRViewController _controller;
 
@@ -703,7 +708,7 @@ class _HomeScreenState extends State<HomeScreen> {
             boxShadow: List.filled(4, FarmToDishTheme.genericBoxShadow)),
 
         // height: 110,
-        width: 95, height: 140,
+        width: 100, height: 155,
         // MediaQuery.of(context).size.width * .25 - 30,
 
         child: AspectRatio(
@@ -714,14 +719,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CircleAvatar(
-                    backgroundColor: Color.fromARGB(255, 202, 231, 197),
-                    radius: 42,
-                    child: Image.network(
-                      e["imageURL"] ?? "",
-                      errorBuilder: (context, error, stackTrace) =>
-                          Icon(Icons.broken_image),
-                    ),
-                  ),
+                      backgroundColor: Color.fromARGB(255, 202, 231, 197),
+                      radius: 42,
+                      child: CachedNetworkImage(
+                        cacheManager: customCacheManager,
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            Center(
+                          child: CircularProgressIndicator(
+                            color: FarmToDishTheme.accentLightColor,
+                            value: progress.progress,
+                          ),
+                        ),
+                        key: UniqueKey(),
+                        imageUrl: e["imageURL"],
+                        errorWidget: (context, url, error) =>
+                            Icon(Icons.broken_image),
+                      )
+                      // child: Image.network(
+                      //   e["imageURL"] ?? "",
+                      //   errorBuilder: (context, error, stackTrace) =>
+                      //       Icon(Icons.broken_image),
+                      // ),
+                      ),
                   Text(
                     e["name"],
                     textAlign: TextAlign.center,
@@ -1008,18 +1027,20 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () async {
             logger("Testing This");
 
-            //  rs256();
+            //  rs256();/
             try {
-              getCurrentLocation().then((value) {
-                lat = "${value.latitude}";
-                lng = "${value.longitude}";
+              // showDialog(context: context, builder: (context) => ScanQrCode());
 
-                String lct = "My Location: $lat -- $lng";
+              // showDialog(
+              //     context: context,
+              //     builder: (context) => QRImage(
+              //           content: 'Awesome',
+              //         ));
 
-                logger("My Location: $lat -- $lng");
+              showDialog(
+                  context: context,
+                  builder: (context) => LocateMe(essence: mkt));
 
-                customSnackBar(context, lct);
-              });
               // logout(context);
 
               // sendNotification(

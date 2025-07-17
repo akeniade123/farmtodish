@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
 
+import '../../Dialogs/dialog_stack.dart';
 import '../../Repository/databaseHelper.dart';
 import '../../firebaseHandler.dart';
 import '../../global_handlers.dart';
@@ -214,47 +215,97 @@ class _CartScreenState extends State<CartScreen> {
                                         borderRadius:
                                             BorderRadius.circular(50)),
                                     onPressed: () async {
-                                      SharedPref pref = SharedPref();
+                                      List<dynamic> itmz = [];
+                                      logger(
+                                          "Itmz: ${selectedProducts.length}");
+                                      // selectedProducts.map((e) =>
+                                      //     itmz.add({e.priceStatement}));
 
-                                      double price =
-                                          currentOrder!.getTotalPrice();
-
-                                      String? act_ =
-                                          await pref.getPrefString(acct);
-
-                                      DatabaseHelper dbm =
-                                          DatabaseHelper(table: mnf);
-
-                                      int i = await dbm.queryRowCount();
-                                      if (i > 0) {
-                                        List<Map<String, dynamic>> dd =
-                                            await dbm.queryAllRows();
-                                        Map<String, dynamic> ust = dd[0];
-                                        Map<String, dynamic> ddd =
-                                            jsonDecode(ust[cpt]);
-
-                                        double bal = double.parse(
-                                            ddd[acct]); // double.parse(
-                                        // act_.replaceAll("k", ""));
-                                        if (bal < price) {
-                                          logger(
-                                              "$price ** $bal More fund needed");
-                                          customSnackBar(context,
-                                              "Insufficient balance, kindly fund your wallet");
-                                          double def = price - bal;
-                                          pay_ = {amt: def};
-                                          context.go("/PaymentScreen");
-                                        } else {
-                                          logger("Transaction Procession");
-                                        }
-                                      } else {
-                                        logger("No fund in account");
-                                        pay_ = {
-                                          amt: currentOrder?.getTotalPrice() ??
-                                              amount
-                                        };
-                                        context.go("/PaymentScreen");
+                                      for (CartItemModel m
+                                          in selectedProducts) {
+                                        itmz.add({
+                                          nmm: m.name,
+                                          prz: m.getPriceStatment(),
+                                          qnt: m.getQuantityStatement(),
+                                          "unit total":
+                                              m.getTotalPriceStatment()
+                                        });
+                                        //logger("The item: ${m.name}");
                                       }
+
+                                      Map<String, dynamic> order = {
+                                        "items": itmz,
+                                        "total":
+                                            "$currency${currentOrder?.getTotalPrice()}"
+                                      };
+
+                                      DatabaseHelper dbz =
+                                          DatabaseHelper(table: plz);
+
+                                      customSnackBar(context,
+                                          "Recipient location is not set yet");
+
+                                      if (await dbz.queryRowCount() < 1) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) =>
+                                                LocateMe(essence: dlv_0));
+                                      } else {
+                                        SharedPref pref = SharedPref();
+
+                                        double price =
+                                            currentOrder!.getTotalPrice();
+
+                                        String? act_ =
+                                            await pref.getPrefString(acct);
+
+                                        DatabaseHelper dbm =
+                                            DatabaseHelper(table: mnf);
+
+                                        int i = await dbm.queryRowCount();
+                                        if (i > 0) {
+                                          List<Map<String, dynamic>> dd =
+                                              await dbm.queryAllRows();
+                                          Map<String, dynamic> ust = dd[0];
+                                          Map<String, dynamic> ddd =
+                                              jsonDecode(ust[cpt]);
+
+                                          double bal = double.parse(
+                                              ddd[acct]); // double.parse(
+                                          // act_.replaceAll("k", ""));
+                                          if (bal < price) {
+                                            logger(
+                                                "$price ** $bal More fund needed");
+                                            customSnackBar(context,
+                                                "Insufficient balance, kindly fund your wallet");
+                                            double def = price - bal;
+                                            pay_ = {amt: def};
+                                            context.go("/PaymentScreen");
+                                          } else {
+                                            List<dynamic> itmz = [];
+                                            selectedProducts.map((e) => itmz
+                                                    .add({
+                                                  nmm: e.name,
+                                                  qnt: e.quantity,
+                                                  prz: e.priceStatement
+                                                }));
+                                            logger(
+                                                "All Item: ${jsonEncode(itmz)}");
+                                            logger("Transaction Procession");
+                                          }
+                                        } else {
+                                          logger("No fund in account");
+                                          pay_ = {
+                                            amt:
+                                                currentOrder?.getTotalPrice() ??
+                                                    amount
+                                          };
+                                          context.go("/PaymentScreen");
+                                        }
+                                      }
+
+                                      logger(
+                                          "Your Order: ${jsonEncode(order)}");
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(

@@ -70,12 +70,17 @@ List<String> productTypes = [
 
 late String lat, lng;
 
+const String plz = "places";
+
+const String lat_ = "latitude";
+const String lng_ = "longitude";
+const String loc_ = "location";
+
 Future<Position> getCurrentLocation() async {
   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
     return Future.error("Location services are disabled");
   }
-
   LocationPermission permission = await Geolocator.checkPermission();
 
   if (permission == LocationPermission.denied) {
@@ -193,6 +198,7 @@ late stackStar strr;
 late balance bll;
 late userDtlz usrdtlz;
 late broadcast brdcst;
+late dropDownlst drpz;
 
 late Map<String, dynamic> userlog;
 late Map<String, dynamic> usrTmp;
@@ -255,6 +261,11 @@ class UINotifier extends ChangeNotifier {
 
   void broadCast(broadcast brdc) {
     brdcst = brdc;
+    notifyListeners();
+  }
+
+  void dropDown(dropDownlst lst) {
+    drpz = lst;
     notifyListeners();
   }
 

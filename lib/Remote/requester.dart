@@ -5,6 +5,7 @@ import 'dart:developer';
 
 import 'package:farm_to_dish/global_handlers.dart';
 
+import '../env.dart';
 import '../global_string.dart';
 import '../global_widgets.dart';
 import 'package:flutter/material.dart';
@@ -112,7 +113,7 @@ Future<Map<String, dynamic>?> getReq(String url, String request, String essence,
   if (await internetAvailable(context, display)) {
     final response = await http
         .get(Uri.parse(url), headers: getHeader(request))
-        .timeout(const Duration(seconds: 5), onTimeout: () {
+        .timeout(const Duration(seconds: timesout), onTimeout: () {
       return http.Response('Error', 408);
     });
     return handleJsonResponse(response, essence, context, display);
@@ -177,7 +178,7 @@ Future<Map<String, dynamic>?> postReq(
             headers: getHeader(request),
             body: data_,
           )
-              .timeout(const Duration(seconds: 20), onTimeout: () {
+              .timeout(const Duration(seconds: timesout), onTimeout: () {
             resp.addEntries(
                 {"status": false, "message": "timeout error"}.entries);
 

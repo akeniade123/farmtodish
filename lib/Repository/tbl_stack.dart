@@ -1,5 +1,7 @@
 //
 
+import 'package:farm_to_dish/global_objects.dart';
+
 import '../global_string.dart';
 
 List<String> usrCln = [
@@ -24,6 +26,8 @@ List<String> usrCln = [
 
 List<String> wltCln = [id, usrId, amt, lstTrnz];
 List<String> cptCln = [id, cpt];
+
+List<String> plcCln = [id, lat_, lng_, loc_];
 
 String mnfCln = "$id_ INTEGER PRIMARY KEY, $cpt TEXT";
 
