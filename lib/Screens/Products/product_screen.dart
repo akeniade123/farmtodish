@@ -4,10 +4,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:farm_to_dish/Screens/screens.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
 // import 'package:sqflite/sqflite.dart';
 
 import '../../Repository/databaseHelper.dart';
@@ -35,9 +39,12 @@ class _ProductScreenState extends State<ProductScreen> {
   DatabaseHelper dbh = DatabaseHelper(table: ptyp);
 
   DatabaseHelper dbp = DatabaseHelper(table: produce);
+  static final customCacheManager = CacheManager(Config('customCacheKey',
+      stalePeriod: const Duration(days: 15), maxNrOfCacheObjects: 100));
 
   late Future<List<ProduceType>>? prSect;
   late Future<List<Widget>>? schip;
+
   late Future<List<ProductModel>>? pmdl;
 
   late Future<List<String>>? lst; // = [];
@@ -57,6 +64,7 @@ class _ProductScreenState extends State<ProductScreen> {
     super.initState();
     // prSect = produceSect();
     // schip = _produceSect();
+
     pmdl = _produceStack();
     cart = _cart();
     cartz = 0;
@@ -92,7 +100,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     padding: const EdgeInsets.all(18.0),
                     child: Column(
                       children: [
-                        _buildSearchBar(),
+                        // _buildSearchBar(),
                         SizedBox(height: 20),
                         Column(
                           children: [
@@ -237,6 +245,12 @@ class _ProductScreenState extends State<ProductScreen> {
                                     print("##" * 220);
                                     // selectedProducts.add(cartModel!);
                                     currentOrder?.addThis(cartModel!);
+                                    //  balance blh = balance(bal: bal);
+                                    //bll = blh;
+                                    dshCtx
+                                        .read<UINotifier>()
+                                        .orderNotice(currentOrder!);
+
                                     print(currentOrder?.items);
                                     print("##" * 220);
                                   }.call()
@@ -246,6 +260,10 @@ class _ProductScreenState extends State<ProductScreen> {
 
                             // selectedProducts.remove(cartModel);
                             currentOrder?.items.remove(cartModel);
+                            dshCtx
+                                .read<UINotifier>()
+                                .orderNotice(currentOrder!);
+
                             // selectedProducts = currentOrder?.items ?? [];
                             print("####" * 120);
 
@@ -371,14 +389,14 @@ class _ProductScreenState extends State<ProductScreen> {
                               fontSize: 14,
                               fontWeight: FontWeight.w500),
                         ),
-                        Text(
-                          quantity.toString(),
-                          style: TextStyle(
-                              // color:
-                              // FarmToDishTheme.scaffoldBackgroundColor,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w400),
-                        ),
+                        // Text(
+                        //   quantity.toString(),
+                        //   style: TextStyle(
+                        //       // color:
+                        //       // FarmToDishTheme.scaffoldBackgroundColor,
+                        //       fontSize: 10,
+                        //       fontWeight: FontWeight.w400),
+                        // ),
                       ],
                     ),
                     Expanded(child: SizedBox()),
@@ -410,6 +428,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
                             // selectedProducts.remove(cartModel);
                             currentOrder?.items.remove(cartModel);
+
                             // selectedProducts = currentOrder?.items ?? [];
                             print("####" * 120);
 
@@ -427,6 +446,10 @@ class _ProductScreenState extends State<ProductScreen> {
                           print(add);
 
                           try {
+                            cartstatus != cartstatus;
+                            dshCtx
+                                .read<UINotifier>()
+                                .orderNotice(currentOrder!);
                             setState(() {});
                           } catch (e) {}
 
@@ -467,12 +490,27 @@ class _ProductScreenState extends State<ProductScreen> {
                       shape: const CircleBorder(),
                       clipBehavior: Clip.antiAlias,
                       elevation: 5,
-                      child: Image.network(
-                        imageURL ?? "",
-                        errorBuilder: (context, error, stackTrace) =>
+                      child: CachedNetworkImage(
+                        cacheManager: customCacheManager,
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            Center(
+                          child: CircularProgressIndicator(
+                            color: FarmToDishTheme.accentLightColor,
+                            value: progress.progress,
+                          ),
+                        ),
+                        key: UniqueKey(),
+                        imageUrl: imageURL!,
+                        errorWidget: (context, url, error) =>
                             Icon(Icons.broken_image),
-                        fit: BoxFit.cover,
                       ),
+
+                      //  child: Image.network(
+                      //   imageURL ?? "",
+                      //   errorBuilder: (context, error, stackTrace) =>
+                      //       Icon(Icons.broken_image),
+                      //   fit: BoxFit.cover,
+                      // ),
                     )),
               ),
             ),
@@ -520,6 +558,7 @@ class _ProductScreenState extends State<ProductScreen> {
           logger("The error $e");
         }
       }
+      dshCtx.read<UINotifier>().produceNotice(rslt);
     } else {
       nvg = Navigate();
       if (selectedTabName != "") {
@@ -535,6 +574,9 @@ class _ProductScreenState extends State<ProductScreen> {
 
           String ctg_ = ddd[usr][ctg];
           logger("Desig: $ctg_");
+          if (ctg_ == "1") {
+            ctg_ = "11";
+          }
 
           Map<String, dynamic> identity = jsonDecode(selectedTabName);
           Map<String, String> mnff = {
@@ -569,6 +611,8 @@ class _ProductScreenState extends State<ProductScreen> {
               //  cntz.add({"name": typ, "imageURL": "${assets}foodplate.png"});
               dbp.insertData(item);
             }
+
+            dshCtx.read<UINotifier>().produceNotice(rslt);
           }
         }
       }
@@ -853,7 +897,8 @@ class _ProductScreenState extends State<ProductScreen> {
         future: pmdl,
         builder: ((context, snapshot) {
           if (snapshot.hasData) {
-            List<ProductModel>? pdm = snapshot.data;
+            List<ProductModel>? pdm = pdmm;
+            // snapshot.data;
             return Column(
                 children: pdm!
                     .map((e) => _productTab(
@@ -972,15 +1017,15 @@ class _ProductScreenState extends State<ProductScreen> {
                 height: 26,
                 width: 26,
 
-                child: Stack(
-                  children: [
-                    Icon(
-                      Icons.shopping_cart,
-                      color: FarmToDishTheme.scaffoldBackgroundColor,
-                    ),
-                    (cart == null) ? Text("") : _cartdisplay(),
-                  ],
-                ),
+                // child: Stack(
+                //   children: [
+                //     Icon(
+                //       Icons.shopping_cart,
+                //       color: FarmToDishTheme.scaffoldBackgroundColor,
+                //     ),
+                //     (cart == null) ? Text("") : _cartdisplay(),
+                //   ],
+                // ),
               ),
             ),
           ),

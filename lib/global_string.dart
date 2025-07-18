@@ -154,6 +154,8 @@ const String acct = "account";
 const String brdc = "broadcast";
 const String lvl = "Level";
 
+const String fnd = "Fund Wallet";
+
 const String psw_ = "Password & Security";
 
 const String psw_0 = "Change Password";

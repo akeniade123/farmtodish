@@ -11,6 +11,7 @@ import 'package:farm_to_dish/Screens/DeliveryCar/delivery_car_model.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 // import 'package:sqflite/sqflite.dart';
 
 import '../../Dialogs/dialog_stack.dart';
@@ -31,8 +32,11 @@ class CartScreen extends StatefulWidget {
   State<CartScreen> createState() => _CartScreenState();
 }
 
+bool cartstatus = false;
+
 class _CartScreenState extends State<CartScreen> {
   List<CartItemModel> selectedProducts = currentOrder?.items ?? [];
+
   DeliveryCarModel? selectedDeliveryCar = currentOrder?.vehicle;
 
   late SharedPref pref;
@@ -41,7 +45,6 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     currentOrder ??= OrderModel(items: []);
     super.initState();
-
     account = usrNm = null;
 
     account = getData(acct, context);
@@ -49,6 +52,7 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {});
     return Scaffold(
       backgroundColor: FarmToDishTheme.scaffoldBackgroundColor,
       body: SafeArea(
@@ -97,64 +101,9 @@ class _CartScreenState extends State<CartScreen> {
                         SizedBox(
                           // height: MediaQuery.of(context).size.height * .5,
                           child: SingleChildScrollView(
-                            primary: false,
-                            child: Column(
-                                children: selectedProducts
-                                    .map(
-                                      (e) => Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 8.0),
-                                        child: _buildCartSlab(
-                                            imageURL: e.imageURL,
-                                            priceStatement:
-                                                e.getPriceStatment(),
-                                            quantityStatement:
-                                                e.getQuantityStatement(),
-                                            name: e.name,
-                                            model: e),
-                                      ),
-                                    )
-                                    .toList()
-                                // List.generate(selectedProducts.length, (index) =>   _buildCartSlab(
-                                //     imageURL: selectedProducts[index],
-                                //     priceStatement: "${currency}300",
-                                //     quantityStatement: " 5 tubers",
-                                //     name: "Yams"),
-                                // )
-                                //  [
-                                // _buildCartSlab(
-                                //     imageURL: "${assets}yams.png",
-                                //     priceStatement: "${currency}300",
-                                //     quantityStatement: " 5 tubers",
-                                //     name: "Yams"),
-                                //   SizedBox(height: 20),
-                                //   _buildCartSlab(
-                                //       imageURL: "${assets}yams.png",
-                                //       priceStatement: "${currency}300",
-                                //       quantityStatement: " 5 tubers",
-                                //       name: "Yams"),
-                                //   SizedBox(height: 20),
-                                //   _buildCartSlab(
-                                //       imageURL: "${assets}yams.png",
-                                //       priceStatement: "${currency}300",
-                                //       quantityStatement: " 5 tubers",
-                                //       name: "Yams"),
-                                //   SizedBox(height: 20),
-                                //   _buildCartSlab(
-                                //       imageURL: "${assets}yams.png",
-                                //       priceStatement: "${currency}300",
-                                //       quantityStatement: " 5 tubers",
-                                //       name: "Yams"),
-                                //   SizedBox(height: 20),
-                                //   _buildCartSlab(
-                                //       imageURL: "${assets}yams.png",
-                                //       priceStatement: "${currency}300",
-                                //       quantityStatement: " 5 tubers",
-                                //       name: "Yams"),
-                                //   SizedBox(height: 20),
-                                // ],
-                                ),
-                          ),
+                              primary: false,
+                              child:
+                                  (cartstatus != cartstatus) ? ftr() : ftr()),
                         ),
                         Visibility(
                           visible: currentOrder?.items.isNotEmpty ?? false,
@@ -165,7 +114,7 @@ class _CartScreenState extends State<CartScreen> {
                                 minWidth: 200,
                                 height: 40,
                                 onPressed: () {
-                                  context.go("/ProductScreen");
+                                  context.go("/HomeScreen");
                                 },
                                 child: Text(
                                   "Select Product",
@@ -337,6 +286,68 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
+  Consumer ftr() {
+    return Consumer<UINotifier>(builder: (context, notifier, child) {
+      return cartz();
+    });
+  }
+
+  Column cartz() {
+    return Column(
+        children: currentOrder!.items
+            .map(
+              (e) => Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: _buildCartSlab(
+                    imageURL: e.imageURL,
+                    priceStatement: e.getPriceStatment(),
+                    quantityStatement: e.getQuantityStatement(),
+                    name: e.name,
+                    model: e),
+              ),
+            )
+            .toList()
+        // List.generate(selectedProducts.length, (index) =>   _buildCartSlab(
+        //     imageURL: selectedProducts[index],
+        //     priceStatement: "${currency}300",
+        //     quantityStatement: " 5 tubers",
+        //     name: "Yams"),
+        // )
+        //  [
+        // _buildCartSlab(
+        //     imageURL: "${assets}yams.png",
+        //     priceStatement: "${currency}300",
+        //     quantityStatement: " 5 tubers",
+        //     name: "Yams"),
+        //   SizedBox(height: 20),
+        //   _buildCartSlab(
+        //       imageURL: "${assets}yams.png",
+        //       priceStatement: "${currency}300",
+        //       quantityStatement: " 5 tubers",
+        //       name: "Yams"),
+        //   SizedBox(height: 20),
+        //   _buildCartSlab(
+        //       imageURL: "${assets}yams.png",
+        //       priceStatement: "${currency}300",
+        //       quantityStatement: " 5 tubers",
+        //       name: "Yams"),
+        //   SizedBox(height: 20),
+        //   _buildCartSlab(
+        //       imageURL: "${assets}yams.png",
+        //       priceStatement: "${currency}300",
+        //       quantityStatement: " 5 tubers",
+        //       name: "Yams"),
+        //   SizedBox(height: 20),
+        //   _buildCartSlab(
+        //       imageURL: "${assets}yams.png",
+        //       priceStatement: "${currency}300",
+        //       quantityStatement: " 5 tubers",
+        //       name: "Yams"),
+        //   SizedBox(height: 20),
+        // ],
+        );
+  }
+
   Widget _buildDeliveryCarDisplay() {
     print("\$\$" * 120);
     print(selectedDeliveryCar);
@@ -364,7 +375,7 @@ class _CartScreenState extends State<CartScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 child: Text(
-                  "Add delivery pool",
+                  "Select pickup point",
                   style: TextStyle(
                     color: FarmToDishTheme.scaffoldBackgroundColor,
                     // fontSize: 14,
@@ -605,27 +616,27 @@ class _CartScreenState extends State<CartScreen> {
             // color: FarmToDishTheme.accentLightColor,
             height: 26,
             width: 26,
-            child: Stack(
-              children: [
-                Icon(
-                  Icons.shopping_cart,
-                  color: FarmToDishTheme.scaffoldBackgroundColor,
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: CircleAvatar(
-                    radius: 7,
-                    backgroundColor: FarmToDishTheme.themeRed,
-                    child: Text(
-                      "1",
-                      style: TextStyle(
-                          color: FarmToDishTheme.scaffoldBackgroundColor,
-                          fontSize: 10),
-                    ),
-                  ),
-                )
-              ],
-            ),
+            // child: Stack(
+            //   children: [
+            //     Icon(
+            //       Icons.shopping_cart,
+            //       color: FarmToDishTheme.scaffoldBackgroundColor,
+            //     ),
+            //     Align(
+            //       alignment: Alignment.bottomRight,
+            //       child: CircleAvatar(
+            //         radius: 7,
+            //         backgroundColor: FarmToDishTheme.themeRed,
+            //         child: Text(
+            //           "1",
+            //           style: TextStyle(
+            //               color: FarmToDishTheme.scaffoldBackgroundColor,
+            //               fontSize: 10),
+            //         ),
+            //       ),
+            //     )
+            //   ],
+            // ),
           )
         ],
       ),

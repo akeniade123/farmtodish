@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:742168940418:android:cff39a3aeb5ffe000e899b",
+        "mobilesdk_app_id": "1:742168940418:android:9914a04eab2c46ab0e899b",
         "android_client_info": {
-          "package_name": "com.example.farm_to_dish"
+          "package_name": "com.dlvtech.farm_to_dish"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "742168940418-u60t8efnhi9u5j8q8oe1k4oiuirulbu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDpv_NRPCPHLe61IC8wUd_1AFtDcGQ8KLU"
@@ -20,7 +25,41 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "742168940418-u60t8efnhi9u5j8q8oe1k4oiuirulbu1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742168940418:android:cff39a3aeb5ffe000e899b",
+        "android_client_info": {
+          "package_name": "com.example.farm_to_dish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "742168940418-u60t8efnhi9u5j8q8oe1k4oiuirulbu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpv_NRPCPHLe61IC8wUd_1AFtDcGQ8KLU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "742168940418-u60t8efnhi9u5j8q8oe1k4oiuirulbu1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

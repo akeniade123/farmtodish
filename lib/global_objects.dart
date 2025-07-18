@@ -177,6 +177,8 @@ showdialog(Widget child, Function() externalFunction, BuildContext context) {
 
 OrderModel? currentOrder;
 
+late List<ProductModel> pdmm;
+
 // final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 String baseURL = "https://www.farmtodish.com/base";
@@ -189,6 +191,8 @@ void custom_print(Object? o, String about) {
 }
 
 late dashNote dnn;
+late cartNote cart;
+late OrderModel cartOrder;
 late liveNote lnt;
 late serverFile svrf;
 late contentMode cstk;
@@ -241,6 +245,20 @@ class UINotifier extends ChangeNotifier {
 
   void dashNotice(dashNote dnn_) {
     dnn = dnn_;
+    notifyListeners();
+  }
+
+  void cartNotice(cartNote crt_) {
+    cart = crt_;
+    notifyListeners();
+  }
+
+  void produceNotice(List<ProductModel> prdc) {
+    pdmm = prdc;
+  }
+
+  void orderNotice(OrderModel order_) {
+    currentOrder = order_;
     notifyListeners();
   }
 

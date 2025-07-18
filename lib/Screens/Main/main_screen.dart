@@ -43,6 +43,7 @@ class _MainPageState extends State<MainPage> {
   }
 
   List<TabItem> items = [];
+  bool status = false;
   Future<BottomBarInspiredInside>? tabs;
 
   Future<String>? category() async {
@@ -60,6 +61,11 @@ class _MainPageState extends State<MainPage> {
       switch (pp[ctg]) {
         case "10":
           logger("It's 10");
+          status != status;
+          items.add(TabItem(
+            icon: Icons.mail,
+          ));
+          status != status;
           break;
         case "11":
           logger("It's -- 11");
@@ -136,7 +142,7 @@ class _MainPageState extends State<MainPage> {
       TabItem(
 
           // icon: ImageIcon(Image.asset("coffee.png").image),
-          icon: Icons.inventory_2
+          icon: Icons.shopping_basket
           // title: 'Shop',
           ),
       TabItem(
@@ -199,22 +205,24 @@ class _MainPageState extends State<MainPage> {
                 FarmToDishTheme.faintGreen,
                 FarmToDishTheme.deepGreen
               ])),
-              child: BottomBarInspiredInside(
-                items: items,
-                // backgroundColor: Colors.transparent,
-                backgroundColor: FarmToDishTheme.faintGreen,
+              child: (status != status) ? ftr() : ftr(),
 
-                color: Colors.white,
-                colorSelected: FarmToDishTheme.deepGreen,
-                indexSelected: widget.navigationShell.currentIndex,
-                onTap: onTap,
-                chipStyle: const ChipStyle(
-                  convexBridge: true,
-                  background: Colors.white,
-                ),
-                itemStyle: ItemStyle.circle,
-                animated: true,
-              ),
+              // BottomBarInspiredInside(
+              //   items: items,
+              //   // backgroundColor: Colors.transparent,
+              //   backgroundColor: FarmToDishTheme.faintGreen,
+
+              //   color: Colors.white,
+              //   colorSelected: FarmToDishTheme.deepGreen,
+              //   indexSelected: widget.navigationShell.currentIndex,
+              //   onTap: onTap,
+              //   chipStyle: const ChipStyle(
+              //     convexBridge: true,
+              //     background: Colors.white,
+              //   ),
+              //   itemStyle: ItemStyle.circle,
+              //   animated: true,
+              // ),
             ),
           ),
         ),

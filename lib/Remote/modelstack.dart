@@ -17,6 +17,11 @@ class Curriculum {
       required this.classTag});
 }
 
+class cartNote {
+  final String cart;
+  cartNote({required this.cart});
+}
+
 class dashNote {
   final String title, content, end, info, details;
 

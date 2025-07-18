@@ -476,11 +476,19 @@ Future<void> LoginUser(BuildContext context, Object obj, ServerResponse svr,
     // SharedPref pref = SharedPref();
     // await pref.setPrefString("usrTbl", jsonEncode(usrLogin[0]));
     try {
-      customSnackBar(context, otp_['message']!);
+      switch (ussr_.Category) {
+        case "1":
+          loggedin(context, ussr_);
+
+          break;
+        default:
+          customSnackBar(context, otp_['message']!);
+          context.go("/OTP");
+          break;
+      }
     } catch (e) {}
 
     //Modal(context, 220, wdg);
-    context.go("/OTP");
 
 /*
     Navigator.of(context).pushReplacement(

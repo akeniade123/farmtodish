@@ -134,10 +134,10 @@ final GoRouter myRouter = GoRouter(
           StatefulShellBranch(
             routes: <RouteBase>[
               GoRoute(
-                path: '/ProductScreen',
-                name: 'ProductScreen',
-                builder: (context, state) =>
-                    ProductScreen(initialySelectedTab: state.extra?.toString()),
+                path: '/CartScreen',
+                name: 'CartScreen',
+                builder: (context, state) => const CartScreen(),
+                //  ProductScreen(initialySelectedTab: state.extra?.toString()),
                 // RequestRoute(),
               )
             ],
@@ -164,10 +164,10 @@ final GoRouter myRouter = GoRouter(
       ),
       // CartScreen
       GoRoute(
-        path: '/CartScreen',
-        name: 'CartScreen',
+        path: '/ProductScreen',
+        name: 'ProductScreen',
         builder: (BuildContext context, GoRouterState state) {
-          return const CartScreen();
+          return ProductScreen(initialySelectedTab: state.extra?.toString());
         },
       ),
       GoRoute(

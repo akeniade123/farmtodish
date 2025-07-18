@@ -1,9 +1,11 @@
 // import 'package:farm_to_dish/Screens/Payment/cart_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:farm_to_dish/Screens/Cart/cart_item_model.dart';
 import 'package:farm_to_dish/Screens/Products/product_model.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/global_objects.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class DialogToAddingProducts extends StatefulWidget {
   CartItemModel? model;
@@ -18,6 +20,10 @@ class DialogToAddingProducts extends StatefulWidget {
 class _DialogToAddingProductsState extends State<DialogToAddingProducts> {
   int quantity = 0;
   late ProductModel? pmdl;
+
+  static final customCacheManager = CacheManager(Config('customCacheKey',
+      stalePeriod: const Duration(days: 15), maxNrOfCacheObjects: 100));
+
   @override
   void initState() {
     quantity = widget.model?.quantity ?? 0;
@@ -54,16 +60,32 @@ class _DialogToAddingProductsState extends State<DialogToAddingProducts> {
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(10)),
                 child: Card(
-                  shape: const CircleBorder(),
-                  clipBehavior: Clip.antiAlias,
-                  elevation: 5,
-                  child: Image.network(
-                    widget.model!.imageURL ?? "",
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.broken_image),
-                    fit: BoxFit.cover,
-                  ),
-                ), // Image.asset("${assets}yams.png"),
+                    shape: const CircleBorder(),
+                    clipBehavior: Clip.antiAlias,
+                    elevation: 5,
+                    child: CachedNetworkImage(
+                      cacheManager: customCacheManager,
+                      progressIndicatorBuilder: (context, url, progress) =>
+                          Center(
+                        child: CircularProgressIndicator(
+                          color: FarmToDishTheme.accentLightColor,
+                          value: progress.progress,
+                        ),
+                      ),
+                      key: UniqueKey(),
+                      imageUrl: widget.model!.imageURL!,
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.broken_image),
+                    )
+
+                    // Image.network(
+                    //   widget.model!.imageURL ?? "",
+                    //   errorBuilder: (context, error, stackTrace) =>
+                    //       const Icon(Icons.broken_image),
+                    //   fit: BoxFit.cover,
+                    // ),
+
+                    ), // Image.asset("${assets}yams.png"),
               ),
               const SizedBox(width: 10),
               Column(

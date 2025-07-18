@@ -5,9 +5,12 @@
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
 // import 'package:Yomcoin/screens/login.dart';
+import 'dart:io';
+
 import 'package:farm_to_dish/Screens/Chat/models/profile.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 // import 'package:sqflite/sqflite.dart';
 
 import '../../Dialogs/dialog_stack.dart';
@@ -114,22 +117,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     imageWidget: Image.asset(
                       "${assets}yams.png",
                     ),
-                    title: "Service packs",
-                    subtitle: "1 shoe and 3 jean"),
+                    title: "Yam Tubers",
+                    subtitle: "goods in transit"),
                 SizedBox(height: 15),
-                _buildItem(
-                    imageWidget: Image.asset(
-                      "${assets}yams.png",
-                    ),
-                    title: "Yams and peppers",
-                    subtitle: "1 day to delivery"),
-                SizedBox(height: 15),
-                _buildItem(
-                    imageWidget: Image.asset(
-                      "${assets}yams.png",
-                    ),
-                    title: "Yams and peppers",
-                    subtitle: "1 day to delivery"),
+                // _buildItem(
+                //     imageWidget: Image.asset(
+                //       "${assets}yams.png",
+                //     ),
+                //     title: "Yams and peppers",
+                //     subtitle: "1 day to delivery"),
+                // SizedBox(height: 15),
+                // _buildItem(
+                //     imageWidget: Image.asset(
+                //       "${assets}yams.png",
+                //     ),
+                //     title: "Yams and peppers",
+                //     subtitle: "1 day to delivery"),
               ]),
               titleWidget: _buildTitleForLists("History"),
               isSeeAll: true,
@@ -320,7 +323,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         dtl = account;
         break;
       case csh_bk:
-        _acct = acct;
+        _acct = csh_bk;
         dtl = account;
         break;
 
@@ -364,9 +367,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     List<ProfileLog> fld = [
       ProfileLog(name: psw_, essence: psw_),
       ProfileLog(name: dlv_, essence: dlv_),
-      ProfileLog(name: ref_, essence: ref_),
-      ProfileLog(name: shr_, essence: shr_),
-      ProfileLog(name: tms_, essence: tms_),
+      //    ProfileLog(name: ref_, essence: ref_),
+      //    ProfileLog(name: shr_, essence: shr_),
+      //  ProfileLog(name: tms_, essence: tms_),
       ProfileLog(name: cnt_, essence: cnt_)
     ];
     /*
@@ -403,6 +406,7 @@ Version 1.0
               isSelected: selectedTabName == "Grains and legumes",
               onClickFunction: (p0) {
                 selectedTabName = "Grains and legumes";
+                customSnackBar(context, "Cash back terrain begins in August");
 
                 setState(() {});
               },
@@ -414,6 +418,9 @@ Version 1.0
               imageURL: "${assets}tubbers.png",
               isSelected: selectedTabName == "Tubers",
               onClickFunction: (p0) {
+                customSnackBar(context,
+                    "We'll review your request and get across upon verification");
+
                 selectedTabName = "Tubers";
                 setState(() {});
               },
@@ -450,7 +457,14 @@ Version 1.0
                 ? Text("Hi!")
                 : usrDtl(context, usr, usrNm, Colors.black, 13),
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) => Navs(
+                            essence: psw_,
+                            caption: psw_,
+                          ));
+                },
                 icon: Icon(
                   Icons.edit_square,
                   color: FarmToDishTheme.deepGreen,
@@ -480,5 +494,22 @@ Version 1.0
         //   IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_outlined))
       ],
     );
+  }
+}
+
+whatsapp(var contact) async {
+  // = "+880123232333";
+  var androidUrl = "whatsapp://send?phone=$contact&text=Hi, I need some help";
+  var iosUrl =
+      "https://wa.me/$contact?text=${Uri.parse('Hi, I need some help')}";
+
+  try {
+    if (Platform.isIOS) {
+      await launchUrl(Uri.parse(iosUrl));
+    } else {
+      await launchUrl(Uri.parse(androidUrl));
+    }
+  } on Exception {
+    // EasyLoading.showError('WhatsApp is not installed.');
   }
 }
