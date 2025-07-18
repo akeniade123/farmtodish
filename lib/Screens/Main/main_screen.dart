@@ -5,11 +5,19 @@
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
 // import 'package:Yomcoin/screens/login.dart';
+import 'dart:convert';
+
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:awesome_bottom_bar/widgets/inspired/inspired.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../../Repository/databaseHelper.dart';
+import '../../global_handlers.dart';
+import '../../global_objects.dart';
+import '../../global_string.dart';
 // import 'package:sqflite/sqflite.dart';
 
 // import 'common_widget.dart';
@@ -35,6 +43,88 @@ class _MainPageState extends State<MainPage> {
   }
 
   List<TabItem> items = [];
+  bool status = false;
+  Future<BottomBarInspiredInside>? tabs;
+
+  Future<String>? category() async {
+    DatabaseHelper dbm = DatabaseHelper(table: mnf);
+
+    int i = await dbm.queryRowCount();
+
+    if (i > 0) {
+      List<Map<String, dynamic>> dd = await dbm.queryAllRows();
+      Map<String, dynamic> ust = dd[0];
+      cppt = jsonDecode(ust[cpt]);
+      Map<String, dynamic> pp = cppt[usrTbl];
+
+      logger("Category Deserialization: $cppt");
+      switch (pp[ctg]) {
+        case "10":
+          logger("It's 10");
+          status != status;
+          items.add(TabItem(
+            icon: Icons.mail,
+          ));
+          status != status;
+          break;
+        case "11":
+          logger("It's -- 11");
+          break;
+        default:
+          logger("It's definitely ${pp[ctg]}");
+          break;
+      }
+    }
+    return "Category";
+  }
+
+  Consumer ftr() {
+    return Consumer<UINotifier>(builder: (context, notifier, child) {
+      return castTabs();
+    });
+  }
+
+  FutureBuilder<BottomBarInspiredInside> castTabs() {
+    return FutureBuilder(
+        future: tabs,
+        builder: (context, snapshot) {
+          return BottomBarInspiredInside(
+            items: items,
+            // backgroundColor: Colors.transparent,
+            backgroundColor: FarmToDishTheme.faintGreen,
+
+            color: Colors.white,
+            colorSelected: FarmToDishTheme.deepGreen,
+            indexSelected: widget.navigationShell.currentIndex,
+            onTap: onTap,
+            chipStyle: const ChipStyle(
+              convexBridge: true,
+              background: Colors.white,
+            ),
+            itemStyle: ItemStyle.circle,
+            animated: true,
+          );
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    category();
+  }
+
+  void onTap(index) {
+    widget.navigationShell.goBranch(
+      index,
+      // A common pattern when using bottom navigation bars is to support
+      // navigating to the initial location when tapping the item that is
+      // already active. This example demonstrates how to support this behavior,
+      // using the initialLocation parameter of goBranch.
+      initialLocation: index == widget.navigationShell.currentIndex,
+    );
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     items = [
@@ -52,7 +142,7 @@ class _MainPageState extends State<MainPage> {
       TabItem(
 
           // icon: ImageIcon(Image.asset("coffee.png").image),
-          icon: Icons.inventory_2
+          icon: Icons.shopping_basket
           // title: 'Shop',
           ),
       TabItem(
@@ -69,17 +159,6 @@ class _MainPageState extends State<MainPage> {
       //     ),
     ];
 
-    void onTap(index) {
-      widget.navigationShell.goBranch(
-        index,
-        // A common pattern when using bottom navigation bars is to support
-        // navigating to the initial location when tapping the item that is
-        // already active. This example demonstrates how to support this behavior,
-        // using the initialLocation parameter of goBranch.
-        initialLocation: index == widget.navigationShell.currentIndex,
-      );
-      setState(() {});
-    }
     // void _onTap(index) {
     //   prePush(context);
     //   if (index == 2 || index == 3) {
@@ -126,22 +205,24 @@ class _MainPageState extends State<MainPage> {
                 FarmToDishTheme.faintGreen,
                 FarmToDishTheme.deepGreen
               ])),
-              child: BottomBarInspiredInside(
-                items: items,
-                // backgroundColor: Colors.transparent,
-                backgroundColor: FarmToDishTheme.faintGreen,
+              child: (status != status) ? ftr() : ftr(),
 
-                color: Colors.white,
-                colorSelected: FarmToDishTheme.deepGreen,
-                indexSelected: widget.navigationShell.currentIndex,
-                onTap: onTap,
-                chipStyle: const ChipStyle(
-                  convexBridge: true,
-                  background: Colors.white,
-                ),
-                itemStyle: ItemStyle.circle,
-                animated: true,
-              ),
+              // BottomBarInspiredInside(
+              //   items: items,
+              //   // backgroundColor: Colors.transparent,
+              //   backgroundColor: FarmToDishTheme.faintGreen,
+
+              //   color: Colors.white,
+              //   colorSelected: FarmToDishTheme.deepGreen,
+              //   indexSelected: widget.navigationShell.currentIndex,
+              //   onTap: onTap,
+              //   chipStyle: const ChipStyle(
+              //     convexBridge: true,
+              //     background: Colors.white,
+              //   ),
+              //   itemStyle: ItemStyle.circle,
+              //   animated: true,
+              // ),
             ),
           ),
         ),

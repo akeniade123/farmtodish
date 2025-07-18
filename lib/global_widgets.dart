@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:card_swiper/card_swiper.dart';
+import 'package:farm_to_dish/Screens/screens.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/env.dart';
 import 'package:flutter/material.dart';
@@ -68,8 +69,9 @@ SizedBox ess(String item, String essence, BuildContext context) {
           onPressed: () async {
             switch (essence) {
               case psw_0:
-                showDialog(
-                    context: context, builder: (context) => const FundWallet());
+                customSnackBar(context, "unauthorizes access denied");
+                //  showDialog(
+                //      context: context, builder: (context) => const FundWallet());
 
                 break;
               case dlv_0:
@@ -112,6 +114,13 @@ InkWell nav(String item, String essence, BuildContext context) {
                     essence: essence,
                     caption: item,
                   ));
+          break;
+        case tms_:
+          customSnackBar(context, "visit www.farmtodish.com/privacypolicy");
+          break;
+
+        case cnt_:
+          whatsapp("+2348132547993");
           break;
       }
     },
@@ -347,6 +356,16 @@ FutureBuilder<String> dtlCast(BuildContext context, String essence,
           case acct:
             wdg = Text(
               "₦${bll.bal}",
+              style: TextStyle(
+                fontSize: fontsize,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            );
+            break;
+          case csh_bk:
+            wdg = Text(
+              "₦0.00",
               style: TextStyle(
                 fontSize: fontsize,
                 fontWeight: FontWeight.bold,

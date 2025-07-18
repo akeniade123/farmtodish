@@ -222,39 +222,7 @@ class _otpState extends State<otp> {
                                 if (verification == widget.value) {
                                   switch (widget.essence) {
                                     case login:
-                                      DatabaseHelper dbh =
-                                          DatabaseHelper(table: usrTbl);
-
-                                      if (await dbh.queryRowCount() > 0) {}
-
-                                      await dbh
-                                          .insertData(User.toMap(widget.user));
-
-                                      SharedPref pref = SharedPref();
-                                      // String? dtt =
-                                      //     await pref.getPrefString("usrTbl");
-                                      // pref.setPrefString(usrTbl, dtt!);
-
-                                      Map<String, dynamic> dbb = {
-                                        usrTbl: usrTmp, // jsonDecode(dtt),
-                                        login: true,
-                                        appState: prelim,
-                                        indexed: false
-                                      };
-
-                                      dbh = DatabaseHelper(table: mnf);
-                                      await dbh
-                                          .insertData({cpt: jsonEncode(dbb)});
-
-                                      await pref.setPrefBool(login, true);
-                                      pref = SharedPref();
-                                      await pref.setPrefString(
-                                          appState, prelim);
-
-                                      pref = SharedPref();
-                                      await pref.setPrefBool(indexed, false);
-
-                                      context.go("/HomeScreen");
+                                      loggedin(context, widget.user);
 
                                       /*
                                       Navigator.of(context).pushReplacement(
@@ -386,4 +354,36 @@ class _otpState extends State<otp> {
       ),
     );
   }
+}
+
+Future<void> loggedin(BuildContext context, User usr_) async {
+  DatabaseHelper dbh = DatabaseHelper(table: usrTbl);
+
+  if (await dbh.queryRowCount() > 0) {}
+
+  await dbh.insertData(User.toMap(usr_));
+
+  SharedPref pref = SharedPref();
+  // String? dtt =
+  //     await pref.getPrefString("usrTbl");
+  // pref.setPrefString(usrTbl, dtt!);
+
+  Map<String, dynamic> dbb = {
+    usrTbl: usrTmp, // jsonDecode(dtt),
+    login: true,
+    appState: prelim,
+    indexed: false
+  };
+
+  dbh = DatabaseHelper(table: mnf);
+  await dbh.insertData({cpt: jsonEncode(dbb)});
+
+  await pref.setPrefBool(login, true);
+  pref = SharedPref();
+  await pref.setPrefString(appState, prelim);
+
+  pref = SharedPref();
+  await pref.setPrefBool(indexed, false);
+
+  context.go("/HomeScreen");
 }

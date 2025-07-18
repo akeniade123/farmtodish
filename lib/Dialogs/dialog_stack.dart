@@ -191,17 +191,17 @@ class _NavsState extends State<Navs> {
       case psw_:
         fld = [
           ProfileLog(name: psw_0, essence: psw_0),
-          ProfileLog(name: psw_1, essence: psw_1),
-          ProfileLog(name: psw_2, essence: psw_2),
-          ProfileLog(name: psw_3, essence: psw_3),
-          ProfileLog(name: psw_4, essence: psw_4),
+          //    ProfileLog(name: psw_1, essence: psw_1),
+          //    ProfileLog(name: psw_2, essence: psw_2),
+          //    ProfileLog(name: psw_3, essence: psw_3),
+          //    ProfileLog(name: psw_4, essence: psw_4),
           ProfileLog(name: psw_5, essence: psw_5),
         ];
         break;
       case dlv_:
         fld = [
           ProfileLog(name: dlv_0, essence: dlv_0),
-          ProfileLog(name: dlv_1, essence: dlv_1),
+          //   ProfileLog(name: dlv_1, essence: dlv_1),
         ];
         break;
     }
@@ -286,13 +286,17 @@ class _LocateMeState extends State<LocateMe> {
     switch (widget.essence) {
       case psw_5:
       case dlv_0:
-        addr =
-            "Your Current Location depicts: ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} based on the coordinates of lat: ${position.latitude} & long: ${position.longitude}, further information will assists for efficient order deliveries, do well to ensure you're around the exact vicinity you expect your delivery before setting location ";
+        setState(() {
+          addr =
+              "Your Current Location depicts: ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} based on the coordinates of lat: ${position.latitude} & long: ${position.longitude}, further information will assists for efficient order deliveries, do well to ensure you're around the exact vicinity you expect your delivery before setting location ";
+        });
 
         break;
       default:
-        addr =
-            "Your Current Location depicts: ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} based on the coordinates of lat: ${position.latitude} & long: ${position.longitude} ";
+        setState(() {
+          addr =
+              "Your Current Location depicts: ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} based on the coordinates of lat: ${position.latitude} & long: ${position.longitude} ";
+        });
         break;
     }
     //  "Your Current Location depicts ${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} based on the coordinates of lat: ${position.latitude} & long: ${position.longitude}, further information  assists with ";

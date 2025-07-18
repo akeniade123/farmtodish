@@ -779,7 +779,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       InkWell(
                         onTap: () {
-                          context.pushNamed("ProfileScreen");
+                          // context.pushNamed("ProfileScreen");
+                          context.goNamed("ProfileScreen");
                         },
                         child: Text(
                           "Transaction History",
@@ -977,6 +978,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 35,
                     minWidth: 155,
                     onPressed: () {
+                      switch (brdcst.cta) {
+                        case fnd:
+                          showDialog(
+                              context: context,
+                              builder: (context) => FundWallet());
+
+                          break;
+                      }
+
                       // context.go("/ProductScreen");
                     },
                     color: FarmToDishTheme.faintGreen,
