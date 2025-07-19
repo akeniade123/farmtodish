@@ -59,13 +59,19 @@ class _MainPageState extends State<MainPage> {
 
       logger("Category Deserialization: $cppt");
       switch (pp[ctg]) {
-        case "10":
+        case "1":
           logger("It's 10");
           status != status;
           items.add(TabItem(
             icon: Icons.mail,
           ));
+          //  tabz = items;
+
           status != status;
+          //  dshCtx = context;
+
+          dshCtx.read<UINotifier>().tabNotice(items);
+
           break;
         case "11":
           logger("It's -- 11");
@@ -74,6 +80,7 @@ class _MainPageState extends State<MainPage> {
           logger("It's definitely ${pp[ctg]}");
           break;
       }
+      setState(() {});
     }
     return "Category";
   }
@@ -89,7 +96,7 @@ class _MainPageState extends State<MainPage> {
         future: tabs,
         builder: (context, snapshot) {
           return BottomBarInspiredInside(
-            items: items,
+            items: tabz,
             // backgroundColor: Colors.transparent,
             backgroundColor: FarmToDishTheme.faintGreen,
 
@@ -110,6 +117,8 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+    tabz = items;
+    dshCtx = context;
     category();
   }
 
@@ -151,6 +160,9 @@ class _MainPageState extends State<MainPage> {
           icon: Icons.local_shipping
           // title: 'Shop',
           ),
+      TabItem(
+        icon: Icons.mail,
+      )
       // TabItem(
 
       //     // icon: ImageIcon(Image.asset("coffee.png").image),
@@ -158,6 +170,7 @@ class _MainPageState extends State<MainPage> {
       //     // title: 'Shop',
       //     ),
     ];
+    tabz = items;
 
     // void _onTap(index) {
     //   prePush(context);

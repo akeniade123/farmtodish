@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:farm_to_dish/Screens/Products/product_model.dart';
 import 'package:farm_to_dish/global_handlers.dart';
@@ -178,6 +179,7 @@ showdialog(Widget child, Function() externalFunction, BuildContext context) {
 OrderModel? currentOrder;
 
 late List<ProductModel> pdmm;
+late List<TabItem> tabz;
 
 // final rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -255,6 +257,12 @@ class UINotifier extends ChangeNotifier {
 
   void produceNotice(List<ProductModel> prdc) {
     pdmm = prdc;
+    notifyListeners();
+  }
+
+  void tabNotice(List<TabItem> items) {
+    tabz = items;
+    notifyListeners();
   }
 
   void orderNotice(OrderModel order_) {
