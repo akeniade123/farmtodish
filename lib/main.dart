@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -44,14 +46,15 @@ void main() async {
   // await NotificationController.initializeIsolateReceivePort();
   //getContext();
 
-  await initializeService();
+  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  dbCart = DatabaseHelper(table: orderItem);
-
+  // Service Initialization
   // FirebaseMessaging.
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
+  await initializeService();
   // deviceId;
 
   if (!UniversalPlatform.isWeb) {
@@ -60,8 +63,11 @@ void main() async {
 
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp]); // -->[1]
-
-  crashlyticsBase();
+  try {
+    //crashlyticsBase();
+  } catch (e) {
+    logger("Crashlytic error: $e");
+  }
   // identifyDeviceId();
   runApp(const MyApp());
 }
@@ -106,6 +112,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // print("Handling a background message: ${message.messageId}");
 }
 
+Future<void> isolateMain(RootIsolateToken rootIsolateToken) async {
+  // Register the background isolate with the root isolate.
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+  await initializeService();
+  // You can now use the shared_preferences plugin.
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+  print(sharedPreferences.getBool('isDebug'));
+}
+
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
 
@@ -118,22 +134,30 @@ Future<void> initializeService() async {
     importance: Importance.low, // importance must be at low or higher level
   );
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  /// WidgetsFlutterBinding.ensureInitialized();
+  ///
+  ///
 
-  if (Platform.isIOS || Platform.isAndroid) {
-    await flutterLocalNotificationsPlugin.initialize(
-      const InitializationSettings(
-        iOS: DarwinInitializationSettings(),
-        android: AndroidInitializationSettings('ic_bg_service_small'),
-      ),
-    );
+  try {
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+
+    if (Platform.isIOS || Platform.isAndroid) {
+      await flutterLocalNotificationsPlugin.initialize(
+        const InitializationSettings(
+          iOS: DarwinInitializationSettings(),
+          android: AndroidInitializationSettings('ic_bg_service_small'),
+        ),
+      );
+    }
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+  } catch (e) {
+    logger("Notification Setup error: $e");
   }
-
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
 
   await service.configure(
     androidConfiguration: AndroidConfiguration(
@@ -160,6 +184,7 @@ Future<void> initializeService() async {
       onBackground: onIosBackground,
     ),
   );
+//  sendPort.send("message");
 }
 
 @pragma('vm:entry-point')
@@ -553,7 +578,7 @@ class _MyAppState extends State<MyApp> {
       });
     }));
 
-    msgg();
+    // msgg();
 
     //  logger("Queued: ${await dbh.queryRowCount()}");
   }
@@ -596,9 +621,9 @@ class _MyAppState extends State<MyApp> {
       //  FirebaseMessaging.instance.getInitialMessage().then((value) => null)
     }
 
-    DatabaseHelper dbh = DatabaseHelper(table: ctg);
-    int ipp = await dbh.queryRowCount();
-    logger("***$ipp");
+    // DatabaseHelper dbh = DatabaseHelper(table: ctg);
+    // int ipp = await dbh.queryRowCount();
+    // logger("***$ipp");
   }
 
   Future<void> receivedMessage(RemoteMessage remoteMessage) async {
@@ -640,7 +665,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   MaterialApp routeDefs(GlobalKey<ScaffoldState> ctxKey) {
-    //  FlutterNativeSplash.remove();
     return MaterialApp.router(
       // navigatorKey: rootNavigatorKey,
       scaffoldMessengerKey: snackbarKey,

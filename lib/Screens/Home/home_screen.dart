@@ -3,6 +3,7 @@
 // import 'dart:js_interop';
 
 import 'dart:convert';
+import 'dart:isolate';
 import 'dart:math';
 // import 'package:flutter/widgets.dart' as w;
 // import 'package:Yomcoin/models/models.dart';
@@ -12,6 +13,7 @@ import 'package:farm_to_dish/Screens/DeliveryCar/delivery_car_model.dart';
 // import 'package:farm_to_dish/Screens/Payment/cart_model.dart';
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +32,7 @@ import '../../global_handlers.dart';
 import '../../global_objects.dart';
 import '../../global_string.dart';
 import '../../global_widgets.dart';
+import '../../main.dart';
 import '../../sharedpref.dart';
 import '../Products/product_model.dart';
 import '../screens.dart';
@@ -96,6 +99,23 @@ class _HomeScreenState extends State<HomeScreen> {
     dbh = DatabaseHelper(table: ptyp);
     dba = DatabaseHelper(table: usrWlt);
     dbc = DatabaseHelper(table: cpt);
+
+    try {
+      /*
+      //  await initializeService();
+      // final receivePort = ReceivePort();
+      WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+      RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
+      await Isolate.spawn(isolateMain, rootIsolateToken);
+      // await Isolate.spawn(initializeService(receivePort) ,
+      //     receivePort.sendPort);
+
+      */
+    } catch (r) {
+      logger("Service error: $r");
+    }
+
     pref = SharedPref();
 
     usrdtlz = userDtlz(nmm: "---");

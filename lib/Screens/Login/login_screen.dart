@@ -5,6 +5,7 @@ import 'package:farm_to_dish/env.dart';
 import 'package:farm_to_dish/requester.dart';
 import 'package:farm_to_dish/sharedpref.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../Remote/requestcore.dart';
@@ -129,6 +130,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FlutterNativeSplash.remove();
+
     return Scaffold(
       backgroundColor: FarmToDishTheme.scaffoldBackgroundColor,
       body: Center(

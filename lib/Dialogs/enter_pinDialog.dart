@@ -194,7 +194,8 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 child: (payment == false)
                     ? Text(
-                        "Pay $currency${currentOrder?.getTotalPrice() ?? amount}",
+                        "Pay $currency $amount",
+                        // "Pay $currency${currentOrder?.getTotalPrice() ?? amount}",
                         style: TextStyle(
                           color: FarmToDishTheme.scaffoldBackgroundColor,
                           // fontSize: 14,

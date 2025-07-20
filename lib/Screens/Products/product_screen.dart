@@ -632,6 +632,7 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   Future<int>? _cart() async {
+    dbCart = DatabaseHelper(table: orderItem);
     int i = await dbCart.queryRowCount();
     cartz = i;
     return i;

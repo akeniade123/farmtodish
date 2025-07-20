@@ -127,6 +127,13 @@ class Navigate {
 
     Map<String, String> hsh = {};
 
+    /*
+    Essence:Charge
+regId:lkmlkmflkmlfkmf
+Designation:Charge
+sect:lone
+    */
+
     if (essence != null) {
       switch (essence) {
         //case sp
@@ -220,32 +227,40 @@ class Navigate {
           };
 //"data":{↵   "email":"adeyinkaakeni@gmail.com",↵   "amount":"20000",↵   "metadata":{↵      "value":"Lagos",↵      "display_name":"Fund Wallet",↵      "variable_name":"Card Funding",↵      "sect":"wallet",↵      "time":"2023-10-20 15:34",↵      "amount":"20000",↵      "reg_Id":"954948848484848",↵      "domain":"107",↵      "name":"Akeni Adeyinka David",↵      "user_id":"909891",↵      "description":"Fund Wallet"↵   },↵   "card":{↵      "cvv":"408",↵      "number":"4084084084084081",↵      "expiry_month":"02",↵      "expiry_year":"26"↵   },↵   "pin":"1234"↵}
 
+          DatabaseHelper dbm = DatabaseHelper(table: mnf);
+          List<Map<String, dynamic>> dd = await dbm.queryAllRows();
+          Map<String, dynamic> ust = dd[0];
+          cppt = jsonDecode(ust[cpt]);
+          Map<String, dynamic> pp = cppt[usrTbl];
+
           Map<String, dynamic> dtt_ = {
-            "email": "adeyinkaakeni@gmail.com",
-            "amount": {currentOrder?.getTotalPrice() ?? amount}.toString(),
+            "email": pp[eml],
+            "amount": amount *
+                100, // {currentOrder?.getTotalPrice() ?? amount}.toString(),
             "metadata": {
               "value": "Lagos",
               "display_name": "Fund Wallet",
               "variable_name": "Card Funding",
               "sect": "wallet",
-              "time": "2023-10-20 15:34",
-              "amount": {currentOrder?.getTotalPrice() ?? amount}.toString(),
-              "reg_Id": "954948848484848",
+              "time": DateTime.now().toString(),
+              "amount":
+                  amount, // {currentOrder?.getTotalPrice() ?? amount}.toString(),
+              "reg_Id": pp[fb_uid],
               "domain": "107",
-              "name": "Akeni Adeyinka David",
-              "user_id": "909891",
+              "name": pp[nmm_],
+              "user_id": pp[unq],
               "description": "Fund Wallet"
             },
-            /*
             "card": {
               "cvv": cvnum,
               "number": cdnum,
               "expiry_month": dynum,
               "expiry_year": yrnum
             },
-            */
             "pin": pnum.toString()
           };
+
+          logger("Charge Card:${jsonEncode(dtt_)}");
 
           hsh.addEntries({"data": jsonEncode(dtt_)}.entries);
         } catch (e) {

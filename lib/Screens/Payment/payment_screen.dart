@@ -126,6 +126,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               cvnumRetriever.text.isNotEmpty &&
                               dynumRetriever.text.isNotEmpty &&
                               yrnumRetriever.text.isNotEmpty) {
+                            amount = widget.amount;
                             Navigator.of(rootNavigatorKey
                                     .currentState!.overlay!.context)
                                 .push(DialogRoute(
@@ -143,6 +144,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               horizontal: 12, vertical: 5),
                           child: Text(
                             //"Pay $currency${currentOrder?.getTotalPrice() ?? amount}",
+
                             "Pay $currency${widget.amount}",
                             style: TextStyle(
                               color: FarmToDishTheme.scaffoldBackgroundColor,

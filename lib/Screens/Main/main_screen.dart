@@ -60,6 +60,7 @@ class _MainPageState extends State<MainPage> {
       logger("Category Deserialization: $cppt");
       switch (pp[ctg]) {
         case "1":
+          /*
           logger("It's 10");
           status != status;
           items.add(TabItem(
@@ -71,6 +72,7 @@ class _MainPageState extends State<MainPage> {
           //  dshCtx = context;
 
           dshCtx.read<UINotifier>().tabNotice(items);
+          */
 
           break;
         case "11":
@@ -159,10 +161,7 @@ class _MainPageState extends State<MainPage> {
           // icon: ImageIcon(Image.asset("coffee.png").image),
           icon: Icons.local_shipping
           // title: 'Shop',
-          ),
-      TabItem(
-        icon: Icons.mail,
-      )
+          )
       // TabItem(
 
       //     // icon: ImageIcon(Image.asset("coffee.png").image),
