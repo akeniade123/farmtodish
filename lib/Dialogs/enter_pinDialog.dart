@@ -144,10 +144,9 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
                         // ScaffoldMessenger.of()
                         snackbarKey.currentState?.showSnackBar(
                           SnackBar(
-                            backgroundColor:
-                                FarmToDishTheme.scaffoldBackgroundColor,
+                            backgroundColor: FarmToDishTheme.deepGreen,
                             // onVisible: ,
-                            content: const Text("your goods are on the way"),
+                            content: const Text("Successful Transaction"),
                           ),
                         );
 

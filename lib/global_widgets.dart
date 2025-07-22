@@ -12,12 +12,14 @@ import 'Dialogs/dialog_stack.dart';
 import 'Remote/elitebasis.dart';
 import 'Remote/modelstack.dart';
 import 'Remote/requestcore.dart';
+import 'Remote/requestmodel.dart';
 import 'Remote/server_response.dart';
 import 'Repository/databaseHelper.dart';
 import 'Screens/Home/home_screen.dart';
 import 'global_handlers.dart';
 import 'global_objects.dart';
 import 'global_string.dart';
+import 'main.dart';
 import 'sharedpref.dart';
 
 class Squire extends StatefulWidget {
@@ -220,6 +222,7 @@ Future<String>? getData(String essence, [BuildContext? context]) async {
   bool? lgn = await pref.getPrefBool(login);
   if (lgn) {
     pref = SharedPref();
+    logger("The Essence: $essence");
 
     switch (essence) {
       case home:
@@ -264,14 +267,35 @@ Future<String>? getData(String essence, [BuildContext? context]) async {
           DatabaseHelper dbm = DatabaseHelper(table: mnf);
 
           int i = await dbm.queryRowCount();
+          logger("Cast Value: $i");
           if (i > 0) {
             List<Map<String, dynamic>> dd = await dbm.queryAllRows();
             Map<String, dynamic> ust = dd[0];
+            logger("The Current Data: ${jsonEncode(ust)}");
 
             // logger("Cast::: ${dd[0][cpt]}");
             Map<String, dynamic> ddd = jsonDecode(ust[cpt]);
+            logger("The Current Caption: ${jsonEncode(ddd)}");
 
-            bal = ddd[acct];
+            try {
+              bal = ddd[acct];
+            } catch (e) {
+              logger("Balance error: $e");
+              bal = "";
+            }
+
+            if (bal.isEmpty) {
+              //svrRqst(usrWlt, app);
+              logger("The balance is empty");
+              if (isAppActive) {
+                logger("Active AppState");
+              } else {
+                logger("Inactive App State");
+                //  isAppActive = true;
+                //  await initializeService();
+                svrRqst(usrWlt, setup_);
+              }
+            }
             logger("Cast:: $bal");
           }
 
@@ -417,8 +441,9 @@ Future<String>? _futureAccount(BuildContext context) async {
     if (act_!.isNotEmpty) {
       bal = act_;
     } else {
+      Navigate nvgg = Navigate();
       Map<String, dynamic>? obj =
-          await nvg.readData(usrWlt, cls, global, rd, "", false, rd, context);
+          await nvgg.readData(usrWlt, cls, global, rd, "", false, rd, context);
 
       ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
       if (svp.status) {

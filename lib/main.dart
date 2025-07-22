@@ -115,7 +115,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> isolateMain(RootIsolateToken rootIsolateToken) async {
   // Register the background isolate with the root isolate.
   BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
-  await initializeService();
+  // await initializeService();
   // You can now use the shared_preferences plugin.
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
@@ -159,32 +159,36 @@ Future<void> initializeService() async {
     logger("Notification Setup error: $e");
   }
 
-  await service.configure(
-    androidConfiguration: AndroidConfiguration(
-      // this will be executed when app is in foreground or background in separated isolate
-      onStart: onStart,
+  bool chk = isAppActive;
+  logger("The Current State : $chk");
 
-      // auto start service
-      autoStart: true,
-      isForegroundMode: true,
+  if (chk == true) {
+    await service.configure(
+      androidConfiguration: AndroidConfiguration(
+        // this will be executed when app is in foreground or background in separated isolate
+        onStart: onStart,
 
-      notificationChannelId: 'my_foreground',
-      initialNotificationTitle: 'AWESOME SERVICE',
-      initialNotificationContent: 'Initializing',
-      foregroundServiceNotificationId: 888,
-    ),
-    iosConfiguration: IosConfiguration(
-      // auto start service
-      autoStart: true,
+        // auto start service
+        autoStart: true,
+        isForegroundMode: true,
 
-      // this will be executed when app is in foreground in separated isolate
-      onForeground: onStart,
+        notificationChannelId: 'my_foreground',
+        initialNotificationTitle: 'AWESOME SERVICE',
+        initialNotificationContent: 'Initializing',
+        foregroundServiceNotificationId: 888,
+      ),
+      iosConfiguration: IosConfiguration(
+        // auto start service
+        autoStart: true,
 
-      // you have to enable background fetch capability on xcode project
-      onBackground: onIosBackground,
-    ),
-  );
-//  sendPort.send("message");
+        // this will be executed when app is in foreground in separated isolate
+        onForeground: onStart,
+
+        // you have to enable background fetch capability on xcode project
+        onBackground: onIosBackground,
+      ),
+    );
+  }
 }
 
 @pragma('vm:entry-point')
@@ -578,7 +582,7 @@ class _MyAppState extends State<MyApp> {
       });
     }));
 
-    // msgg();
+    msgg();
 
     //  logger("Queued: ${await dbh.queryRowCount()}");
   }
