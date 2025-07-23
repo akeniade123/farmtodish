@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:farm_to_dish/app_theme_file.dart';
@@ -144,67 +146,72 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
                         break;
 
                       case "Transaction Successful":
-                        String msgg = "Transaction Successful";
-                        try {
-                          Map<String, dynamic> dtk =
-                              svv.msg as Map<String, dynamic>;
-                          msgg = dtk["message"];
-                          logger("Setup Procession");
-                          String bllb = dtk["new balance"];
+                        break;
+                      default:
+                        Map<String, dynamic> dtk =
+                            svv.msg as Map<String, dynamic>;
+                        String msgg = dtk["message"];
+                        switch (msgg) {
+                          case "Transaction Successful":
+                            String msgg = "Transaction Successful";
+                            try {
+                              logger("Setup Procession");
+                              String bllb = dtk["new balance"];
 
-                          // Once Service starts running delete this section of cppt
+                              // Once Service starts running delete this section of cppt
 
-                          DatabaseHelper dbm = DatabaseHelper(table: mnf);
+                              DatabaseHelper dbm = DatabaseHelper(table: mnf);
 
-                          int i = await dbm.queryRowCount();
+                              int i = await dbm.queryRowCount();
 
-                          if (i > 0) {
-                            List<Map<String, dynamic>> dd =
-                                await dbm.queryAllRows();
-                            Map<String, dynamic> ust = dd[0];
-                            cppt = jsonDecode(ust[cpt]);
-                          }
+                              if (i > 0) {
+                                List<Map<String, dynamic>> dd =
+                                    await dbm.queryAllRows();
+                                Map<String, dynamic> ust = dd[0];
+                                cppt = jsonDecode(ust[cpt]);
+                              }
 
-                          Map<String, dynamic> appSet = cppt;
-                          appSet[appState] = linked;
-                          appSet[indexed] = true;
-                          appSet[acct] = bllb;
+                              Map<String, dynamic> appSet = cppt;
+                              appSet[appState] = linked;
+                              appSet[indexed] = true;
+                              appSet[acct] = bllb;
 
-                          List<Map<String, dynamic>> ddf =
-                              await dbm.queryAllRows();
+                              List<Map<String, dynamic>> ddf =
+                                  await dbm.queryAllRows();
 
-                          for (Map<String, dynamic> dd in ddf) {
-                            dbm.delete(dd);
-                          }
+                              for (Map<String, dynamic> dd in ddf) {
+                                dbm.delete(dd);
+                              }
 
-                          await dbm.insertData({cpt: jsonEncode(appSet)});
+                              await dbm.insertData({cpt: jsonEncode(appSet)});
 
-                          logger("Refactored: $appSet");
+                              logger("Refactored: $appSet");
 
-                          balance blh = balance(bal: dtk["new balance"]);
+                              balance blh = balance(bal: dtk["new balance"]);
 
-                          dshCtx.read<UINotifier>().accountBalance(blh);
+                              dshCtx.read<UINotifier>().accountBalance(blh);
+                            } catch (e) {}
 
-                          /*
-                        "message": "Transaction Successful",
-        "reference": "rs58hz72z1empvz",
-        "amount": 5000,
-        "new balance": "2205000",
-        "transaction_time": "2025-07-22 05:16:36"
-                        */
-                        } catch (e) {}
+                            switch (pay_[stt]) {
+                              case fnd:
+                                Navigator.pop(context);
+                                context.go("/HomeScreen");
+                                break;
+                              case stt:
+                                break;
+                            }
 
-                        Navigator.pop(context);
-                        context.go("/HomeScreen");
-                        // ScaffoldMessenger.of()
-                        snackbarKey.currentState?.showSnackBar(
-                          SnackBar(
-                            backgroundColor: FarmToDishTheme.deepGreen,
-                            // onVisible: ,
-                            content: const Text("Successful Transaction"),
-                          ),
-                        );
+                            // ScaffoldMessenger.of()
+                            snackbarKey.currentState?.showSnackBar(
+                              SnackBar(
+                                backgroundColor: FarmToDishTheme.deepGreen,
+                                // onVisible: ,
+                                content: const Text("Successful Transaction"),
+                              ),
+                            );
 
+                            break;
+                        }
                         break;
                     }
 

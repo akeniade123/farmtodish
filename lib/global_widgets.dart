@@ -16,6 +16,7 @@ import 'Remote/requestmodel.dart';
 import 'Remote/server_response.dart';
 import 'Repository/databaseHelper.dart';
 import 'Screens/Home/home_screen.dart';
+
 import 'global_handlers.dart';
 import 'global_objects.dart';
 import 'global_string.dart';
@@ -116,6 +117,8 @@ InkWell nav(String item, String essence, BuildContext context) {
                     essence: essence,
                     caption: item,
                   ));
+          break;
+        case shr_:
           break;
         case tms_:
           customSnackBar(context, "visit www.farmtodish.com/privacypolicy");

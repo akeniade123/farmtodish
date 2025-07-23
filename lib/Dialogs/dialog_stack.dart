@@ -601,7 +601,7 @@ class _FundWalletState extends State<FundWallet> {
                       onPressed: () async {
                         if (_amount.text.isNotEmpty) {
                           amount = double.parse(_amount.text);
-                          pay_ = {amt: amount};
+                          pay_ = {amt: amount, stt: fnd};
                           context.go("/PaymentScreen");
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(

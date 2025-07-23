@@ -228,7 +228,7 @@ class _CartScreenState extends State<CartScreen> {
                                             customSnackBar(context,
                                                 "Insufficient balance, kindly fund your wallet");
                                             double def = price - bal;
-                                            pay_ = {amt: def};
+                                            pay_ = {amt: def, stt: stt};
                                             context.go("/PaymentScreen");
                                           } else {
                                             List<dynamic> itmz = [];
@@ -247,7 +247,8 @@ class _CartScreenState extends State<CartScreen> {
                                           pay_ = {
                                             amt:
                                                 currentOrder?.getTotalPrice() ??
-                                                    amount
+                                                    amount,
+                                            stt: stt
                                           };
                                           context.go("/PaymentScreen");
                                         }
