@@ -105,11 +105,14 @@ Future<Map<String, dynamic>>? svrRqst(String table, String essence,
 
           List<Map<String, dynamic>> ddf = await dbm.queryAllRows();
 
-          for (Map<String, dynamic> dd in ddf) {
-            dbm.delete(dd);
+          if (ddf.isNotEmpty) {
+            for (Map<String, dynamic> dd in ddf) {
+              dbm.delete(dd);
+            }
           }
 
           await dbm.insertData({cpt: jsonEncode(appSet)});
+          cppt = appSet;
 
           logger("Refactored: $appSet");
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:farm_to_dish/app_theme_file.dart';
 import 'package:farm_to_dish/global_handlers.dart';
 import 'package:farm_to_dish/global_objects.dart';
@@ -7,9 +9,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:numpad_layout/numpad.dart';
+import 'package:provider/provider.dart';
 
+import '../Remote/modelstack.dart';
 import '../Remote/requestmodel.dart';
 import '../Remote/server_response.dart';
+import '../Repository/databaseHelper.dart';
 import '../global_string.dart';
 
 import '../../global_objects.dart';
@@ -109,7 +114,7 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
               onPressed: () async {
                 payment = true;
                 Navigate nvg = Navigate();
-                Map<String, dynamic> mnf = {};
+                //  Map<String, dynamic> mnf = {};
 
                 Map<String, dynamic>? dtt = await nvg.entry(
                     NA, {}, {}, {}, global, chg, chg, true, NA, context);
@@ -139,6 +144,56 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
                         break;
 
                       case "Transaction Successful":
+                        String msgg = "Transaction Successful";
+                        try {
+                          Map<String, dynamic> dtk =
+                              svv.msg as Map<String, dynamic>;
+                          msgg = dtk["message"];
+                          logger("Setup Procession");
+                          String bllb = dtk["new balance"];
+
+                          // Once Service starts running delete this section of cppt
+
+                          DatabaseHelper dbm = DatabaseHelper(table: mnf);
+
+                          int i = await dbm.queryRowCount();
+
+                          if (i > 0) {
+                            List<Map<String, dynamic>> dd =
+                                await dbm.queryAllRows();
+                            Map<String, dynamic> ust = dd[0];
+                            cppt = jsonDecode(ust[cpt]);
+                          }
+
+                          Map<String, dynamic> appSet = cppt;
+                          appSet[appState] = linked;
+                          appSet[indexed] = true;
+                          appSet[acct] = bllb;
+
+                          List<Map<String, dynamic>> ddf =
+                              await dbm.queryAllRows();
+
+                          for (Map<String, dynamic> dd in ddf) {
+                            dbm.delete(dd);
+                          }
+
+                          await dbm.insertData({cpt: jsonEncode(appSet)});
+
+                          logger("Refactored: $appSet");
+
+                          balance blh = balance(bal: dtk["new balance"]);
+
+                          dshCtx.read<UINotifier>().accountBalance(blh);
+
+                          /*
+                        "message": "Transaction Successful",
+        "reference": "rs58hz72z1empvz",
+        "amount": 5000,
+        "new balance": "2205000",
+        "transaction_time": "2025-07-22 05:16:36"
+                        */
+                        } catch (e) {}
+
                         Navigator.pop(context);
                         context.go("/HomeScreen");
                         // ScaffoldMessenger.of()
