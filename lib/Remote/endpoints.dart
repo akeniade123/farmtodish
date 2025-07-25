@@ -34,6 +34,9 @@ class Endpoint {
       case chg:
         result += "$dmm/transaction/cards";
         break;
+      case trz:
+        result += "$dmm/transaction/banks";
+        break;
     }
 
     log("endpoint: $result");

@@ -13,7 +13,9 @@ import 'package:qr_code_dart_scan/qr_code_dart_scan.dart';
 import 'package:camera_android_camerax/camera_android_camerax.dart';
 
 import '../Models/model_stack.dart';
+import '../Remote/endpoints.dart';
 import '../Remote/modelstack.dart';
+import '../Remote/requester.dart';
 import '../Remote/requestmodel.dart';
 import '../Remote/server_response.dart';
 import '../app_theme_file.dart';
@@ -227,8 +229,11 @@ class LocateMe extends StatefulWidget {
 class _LocateMeState extends State<LocateMe> {
   Future<Position>? pos;
   List<String> itemz = [];
+  Map<String, dynamic> bkk = {};
   String location = "";
   String addr = "";
+  final TextEditingController _account_nm = TextEditingController();
+  final TextEditingController _bank = TextEditingController();
 
   @override
   void initState() {
@@ -241,11 +246,34 @@ class _LocateMeState extends State<LocateMe> {
   // final dropDownKey = GlobalKey<DropdownSearchState>();
 
   Future<Position>? locator() async {
-    switch (widget.essence) {
-      case mkt:
-        Navigate nvg = Navigate();
-        List<String> nmm = [];
+    Navigate nvg = Navigate();
+    Endpoint enp = Endpoint();
 
+    logger("Where: ${widget.essence}");
+    switch (widget.essence) {
+      case csp:
+        Map<String, dynamic>? obj = await getReq(
+            enp.getEndpoint(trz, global, true), rqstElite, csp, context, true);
+        //  await nvg.readData(NA, {}, global, trz, "content", false, rd);
+        logger("Bank List: $obj");
+
+        ServerPrelim? svp = ServerPrelim.fromJson(obj!); // as ServerPrelim?;
+        if (svp.status) {
+          ServerResponse svr = ServerResponse.fromJson(obj);
+          for (dynamic d in svr.data) {
+            try {
+              setState(
+                () {
+                  itemz.add(d["name"]);
+                  //bkk.addEntries(MapEntry(d["name"], d["code"]) as Iterable<MapEntry<String, dynamic>>);
+                },
+              );
+            } catch (e) {}
+          }
+        }
+        break;
+      case mkt:
+        List<String> nmm = [];
         Map<String, dynamic>? obj = await nvg.readData(
             mkt, {"lat": ""}, global, "access", "content", false, rd_e);
         logger("Response: $obj");
@@ -306,6 +334,11 @@ class _LocateMeState extends State<LocateMe> {
         dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
         dshCtx.read<UINotifier>().dropDown(drp_);
         break;
+      case csp:
+        dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
+        dshCtx.read<UINotifier>().dropDown(drp_);
+
+        break;
     }
 
     return position;
@@ -333,6 +366,7 @@ class _LocateMeState extends State<LocateMe> {
     Widget wdg = const Text("No View");
 
     switch (widget.essence) {
+      case csp:
       case psw_5:
       case dlv_0:
         wdg = Center(
@@ -357,6 +391,61 @@ class _LocateMeState extends State<LocateMe> {
                 ),
               ),
               //  (widget.essence == psw_5) ? const Text("") : Text(""),
+
+              (widget.essence == csp)
+                  ? Column(
+                      children: [
+                        DropdownButtonFormField(
+                          hint: Text(
+                            "Bank",
+                            style: FarmToDishTheme.iStyle,
+                          ),
+                          isExpanded: false,
+                          icon: Expanded(
+                            child: Center(
+                              child: Container(
+                                alignment: Alignment.topCenter,
+                                child:
+                                    Icon(Icons.keyboard_arrow_down, size: 20),
+                              ),
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          decoration: InputDecoration(border: InputBorder.none),
+                          items: drpz.array.map((String value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              int loc = drpz.array.indexOf(value!);
+                              location = drpz.array[loc];
+                              logger("The Current: $location");
+                            });
+                          },
+                        ),
+                        Squire(
+                          height: 40,
+                          child: TextField(
+                            decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.only(
+                                    bottom: 10, right: 10, left: 10),
+                                border: InputBorder.none,
+                                hintText: 'Account Number: ' ' :',
+                                hintStyle: FarmToDishTheme.iStyle
+                                // label: Text('Email' ' :'),
+
+                                ),
+                            // label: 'Email' ' :',
+                            // controller: ,
+                            controller: _account_nm,
+                          ),
+                        ),
+                      ],
+                    )
+                  : const Text(""),
 
               (addr.isEmpty)
                   ? const Text("")
@@ -399,7 +488,7 @@ class _LocateMeState extends State<LocateMe> {
                           customSnackBar(context,
                               "yet to obtain your co-ordinate, please wait...");
                         }
-                      })
+                      }),
             ],
           ),
         );

@@ -35,6 +35,7 @@ const String rt = "Router";
 const String spk = "specific_tsk";
 const String rd_e = "read_expl";
 const String chg = "Charge";
+const String trz = "transaction";
 
 const String NA = "NA";
 
@@ -112,6 +113,7 @@ const String dlv = "delivered";
 const String pnd = "pending";
 
 const String mkt = "market_segment";
+const String csp = "Apply for sales point";
 
 const String fg = "Foreground Engagement";
 const String bg = "Background Engagement";

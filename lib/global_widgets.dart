@@ -104,12 +104,9 @@ InkWell nav(String item, String essence, BuildContext context) {
         case psw_:
           showDialog(
               context: context,
-              builder: (context) => Navs(
-                    essence: essence,
-                    caption: item,
-                  ));
-
+              builder: (context) => const LocateMe(essence: csp));
           break;
+
         case dlv_:
           showDialog(
               context: context,
@@ -119,6 +116,12 @@ InkWell nav(String item, String essence, BuildContext context) {
                   ));
           break;
         case shr_:
+          break;
+
+        case csp:
+          showDialog(
+              context: context,
+              builder: (context) => const LocateMe(essence: csp));
           break;
         case tms_:
           customSnackBar(context, "visit www.farmtodish.com/privacypolicy");

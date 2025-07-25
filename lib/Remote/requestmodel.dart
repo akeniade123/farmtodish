@@ -195,7 +195,13 @@ sect:lone
 
     String dmn = (domain == communal) ? communal : generic;
     try {
-      obj = await postReq(enp.getEndpoint(generic, dmn, true), hsh, rqstElite,
+      String pth = generic;
+      switch (essence) {
+        case trz:
+          pth = trz;
+          break;
+      }
+      obj = await postReq(enp.getEndpoint(pth, dmn, true), hsh, rqstElite,
           essence, designation, urlEnc, context, show);
     } catch (e) {}
     return obj;
