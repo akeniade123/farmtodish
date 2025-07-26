@@ -223,6 +223,15 @@ sect:lone
     Map<String, String> hsh = formRequisite();
 
     switch (essence) {
+      case cssp:
+        hsh = {
+          "Account_no": manifest["Account_no"],
+          "Bank_code": manifest["Bank_code"],
+          "Essence": "Account_no",
+          "regId": "lkmlkmflkmlfkmf"
+        }; // jsonDecode(designation);
+        // manifest as Map<String, String>;
+        break;
       case chg:
         try {
           hsh = {
@@ -292,13 +301,16 @@ sect:lone
 
     String dmn = (domain == communal) ? communal : generic;
     try {
-      String dmm = generic;
+      String pth = generic;
       switch (essence) {
+        case csp:
+          pth = trz;
+          break;
         case chg:
-          dmm = chg;
+          pth = chg;
           break;
       }
-      obj = await postReq(enp.getEndpoint(dmm, dmn, true), hsh, rqstElite,
+      obj = await postReq(enp.getEndpoint(pth, dmn, true), hsh, rqstElite,
           essence, designation, urlEnc, context, show);
     } catch (e) {
       logger(e.toString());

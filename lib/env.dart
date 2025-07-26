@@ -10,7 +10,7 @@ var mantra = "...raising geniuses through mastery";
 var community = "base";
 const Color bgmainclr = Color.fromARGB(255, 195, 216, 255);
 
-const Color accentclr = Color.fromARGB(255, 3, 38, 66);
+const Color accentclr = Color.fromARGB(255, 192, 221, 66);
 //   Color.fromARGB(255, 21, 58, 34); //Color.fromARGB(255, 3, 38, 66);
 
 //...beyond education

@@ -114,6 +114,7 @@ const String pnd = "pending";
 
 const String mkt = "market_segment";
 const String csp = "Apply for sales point";
+const String cssp = "Sales Point";
 
 const String fg = "Foreground Engagement";
 const String bg = "Background Engagement";

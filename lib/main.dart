@@ -112,6 +112,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // print("Handling a background message: ${message.messageId}");
 }
 
+/*
+
 Future<void> isolateMain(RootIsolateToken rootIsolateToken) async {
   // Register the background isolate with the root isolate.
   BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
@@ -121,6 +123,8 @@ Future<void> isolateMain(RootIsolateToken rootIsolateToken) async {
 
   print(sharedPreferences.getBool('isDebug'));
 }
+
+*/
 
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();

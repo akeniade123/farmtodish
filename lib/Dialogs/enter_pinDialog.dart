@@ -114,141 +114,104 @@ class _EnterPinDialogState extends State<EnterPinDialog> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               onPressed: () async {
-                payment = true;
-                Navigate nvg = Navigate();
-                //  Map<String, dynamic> mnf = {};
+                if (pin.length >= 4) {
+                  showLoaderDialog(context);
+                  payment = true;
+                  Navigate nvg = Navigate();
+                  //  Map<String, dynamic> mnf = {};
 
-                Map<String, dynamic>? dtt = await nvg.entry(
-                    NA, {}, {}, {}, global, chg, chg, true, NA, context);
+                  Map<String, dynamic>? dtt = await nvg.entry(
+                      NA, {}, {}, {}, global, chg, chg, true, NA, context);
 
-                try {
-                  if (dtt!["status"]) {
-                    payment = false;
-                    CustomResponse svv = CustomResponse.fromJson(dtt);
-                    switch (svv.msg) {
-                      /*
-                      {
-    "status": true,
-    "data": {
-        "reference": "3h4s4g5e6x21f1x",
-        "status": "failed",
-        "message": "Transaction declined. Please use the test card."
-    },
-    "message": "Transaction failed"
-}
-                      */
+                  try {
+                    Navigator.pop(context);
+                    if (dtt!["status"]) {
+                      payment = false;
+                      CustomResponse svv = CustomResponse.fromJson(dtt);
+                      switch (svv.msg) {
+                        case "Transaction failed":
+                          Map<String, dynamic> dty = svv.data;
 
-                      case "Transaction failed":
-                        Map<String, dynamic> dty = svv.data;
+                          customSnackBar(context, dty["message"]);
 
-                        customSnackBar(context, dty["message"]);
+                          break;
 
-                        break;
+                        case "Transaction Successful":
+                          break;
+                        default:
+                          Map<String, dynamic> dtk =
+                              svv.msg as Map<String, dynamic>;
+                          String msgg = dtk["message"];
+                          switch (msgg) {
+                            case "Transaction Successful":
+                              String msgg = "Transaction Successful";
+                              try {
+                                logger("Setup Procession");
+                                String bllb = dtk["new balance"];
 
-                      case "Transaction Successful":
-                        break;
-                      default:
-                        Map<String, dynamic> dtk =
-                            svv.msg as Map<String, dynamic>;
-                        String msgg = dtk["message"];
-                        switch (msgg) {
-                          case "Transaction Successful":
-                            String msgg = "Transaction Successful";
-                            try {
-                              logger("Setup Procession");
-                              String bllb = dtk["new balance"];
+                                // Once Service starts running delete this section of cppt
 
-                              // Once Service starts running delete this section of cppt
+                                DatabaseHelper dbm = DatabaseHelper(table: mnf);
 
-                              DatabaseHelper dbm = DatabaseHelper(table: mnf);
+                                int i = await dbm.queryRowCount();
 
-                              int i = await dbm.queryRowCount();
+                                if (i > 0) {
+                                  List<Map<String, dynamic>> dd =
+                                      await dbm.queryAllRows();
+                                  Map<String, dynamic> ust = dd[0];
+                                  cppt = jsonDecode(ust[cpt]);
+                                }
 
-                              if (i > 0) {
-                                List<Map<String, dynamic>> dd =
+                                Map<String, dynamic> appSet = cppt;
+                                appSet[appState] = linked;
+                                appSet[indexed] = true;
+                                appSet[acct] = bllb;
+
+                                List<Map<String, dynamic>> ddf =
                                     await dbm.queryAllRows();
-                                Map<String, dynamic> ust = dd[0];
-                                cppt = jsonDecode(ust[cpt]);
+
+                                for (Map<String, dynamic> dd in ddf) {
+                                  dbm.delete(dd);
+                                }
+
+                                await dbm.insertData({cpt: jsonEncode(appSet)});
+
+                                logger("Refactored: $appSet");
+
+                                balance blh = balance(bal: dtk["new balance"]);
+
+                                dshCtx.read<UINotifier>().accountBalance(blh);
+                              } catch (e) {}
+
+                              switch (pay_[stt]) {
+                                case fnd:
+                                  Navigator.pop(context);
+                                  context.go("/HomeScreen");
+                                  break;
+                                case stt:
+                                  break;
                               }
 
-                              Map<String, dynamic> appSet = cppt;
-                              appSet[appState] = linked;
-                              appSet[indexed] = true;
-                              appSet[acct] = bllb;
+                              // ScaffoldMessenger.of()
+                              snackbarKey.currentState?.showSnackBar(
+                                SnackBar(
+                                  backgroundColor: FarmToDishTheme.deepGreen,
+                                  // onVisible: ,
+                                  content: const Text("Successful Transaction"),
+                                ),
+                              );
 
-                              List<Map<String, dynamic>> ddf =
-                                  await dbm.queryAllRows();
-
-                              for (Map<String, dynamic> dd in ddf) {
-                                dbm.delete(dd);
-                              }
-
-                              await dbm.insertData({cpt: jsonEncode(appSet)});
-
-                              logger("Refactored: $appSet");
-
-                              balance blh = balance(bal: dtk["new balance"]);
-
-                              dshCtx.read<UINotifier>().accountBalance(blh);
-                            } catch (e) {}
-
-                            switch (pay_[stt]) {
-                              case fnd:
-                                Navigator.pop(context);
-                                context.go("/HomeScreen");
-                                break;
-                              case stt:
-                                break;
-                            }
-
-                            // ScaffoldMessenger.of()
-                            snackbarKey.currentState?.showSnackBar(
-                              SnackBar(
-                                backgroundColor: FarmToDishTheme.deepGreen,
-                                // onVisible: ,
-                                content: const Text("Successful Transaction"),
-                              ),
-                            );
-
-                            break;
-                        }
-                        break;
+                              break;
+                          }
+                          break;
+                      }
                     }
-
-                    /*
-
-                    List dts = svv.data;
-                    for (int i = 0; i < dts.length; i++) {
-                      Map<String, dynamic> dtk = dts[i];
-                      // await dbh.insertData(dtk);
-                    }
-                    */
-                    // await pref.setPrefBool(sct, true);
-                    // dbh.insertData(row);
-                    // log("$sct Accomplished");
+                  } catch (e) {
+                    // log("error: $e");
                   }
-                } catch (e) {
-                  // log("error: $e");
+                } else {
+                  customSnackBar(context, "incomplete pin");
                 }
-
-                //    await nvg.readData(produce, mnf, global, rd, "", false, rd, context);
-
-                /*
-                Navigator.pop(context);
-                context.go("/HomeScreen");
-                // ScaffoldMessenger.of()
-                snackbarKey.currentState?.showSnackBar(
-                  SnackBar(
-                    backgroundColor: FarmToDishTheme.scaffoldBackgroundColor,
-                    // onVisible: ,
-                    content: const Text("your goods are on the way"),
-                  ),
-                );
-
-                */
-                // ScaffoldMessenger.of(snackbarKey.currentState!.context)
-                // .showSnackBar(
-                //     );
               },
               child: Padding(
                 padding:

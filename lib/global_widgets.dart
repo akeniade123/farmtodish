@@ -102,11 +102,6 @@ InkWell nav(String item, String essence, BuildContext context) {
     onTap: () {
       switch (essence) {
         case psw_:
-          showDialog(
-              context: context,
-              builder: (context) => const LocateMe(essence: csp));
-          break;
-
         case dlv_:
           showDialog(
               context: context,
@@ -221,6 +216,27 @@ SnackBar displaySnackBar(String message) {
 
 void customSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(displaySnackBar(message));
+}
+
+showLoaderDialog(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    content: Row(
+      children: [
+        const CircularProgressIndicator(
+          color: accentclr,
+        ),
+        Container(
+            margin: const EdgeInsets.only(left: 7), child: Text("Loading...")),
+      ],
+    ),
+  );
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
 
 Future<String>? getData(String essence, [BuildContext? context]) async {

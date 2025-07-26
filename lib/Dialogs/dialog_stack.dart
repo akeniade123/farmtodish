@@ -3,14 +3,12 @@ import 'dart:convert';
 //import 'dart:html';
 
 import 'package:farm_to_dish/Repository/databaseHelper.dart';
-import 'package:farm_to_dish/Repository/tbl_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_dart_scan/qr_code_dart_scan.dart';
-import 'package:camera_android_camerax/camera_android_camerax.dart';
 
 import '../Models/model_stack.dart';
 import '../Remote/endpoints.dart';
@@ -24,8 +22,9 @@ import '../global_objects.dart';
 import '../global_string.dart';
 import '../global_widgets.dart';
 
-import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
+import '../main.dart';
 
 class ScanQrCode extends StatefulWidget {
   const ScanQrCode({super.key});
@@ -232,8 +231,9 @@ class _LocateMeState extends State<LocateMe> {
   Map<String, dynamic> bkk = {};
   String location = "";
   String addr = "";
+  String code = "";
+  String accnm = "";
   final TextEditingController _account_nm = TextEditingController();
-  final TextEditingController _bank = TextEditingController();
 
   @override
   void initState() {
@@ -265,6 +265,10 @@ class _LocateMeState extends State<LocateMe> {
               setState(
                 () {
                   itemz.add(d["name"]);
+                  bkk[d["name"]] = d["code"];
+                  // bkk.addEntries({d["name"]: d["code"]}
+                  //   as Iterable<MapEntry<String, dynamic>>);
+                  //  bkk.addEntries({d["name"]: d["code"]}.entries);
                   //bkk.addEntries(MapEntry(d["name"], d["code"]) as Iterable<MapEntry<String, dynamic>>);
                 },
               );
@@ -321,10 +325,12 @@ class _LocateMeState extends State<LocateMe> {
 
         break;
       default:
-        setState(() {
-          addr =
-              "Your Current Location depicts: ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} based on the coordinates of lat: ${position.latitude} & long: ${position.longitude} ";
-        });
+        try {
+          setState(() {
+            addr =
+                "Your Current Location depicts: ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} based on the coordinates of lat: ${position.latitude} & long: ${position.longitude} ";
+          });
+        } catch (e) {}
         break;
     }
     //  "Your Current Location depicts ${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.subAdministrativeArea}, ${placemarks.first.administrativeArea}, ${placemarks.first.country} based on the coordinates of lat: ${position.latitude} & long: ${position.longitude}, further information  assists with ";
@@ -337,7 +343,6 @@ class _LocateMeState extends State<LocateMe> {
       case csp:
         dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
         dshCtx.read<UINotifier>().dropDown(drp_);
-
         break;
     }
 
@@ -364,6 +369,17 @@ class _LocateMeState extends State<LocateMe> {
     logger('The Names: ${jsonEncode(items_)}');
 
     Widget wdg = const Text("No View");
+
+    String cta = "Share my location";
+
+    switch (widget.essence) {
+      case dlv_0:
+        cta = "Update";
+        break;
+      case csp:
+        cta = "Apply";
+        break;
+    }
 
     switch (widget.essence) {
       case csp:
@@ -393,56 +409,104 @@ class _LocateMeState extends State<LocateMe> {
               //  (widget.essence == psw_5) ? const Text("") : Text(""),
 
               (widget.essence == csp)
-                  ? Column(
+                  ? Wrap(
                       children: [
-                        DropdownButtonFormField(
-                          hint: Text(
-                            "Bank",
-                            style: FarmToDishTheme.iStyle,
-                          ),
-                          isExpanded: false,
-                          icon: Expanded(
-                            child: Center(
-                              child: Container(
-                                alignment: Alignment.topCenter,
-                                child:
-                                    Icon(Icons.keyboard_arrow_down, size: 20),
+                        Column(
+                          children: [
+                            Autocomplete<String>(
+                              optionsBuilder:
+                                  (TextEditingValue textEditingValue) {
+                                if (textEditingValue.text.isEmpty) {
+                                  return const Iterable<String>.empty();
+                                }
+                                return items_.where((String option) {
+                                  return option.contains(
+                                      textEditingValue.text.toLowerCase());
+                                });
+                              },
+                              onSelected: (String selection) {
+                                logger("Bank_Chosen: $selection");
+                                logger("Bank_Code: ${bkk[selection]}");
+                                code = bkk[selection];
+
+                                setState(() {
+                                  accnm = "";
+                                });
+                                // debugPrint('You just selected $selection');
+                              },
+                              // Customize fieldViewBuilder and optionsViewBuilder as needed
+                            ),
+                            Squire(
+                              height: 40,
+                              child: TextField(
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.only(
+                                        bottom: 10, right: 10, left: 10),
+                                    border: InputBorder.none,
+                                    hintText: 'Account Number ' ' :',
+                                    hintStyle: FarmToDishTheme.iStyle
+                                    // label: Text('Email' ' :'),
+
+                                    ),
+                                // label: 'Email' ' :',
+                                // controller: ,
+                                controller: _account_nm,
+                                onChanged: (value) async {
+                                  try {
+                                    setState(() {
+                                      accnm = "";
+                                    });
+
+                                    if (value.length >= 10 && code.isNotEmpty) {
+                                      showLoaderDialog(context);
+                                      Map<String, String> mnf_ = {
+                                        "Account_no": value,
+                                        "Bank_code": code,
+                                        "Essence": "Account_no",
+                                        "regId": "lkmlkmflkmlfkmf"
+                                      };
+                                      nvg = Navigate();
+                                      Map<String, dynamic>? obj =
+                                          await nvg.entry(
+                                              mkt,
+                                              mnf_,
+                                              {},
+                                              {},
+                                              global,
+                                              cssp,
+                                              jsonEncode(mnf_),
+                                              false,
+                                              upd_,
+                                              context);
+
+                                      try {
+                                        ServerPrelim svr =
+                                            ServerPrelim.fromJson(obj!);
+                                        Navigator.pop(context);
+                                        try {
+                                          ServerResponse svg =
+                                              ServerResponse.fromJson(obj);
+                                          if (svg.data.isNotEmpty) {
+                                            setState(() {
+                                              accnm =
+                                                  svg.data[0]["account_name"];
+                                            });
+                                            // _account_nm.text = accnm;
+                                          }
+                                        } catch (e) {}
+                                        customSnackBar(
+                                            context, svr.msg.toString());
+                                      } catch (e) {}
+                                    }
+                                  } catch (e) {}
+                                },
                               ),
                             ),
-                          ),
-                          alignment: Alignment.center,
-                          decoration: InputDecoration(border: InputBorder.none),
-                          items: drpz.array.map((String value) {
-                            return DropdownMenuItem(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              int loc = drpz.array.indexOf(value!);
-                              location = drpz.array[loc];
-                              logger("The Current: $location");
-                            });
-                          },
+                            //(accnm.isNotEmpty) ? Text(accnm) : const Spacer()
+                          ],
                         ),
-                        Squire(
-                          height: 40,
-                          child: TextField(
-                            decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(
-                                    bottom: 10, right: 10, left: 10),
-                                border: InputBorder.none,
-                                hintText: 'Account Number: ' ' :',
-                                hintStyle: FarmToDishTheme.iStyle
-                                // label: Text('Email' ' :'),
-
-                                ),
-                            // label: 'Email' ' :',
-                            // controller: ,
-                            controller: _account_nm,
-                          ),
-                        ),
+                        (accnm.isNotEmpty) ? Text(accnm) : const Spacer()
                       ],
                     )
                   : const Text(""),
@@ -455,21 +519,13 @@ class _LocateMeState extends State<LocateMe> {
                       color: FarmToDishTheme.faintGreen,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5)),
-                      child: (widget.essence == dlv_0)
-                          ? const Text(
-                              "Update",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            )
-                          : const Text(
-                              "Share my location",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
+                      child: Text(
+                        cta,
+                        style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
                       onPressed: () async {
                         if (lat != "") {
                           switch (widget.essence) {
@@ -482,6 +538,53 @@ class _LocateMeState extends State<LocateMe> {
                                 loc_: _address.text
                               };
                               await dhl.insertData(dd);
+                              break;
+                            case csp:
+                              DatabaseHelper dbm = DatabaseHelper(table: mnf);
+                              List<Map<String, dynamic>> dd =
+                                  await dbm.queryAllRows();
+                              Map<String, dynamic> ust = dd[0];
+                              cppt = jsonDecode(ust[cpt]);
+
+                              // logger("Data Deserialization: $cppt");
+
+                              try {
+                                logger("App State: ${cppt[appState]}");
+                                // app = cppt[appState];
+                                Map<String, dynamic> prf = cppt[usrTbl];
+                                if (prf.isNotEmpty) {
+                                  String unq_ = prf[unq];
+
+                                  Map<String, dynamic> mnf_ = {
+                                    "user": unq_,
+                                    "lat": lat,
+                                    "lng": lng,
+                                    "address": _address.text,
+                                    "status": "1"
+                                  };
+
+                                  Map<String, dynamic>? obj = await nvg.entry(
+                                      "salespoint",
+                                      mnf_,
+                                      {},
+                                      {},
+                                      global,
+                                      "access",
+                                      "content",
+                                      false,
+                                      "create",
+                                      context);
+
+                                  try {
+                                    ServerPrelim svr =
+                                        ServerPrelim.fromJson(obj!);
+                                    customSnackBar(context, svr.msg.toString());
+                                  } catch (e) {}
+                                }
+                              } catch (e) {
+                                //catch
+                              }
+
                               break;
                           }
                         } else {

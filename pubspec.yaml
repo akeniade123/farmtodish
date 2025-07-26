@@ -99,6 +99,7 @@ dependencies:
   qr_code_dart_scan: ^0.9.4
   camera_android_camerax: ^0.6.5+2
   url_launcher: ^6.3.1
+  flutter_typeahead: ^5.2.0
 
   # path: ./packages_list/liquid_progress_indicator-master 
 
