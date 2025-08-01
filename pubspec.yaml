@@ -100,6 +100,7 @@ dependencies:
   camera_android_camerax: ^0.6.5+2
   url_launcher: ^6.3.1
   flutter_typeahead: ^5.2.0
+  #ekyc_id_flutter: ^1.1.17
 
   # path: ./packages_list/liquid_progress_indicator-master 
 

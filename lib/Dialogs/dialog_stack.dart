@@ -232,6 +232,8 @@ class _LocateMeState extends State<LocateMe> {
   String location = "";
   String addr = "";
   String code = "";
+  String accnum = "";
+  String bank = "";
   String accnm = "";
   final TextEditingController _account_nm = TextEditingController();
 
@@ -314,6 +316,9 @@ class _LocateMeState extends State<LocateMe> {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     logger("Hello: ${placemarks} -- ${placemarks.first}");
+
+    lat = position.latitude.toString();
+    lng = position.longitude.toString();
 
     switch (widget.essence) {
       case psw_5:
@@ -428,6 +433,7 @@ class _LocateMeState extends State<LocateMe> {
                                 logger("Bank_Chosen: $selection");
                                 logger("Bank_Code: ${bkk[selection]}");
                                 code = bkk[selection];
+                                bank = selection;
 
                                 setState(() {
                                   accnm = "";
@@ -456,6 +462,7 @@ class _LocateMeState extends State<LocateMe> {
                                   try {
                                     setState(() {
                                       accnm = "";
+                                      accnum = value;
                                     });
 
                                     if (value.length >= 10 && code.isNotEmpty) {
@@ -506,7 +513,9 @@ class _LocateMeState extends State<LocateMe> {
                             //(accnm.isNotEmpty) ? Text(accnm) : const Spacer()
                           ],
                         ),
-                        (accnm.isNotEmpty) ? Text(accnm) : const Spacer()
+                        (accnm.isNotEmpty)
+                            ? Text(accnm)
+                            : const Text("") // const Spacer()
                       ],
                     )
                   : const Text(""),
@@ -549,7 +558,7 @@ class _LocateMeState extends State<LocateMe> {
                               // logger("Data Deserialization: $cppt");
 
                               try {
-                                logger("App State: ${cppt[appState]}");
+                                //   logger("App State: ${cppt[appState]}");
                                 // app = cppt[appState];
                                 Map<String, dynamic> prf = cppt[usrTbl];
                                 if (prf.isNotEmpty) {
@@ -557,17 +566,28 @@ class _LocateMeState extends State<LocateMe> {
 
                                   Map<String, dynamic> mnf_ = {
                                     "user": unq_,
+                                  };
+
+                                  Map<String, dynamic> bnk = {
+                                    "Account_no": accnum,
+                                    "Account_name": accnm,
+                                    "Bank_code": code,
+                                    "Bank": bank
+                                  };
+
+                                  Map<String, dynamic> ent_ = {
                                     "lat": lat,
                                     "lng": lng,
                                     "address": _address.text,
+                                    "bank_details": jsonEncode(bnk),
                                     "status": "1"
                                   };
 
                                   Map<String, dynamic>? obj = await nvg.entry(
                                       "salespoint",
                                       mnf_,
-                                      {},
-                                      {},
+                                      ent_,
+                                      mnf_,
                                       global,
                                       "access",
                                       "content",
@@ -578,7 +598,14 @@ class _LocateMeState extends State<LocateMe> {
                                   try {
                                     ServerPrelim svr =
                                         ServerPrelim.fromJson(obj!);
-                                    customSnackBar(context, svr.msg.toString());
+                                    if (svr.status == true) {
+                                      customSnackBar(context,
+                                          "Verification in progress we'll revert accordingly");
+                                    } else {
+                                      customSnackBar(context,
+                                          "There's a likelihood of having to had applied with this detail before now, contact customercare for support");
+                                    }
+                                    Navigator.pop(context);
                                   } catch (e) {}
                                 }
                               } catch (e) {
