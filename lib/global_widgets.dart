@@ -113,10 +113,11 @@ InkWell nav(String item, String essence, BuildContext context) {
         case shr_:
           break;
 
+        case ass:
         case csp:
           showDialog(
               context: context,
-              builder: (context) => const LocateMe(essence: csp));
+              builder: (context) => LocateMe(essence: essence));
           break;
         case tms_:
           customSnackBar(context, "visit www.farmtodish.com/privacypolicy");

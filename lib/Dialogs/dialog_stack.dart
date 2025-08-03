@@ -253,6 +253,7 @@ class _LocateMeState extends State<LocateMe> {
 
     logger("Where: ${widget.essence}");
     switch (widget.essence) {
+      case ass:
       case csp:
         Map<String, dynamic>? obj = await getReq(
             enp.getEndpoint(trz, global, true), rqstElite, csp, context, true);
@@ -345,6 +346,7 @@ class _LocateMeState extends State<LocateMe> {
         dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
         dshCtx.read<UINotifier>().dropDown(drp_);
         break;
+      case ass:
       case csp:
         dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
         dshCtx.read<UINotifier>().dropDown(drp_);
@@ -376,17 +378,21 @@ class _LocateMeState extends State<LocateMe> {
     Widget wdg = const Text("No View");
 
     String cta = "Share my location";
+    bool asc = false;
 
     switch (widget.essence) {
       case dlv_0:
         cta = "Update";
         break;
+      case ass:
       case csp:
         cta = "Apply";
+        asc = true;
         break;
     }
 
     switch (widget.essence) {
+      case ass:
       case csp:
       case psw_5:
       case dlv_0:
@@ -413,7 +419,7 @@ class _LocateMeState extends State<LocateMe> {
               ),
               //  (widget.essence == psw_5) ? const Text("") : Text(""),
 
-              (widget.essence == csp)
+              (asc == true)
                   ? Wrap(
                       children: [
                         Column(
@@ -548,6 +554,7 @@ class _LocateMeState extends State<LocateMe> {
                               };
                               await dhl.insertData(dd);
                               break;
+                            case ass:
                             case csp:
                               DatabaseHelper dbm = DatabaseHelper(table: mnf);
                               List<Map<String, dynamic>> dd =
@@ -580,8 +587,15 @@ class _LocateMeState extends State<LocateMe> {
                                     "lng": lng,
                                     "address": _address.text,
                                     "bank_details": jsonEncode(bnk),
-                                    "status": "1"
+                                    "status": "1",
+                                    "category": "1"
                                   };
+
+                                  switch (widget.essence) {
+                                    case csp:
+                                      ent_["category"] = "2";
+                                      break;
+                                  }
 
                                   Map<String, dynamic>? obj = await nvg.entry(
                                       "salespoint",

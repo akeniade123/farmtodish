@@ -303,6 +303,7 @@ sect:lone
     try {
       String pth = generic;
       switch (essence) {
+        case ass:
         case csp:
           pth = trz;
           break;
