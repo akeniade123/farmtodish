@@ -305,6 +305,7 @@ sect:lone
       switch (essence) {
         case ass:
         case csp:
+        case rgs:
           pth = trz;
           break;
         case chg:

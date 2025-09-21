@@ -115,6 +115,7 @@ InkWell nav(String item, String essence, BuildContext context) {
 
         case ass:
         case csp:
+        case rgs:
           showDialog(
               context: context,
               builder: (context) => LocateMe(essence: essence));

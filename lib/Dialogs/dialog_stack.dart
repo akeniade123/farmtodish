@@ -236,6 +236,8 @@ class _LocateMeState extends State<LocateMe> {
   String bank = "";
   String accnm = "";
   final TextEditingController _account_nm = TextEditingController();
+  final TextEditingController _vendor = TextEditingController();
+  final TextEditingController _vendorphn = TextEditingController();
 
   @override
   void initState() {
@@ -255,6 +257,7 @@ class _LocateMeState extends State<LocateMe> {
     switch (widget.essence) {
       case ass:
       case csp:
+      case rgs:
         Map<String, dynamic>? obj = await getReq(
             enp.getEndpoint(trz, global, true), rqstElite, csp, context, true);
         //  await nvg.readData(NA, {}, global, trz, "content", false, rd);
@@ -348,6 +351,7 @@ class _LocateMeState extends State<LocateMe> {
         break;
       case ass:
       case csp:
+      case rgs:
         dropDownlst drp_ = dropDownlst(id: "Locator", array: itemz);
         dshCtx.read<UINotifier>().dropDown(drp_);
         break;
@@ -387,6 +391,10 @@ class _LocateMeState extends State<LocateMe> {
       case ass:
       case csp:
         cta = "Apply";
+        asc = true;
+        break;
+      case rgs:
+        cta = "Register";
         asc = true;
         break;
     }
@@ -599,6 +607,281 @@ class _LocateMeState extends State<LocateMe> {
 
                                   Map<String, dynamic>? obj = await nvg.entry(
                                       "salespoint",
+                                      mnf_,
+                                      ent_,
+                                      mnf_,
+                                      global,
+                                      "access",
+                                      "content",
+                                      false,
+                                      "create",
+                                      context);
+
+                                  try {
+                                    ServerPrelim svr =
+                                        ServerPrelim.fromJson(obj!);
+                                    if (svr.status == true) {
+                                      customSnackBar(context,
+                                          "Verification in progress we'll revert accordingly");
+                                    } else {
+                                      customSnackBar(context,
+                                          "There's a likelihood of having to had applied with this detail before now, contact customercare for support");
+                                    }
+                                    Navigator.pop(context);
+                                  } catch (e) {}
+                                }
+                              } catch (e) {
+                                //catch
+                              }
+
+                              break;
+                          }
+                        } else {
+                          customSnackBar(context,
+                              "yet to obtain your co-ordinate, please wait...");
+                        }
+                      }),
+            ],
+          ),
+        );
+        break;
+      case rgs:
+        wdg = Center(
+          child: Column(
+            children: [
+              Text(" $addr"),
+              Squire(
+                height: 40,
+                child: TextField(
+                  decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(
+                          bottom: 10, right: 10, left: 10),
+                      border: InputBorder.none,
+                      hintText: 'Address ' ' :',
+                      hintStyle: FarmToDishTheme.iStyle
+                      // label: Text('Email' ' :'),
+
+                      ),
+                  // label: 'Email' ' :',
+                  // controller: ,
+                  controller: _address,
+                ),
+              ),
+              //  (widget.essence == psw_5) ? const Text("") : Text(""),
+
+              Squire(
+                height: 40,
+                child: TextField(
+                  decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(
+                          bottom: 10, right: 10, left: 10),
+                      border: InputBorder.none,
+                      hintText: 'Vendor\'s Name  ' ' :',
+                      hintStyle: FarmToDishTheme.iStyle
+                      // label: Text('Email' ' :'),
+                      ),
+                  // label: 'Email' ' :',
+                  // controller: ,
+                  controller: _vendor,
+                ),
+              ),
+
+              Squire(
+                height: 40,
+                child: TextField(
+                  decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(
+                          bottom: 10, right: 10, left: 10),
+                      border: InputBorder.none,
+                      hintText: 'Vendor\'s Contact  ' ' :',
+                      hintStyle: FarmToDishTheme.iStyle
+                      // label: Text('Email' ' :'),
+                      ),
+                  // label: 'Email' ' :',
+                  // controller: ,
+                  controller: _vendorphn,
+                ),
+              ),
+
+              (asc == true)
+                  ? Wrap(
+                      children: [
+                        Column(
+                          children: [
+                            Autocomplete<String>(
+                              optionsBuilder:
+                                  (TextEditingValue textEditingValue) {
+                                if (textEditingValue.text.isEmpty) {
+                                  return const Iterable<String>.empty();
+                                }
+                                return items_.where((String option) {
+                                  return option.contains(
+                                      textEditingValue.text.toLowerCase());
+                                });
+                              },
+                              onSelected: (String selection) {
+                                logger("Bank_Chosen: $selection");
+                                logger("Bank_Code: ${bkk[selection]}");
+                                code = bkk[selection];
+                                bank = selection;
+
+                                setState(() {
+                                  accnm = "";
+                                });
+                                // debugPrint('You just selected $selection');
+                              },
+                              // Customize fieldViewBuilder and optionsViewBuilder as needed
+                            ),
+                            Squire(
+                              height: 40,
+                              child: TextField(
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.only(
+                                        bottom: 10, right: 10, left: 10),
+                                    border: InputBorder.none,
+                                    hintText: 'Account Number ' ' :',
+                                    hintStyle: FarmToDishTheme.iStyle
+                                    // label: Text('Email' ' :'),
+
+                                    ),
+                                // label: 'Email' ' :',
+                                // controller: ,
+                                controller: _account_nm,
+                                onChanged: (value) async {
+                                  try {
+                                    setState(() {
+                                      accnm = "";
+                                      accnum = value;
+                                    });
+
+                                    if (value.length >= 10 && code.isNotEmpty) {
+                                      showLoaderDialog(context);
+                                      Map<String, String> mnf_ = {
+                                        "Account_no": value,
+                                        "Bank_code": code,
+                                        "Essence": "Account_no",
+                                        "regId": "lkmlkmflkmlfkmf"
+                                      };
+                                      nvg = Navigate();
+                                      Map<String, dynamic>? obj =
+                                          await nvg.entry(
+                                              mkt,
+                                              mnf_,
+                                              {},
+                                              {},
+                                              global,
+                                              cssp,
+                                              jsonEncode(mnf_),
+                                              false,
+                                              upd_,
+                                              context);
+
+                                      try {
+                                        ServerPrelim svr =
+                                            ServerPrelim.fromJson(obj!);
+                                        Navigator.pop(context);
+                                        try {
+                                          ServerResponse svg =
+                                              ServerResponse.fromJson(obj);
+                                          if (svg.data.isNotEmpty) {
+                                            setState(() {
+                                              accnm =
+                                                  svg.data[0]["account_name"];
+                                            });
+                                            // _account_nm.text = accnm;
+                                          }
+                                        } catch (e) {}
+                                        customSnackBar(
+                                            context, svr.msg.toString());
+                                      } catch (e) {}
+                                    }
+                                  } catch (e) {}
+                                },
+                              ),
+                            ),
+                            //(accnm.isNotEmpty) ? Text(accnm) : const Spacer()
+                          ],
+                        ),
+                        (accnm.isNotEmpty)
+                            ? Text(accnm)
+                            : const Text("") // const Spacer()
+                      ],
+                    )
+                  : const Text(""),
+
+              (addr.isEmpty)
+                  ? const Text("")
+                  : MaterialButton(
+                      height: 30,
+                      minWidth: 100,
+                      color: FarmToDishTheme.faintGreen,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Text(
+                        cta,
+                        style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                      onPressed: () async {
+                        if (lat != "") {
+                          switch (widget.essence) {
+                            case rgs:
+                              DatabaseHelper dbm = DatabaseHelper(table: mnf);
+                              List<Map<String, dynamic>> dd =
+                                  await dbm.queryAllRows();
+                              Map<String, dynamic> ust = dd[0];
+                              cppt = jsonDecode(ust[cpt]);
+
+                              // logger("Data Deserialization: $cppt");
+
+                              try {
+                                //   logger("App State: ${cppt[appState]}");
+                                // app = cppt[appState];
+                                Map<String, dynamic> prf = cppt[usrTbl];
+                                if (prf.isNotEmpty) {
+                                  String unq_ = prf[unq];
+
+                                  Map<String, dynamic> mnf_ = {
+                                    "contact": _vendorphn.text,
+                                  };
+
+                                  Map<String, dynamic> bnk = {
+                                    "Account_no": accnum,
+                                    "Account_name": accnm,
+                                    "Bank_code": code,
+                                    "Bank": bank
+                                  };
+
+                                  Map<String, dynamic> ent_ = {
+                                    "registrar": unq_,
+                                    "vendor": _vendor.text,
+                                    "lat": lat,
+                                    "lng": lng,
+                                    "address": _address.text,
+                                    "bank_details": jsonEncode(bnk),
+                                    "status": "1",
+                                    "category": "1",
+                                    "created_at": DateTime.now().toString()
+                                  };
+
+                                  /*
+
+
+id	registrar	lat	lng	address	vendor	bank_details	status	category	created_at
+
+                                  */
+
+                                  switch (widget.essence) {
+                                    case csp:
+                                      ent_["category"] = "2";
+                                      break;
+                                  }
+
+                                  Map<String, dynamic>? obj = await nvg.entry(
+                                      "inductionpoint",
                                       mnf_,
                                       ent_,
                                       mnf_,

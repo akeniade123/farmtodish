@@ -370,6 +370,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       //    ProfileLog(name: ref_, essence: ref_),
       ProfileLog(name: csp, essence: csp),
       ProfileLog(name: ass, essence: ass),
+      ProfileLog(name: rgs, essence: rgs),
 
       //  ProfileLog(name: tms_, essence: tms_),
       ProfileLog(name: cnt_, essence: cnt_)
